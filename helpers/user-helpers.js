@@ -36,10 +36,17 @@ module.exports = {
             if (user) {
                 if (user.admin) {
                     bcrypt.compare(userData.password, user.password).then((status) => {
-                        response.status = true
-                        response.user = user
-                        response.admin = true
-                        resolve(response)
+
+                        if(status){
+                            response.status = true
+                            response.user = user
+                            response.admin = true
+                            resolve(response)
+                        }else{
+                            response.status=false
+                            reject(response)
+                        }
+                        
                     })
                 } else {
                     bcrypt.compare(userData.password, user.password).then((status) => {
