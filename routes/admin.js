@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-
+var productHelpers=require('../helpers/product-helpers')
 /* GET users listing. */
 router.get('/', function(req, res, next) {
   if(req.session.admin){
@@ -11,4 +11,48 @@ router.get('/', function(req, res, next) {
  
 });
 
+router.get('/user-management',function(req,res){
+  if(req.session.admin){
+    res.render('admin/user-management',{admin:true})
+  }else{
+    res.redirect('/')
+  }
+})
+
+router.get('/product-management',function(req,res){
+  if(req.session.admin){
+    res.render('admin/product-management',{admin:true})
+  }else{
+    res.redirect('/')
+  }
+})
+
+router.get('/add-product',(req,res)=>{
+  if(req.session.admin){
+    res.render('admin/add-product',{admin:true})
+  }else{
+    res.redirect('/')
+  }
+})
+
+router.post('/add-product',(req,res)=>{
+  if(req.session.admin){
+   
+    productHelpers.addProducts(req.body).then((id)=>{
+      
+      let image=req.files.Image
+      
+      image.mv('./products-Image/'+id+'.jpg',(err,done)=>{
+        if(!err){
+          res.redirect('/admin/product-management')
+        }else{
+          console.log('Image upload failed');
+        }
+      })
+      
+    })
+  }else{    
+    res.redirect('/')
+  }
+})
 module.exports = router;

@@ -5,6 +5,7 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var db=require('./config/connection')
 const session = require('express-session')
+var fileUpload=require('express-fileupload')
 
 var userRouter = require('./routes/user');
 var adminRouter = require('./routes/admin');
@@ -20,6 +21,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'assets')));
+
+app.use(fileUpload())
 
 app.use(function(req, res, next) {
   res.set('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');

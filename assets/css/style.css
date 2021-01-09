@@ -19455,6 +19455,9 @@ h3.cart-page-title {
   color: #333;
   font-size: 14px;
 }
+.table-text{
+  color: white;
+}
 
 @media only screen and (min-width: 992px) and (max-width: 1199px) {
   .billing-info-wrap.mr-50 {
