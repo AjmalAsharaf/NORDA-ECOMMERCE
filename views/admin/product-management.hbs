@@ -134,25 +134,26 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-
+                                                {{#each products}}
                                                 <tr>
 
-                                                    <td>1</td>
-                                                    <td>2</td>
-                                                    <td>2</td>
-                                                    <td>2</td>
-                                                    <td>2</td>
-                                                    <td>2</td>
-                                                    <td>2</td>
-                                                    <td>2</td>
+                                                    <td class="table-text">{{this.productName}}</td>
+                                                    <td class="table-text">{{this.productCategory}}</td>
+                                                    <td class="table-text">{{this.productSubCat}}</td>
+                                                    <td class="table-text">{{this.productPrice}}</td>
+                                                    <td class="table-text">{{this.productQty}}</td>
+                                                    <td class="table-text">{{this.productDes}}</td>
+                                                    <td class="table-text"></td>
+                                                    <td class="table-text"><img src="/product-images/{{this._id}}.jpg" alt="" style="width: 50px;height: 50px;"> </td>
 
 
 
                                                 </tr>
 
-
+                                                {{/each}}
                                             </tbody>
                                         </table>
+                                        
                                     </div>
                                 </div>
                             </div>

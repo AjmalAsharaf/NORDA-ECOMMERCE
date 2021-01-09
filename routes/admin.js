@@ -21,7 +21,11 @@ router.get('/user-management',function(req,res){
 
 router.get('/product-management',function(req,res){
   if(req.session.admin){
-    res.render('admin/product-management',{admin:true})
+    productHelpers.viewAllProducts().then((products)=>{
+      console.log('Products are',products);
+      res.render('admin/product-management',{admin:true,products})
+    })
+  
   }else{
     res.redirect('/')
   }
@@ -42,7 +46,7 @@ router.post('/add-product',(req,res)=>{
       
       let image=req.files.Image
       
-      image.mv('./products-Image/'+id+'.jpg',(err,done)=>{
+      image.mv('./assets/product-images/'+id+'.jpg',(err,done)=>{
         if(!err){
           res.redirect('/admin/product-management')
         }else{
