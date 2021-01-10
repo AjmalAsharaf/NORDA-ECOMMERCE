@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
-var productHelpers=require('../helpers/product-helpers')
+var productHelpers=require('../helpers/product-helpers');
+const userHelpers = require('../helpers/user-helpers');
 /* GET users listing. */
 router.get('/', function(req, res, next) {
   if(req.session.admin){
@@ -14,7 +15,11 @@ router.get('/', function(req, res, next) {
 
 router.get('/user-management',function(req,res){
   if(req.session.admin){
-    res.render('admin/user-management',{admin:true})
+    userHelpers.getAllUsers().then((userDetails)=>{
+      console.log('All users',userDetails);
+      res.render('admin/user-management',{admin:true,userDetails})
+    })
+    
   }else{
     res.redirect('/')
   }
@@ -105,5 +110,18 @@ router.post('/update-product/:id',(req,res)=>{
   }else{
     res.redirect('/')
   }
+})
+
+router.get('/block-user/:id',(req,res)=>{
+  if(req.session.admin){
+    proId=req.params.id
+    userHelpers.blockUser(proId).then(()=>{
+      res.redirect('/admin/user-management')
+    })
+    console.log('blockid',proId);
+  }else{
+    res.redirect('/')
+  }
+
 })
 module.exports = router;

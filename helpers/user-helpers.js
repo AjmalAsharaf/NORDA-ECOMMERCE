@@ -33,7 +33,7 @@ module.exports = {
 
         let response = {}
         return new Promise(async (resolve, reject) => {
-            let user = await db.get().collection(collection.USER_COLLECTION).findOne({ email: userData.email })
+            let user = await db.get().collection(collection.USER_COLLECTION).findOne({ email:userData.email})
 
             if (user) {
                 if (user.admin) {
@@ -128,6 +128,21 @@ module.exports = {
                 }
             ]).toArray()
             resolve(cartItems[0].cartItems)
+        })
+    },
+    getAllUsers:function(){
+        return new Promise(async(resolve,reject)=>{
+            users=await db.get().collection(collection.USER_COLLECTION).find({admin:false}).toArray()
+            resolve(users)
+        })
+    },
+    blockUser:function(proId){
+        return new Promise((resolve,reject)=>{
+            db.get().collection(collection.USER_COLLECTION).updateOne({_id:objId(proId)},{
+                $set:{
+                    block:true
+                }
+            })
         })
     }
 
