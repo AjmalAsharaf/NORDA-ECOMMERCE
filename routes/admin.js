@@ -22,7 +22,7 @@ router.get('/user-management',function(req,res){
 router.get('/product-management',function(req,res){
   if(req.session.admin){
     productHelpers.viewAllProducts().then((products)=>{
-      console.log('Products are',products);
+      
       res.render('admin/product-management',{admin:true,products})
     })
   
@@ -56,6 +56,18 @@ router.post('/add-product',(req,res)=>{
       
     })
   }else{    
+    res.redirect('/')
+  }
+})
+
+router.get('/delete-product/:id',(req,res)=>{
+  let proId=req.params.id
+  
+  if(req.session.admin){
+    productHelpers.deleteProduct(proId).then(()=>{
+      res.redirect('/admin/product-management')
+    })
+  }else{
     res.redirect('/')
   }
 })
