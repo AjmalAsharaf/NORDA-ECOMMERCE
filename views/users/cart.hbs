@@ -65,11 +65,7 @@
                                     </div>
                                   
                                    
-                                    <div class="same-style-2 header-cart">
-                                        <a class="cart-active" href="#">
-                                            <i class="icon-basket-loaded"></i><span class="pro-count red">02</span>
-                                        </a>
-                                    </div>
+                                    
                                 </div>
                             </div>
                         </div>
@@ -241,18 +237,7 @@
                 <div class="cart-content">
                     <h3>Shopping Cart</h3>
                     <ul>
-                        <li class="single-product-cart">
-                            <div class="cart-img">
-                                <a href="#"><img src="/images/cart/cart-1.jpg" alt=""></a>
-                            </div>
-                            <div class="cart-title">
-                                <h4><a href="#">Simple Black T-Shirt</a></h4>
-                                <span> 1 × $49.00	</span>
-                            </div>
-                            <div class="cart-delete">
-                                <a href="#">×</a>
-                            </div>
-                        </li>
+                       {{#each products}}
                         <li class="single-product-cart">
                             <div class="cart-img">
                                 <a href="#"><img src="/images/cart/cart-2.jpg" alt=""></a>
@@ -265,6 +250,7 @@
                                 <a href="#">×</a>
                             </div>
                         </li>
+                        {{/each}}
                     </ul>
                     <div class="cart-total">
                         <h4>Subtotal: <span>$170.00</span></h4>
