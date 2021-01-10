@@ -146,7 +146,29 @@ router.get('/view-cart',(req,res)=>{
     res.redirect('/')
   }
 })
+router.get('/add-to-cart/:id',(req,res)=>{
+  if (req.session.user) {
 
+    if(req.session.admin){
+      res.redirect('/admin')
+    }else{
+      proId=req.params.id
+      
+      userData=req.session.user
+      userHelpers.getSingleUser(userData).then((userId)=>{
+        console.log('user Id is',userId._id,'product Id',proId);
+        userHelpers.addToCart(proId,userId._id).then(()=>{
+          res.redirect('/user-home')
+        })
+      })
+      
+    }
+   
+    
+  } else {
+    res.redirect('/')
+  }
+})
 
 
 module.exports = router;

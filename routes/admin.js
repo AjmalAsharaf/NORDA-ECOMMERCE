@@ -4,6 +4,7 @@ var productHelpers=require('../helpers/product-helpers')
 /* GET users listing. */
 router.get('/', function(req, res, next) {
   if(req.session.admin){
+   
     res.render('admin/admin',{admin:true})
   }else{
     res.redirect('/')
@@ -67,6 +68,40 @@ router.get('/delete-product/:id',(req,res)=>{
     productHelpers.deleteProduct(proId).then(()=>{
       res.redirect('/admin/product-management')
     })
+  }else{
+    res.redirect('/')
+  }
+})
+
+router.get('/edit-product/:id',(req,res)=>{
+  let proId=req.params.id
+  
+  if(req.session.admin){
+    productHelpers.viewOnePorduct(proId).then((product)=>{
+      console.log('single product',product);
+      res.render('admin/edit-product',{admin:true,product})
+    })
+  }else{
+    res.redirect('/')
+  }
+})
+
+router.post('/update-product/:id',(req,res)=>{
+  let proId=req.params.id
+  if(req.session.admin){
+    product=req.body
+    productHelpers.updateProduct(proId,product).then(()=>{
+      res.redirect('/admin/product-management')
+      if(req.files.Image){
+        image=req.files.Image
+        image.mv('./assets/product-images/'+proId+'.jpg',(err,done)=>{
+
+        })
+
+
+      }
+    })
+    
   }else{
     res.redirect('/')
   }
