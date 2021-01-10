@@ -36,7 +36,8 @@ module.exports = {
         return new Promise(async (resolve, reject) => {
             let user = await db.get().collection(collection.USER_COLLECTION).findOne({ email:userData.email})
 
-            if (user) {
+            if (user && user.block==false) {
+                console.log('blocked user=============');
                 if (user.admin) {
                     bcrypt.compare(userData.password, user.password).then((status) => {
 
@@ -149,6 +150,19 @@ module.exports = {
                 $set:{
                     block:true
                 }
+            }).then(()=>{
+                resolve()
+            })
+        })
+    },
+    unblockUser:function(proId){
+        return new Promise((resolve,reject)=>{
+            db.get().collection(collection.USER_COLLECTION).updateOne({_id:objId(proId)},{
+                $set:{
+                    block:false
+                }
+            }).then(()=>{
+                resolve()
             })
         })
     }

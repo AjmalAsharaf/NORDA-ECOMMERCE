@@ -118,10 +118,18 @@ router.get('/block-user/:id',(req,res)=>{
     userHelpers.blockUser(proId).then(()=>{
       res.redirect('/admin/user-management')
     })
-    console.log('blockid',proId);
+    
   }else{
     res.redirect('/')
   }
 
+})
+router.get('/unblock-user/:id',(req,res)=>{
+  if(req.session.admin){
+    proId=req.params.id
+    userHelpers.unblockUser(proId).then(()=>{
+      res.redirect('/admin/user-management')
+    })
+  }
 })
 module.exports = router;

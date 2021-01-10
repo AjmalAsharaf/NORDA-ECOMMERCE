@@ -144,7 +144,7 @@ router.get('/view-cart',(req,res)=>{
       
       userHelpers.getSingleUser(userData).then(async (user)=>{
         
-
+        
         let products=await userHelpers.getCartProducts(user._id)
           
           res.render('users/cart',{user,products})
