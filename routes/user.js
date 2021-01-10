@@ -1,6 +1,8 @@
 var express = require('express');
 var router = express.Router();
 var userHelpers = require('../helpers/user-helpers')
+var productHelpers=require('../helpers/product-helpers')
+var userHelpers=require('../helpers/user-helpers')
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
@@ -24,6 +26,8 @@ router.get('/login-register', function (req, res) {
     if(req.session.admin){
       res.redirect('/admin')
     }else{
+      
+      
       res.redirect('/user-home')
     }
     
@@ -96,7 +100,17 @@ router.get('/user-home', (req, res) => {
     if(req.session.admin){
       res.redirect('/admin')
     }else{
-      res.render('users/shop-no-sidebar')
+      let userData=req.session.user
+      
+      productHelpers.viewAllProducts().then((products)=>{
+        userHelpers.getSingleUser(userData).then((user)=>{
+          console.log('user data here',user);
+          res.render('users/shop-no-sidebar',{products,user})
+        })
+
+        
+      })
+      
     }
    
     
@@ -110,6 +124,27 @@ router.get('/user-home', (req, res) => {
 router.get('/logout', (req, res) => {
   req.session.destroy()
   res.redirect('/')
+})
+
+router.get('/view-cart',(req,res)=>{
+  if (req.session.user) {
+
+    if(req.session.admin){
+      res.redirect('/admin')
+    }else{
+      let userData=req.session.user
+      
+      userHelpers.getSingleUser(userData).then((user)=>{
+          
+          res.render('users/cart',{user})
+        })
+      
+    }
+   
+    
+  } else {
+    res.redirect('/')
+  }
 })
 
 

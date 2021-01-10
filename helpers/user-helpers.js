@@ -69,5 +69,14 @@ module.exports = {
 
             }
         })
+    },
+    getSingleUser:function(userData){
+        
+        return new Promise(async(resolve,reject)=>{
+            
+            let user= await db.get().collection(collection.USER_COLLECTION).findOne({email:userData.email})
+            resolve(user)
+        })
+
     }
 }

@@ -37,7 +37,10 @@
                                                     <li><a href="login-register.html">login / register </a></li>
                                                 </ul>
                                             </li>
-                                            <li><a href="/logout" style="margin-left: 613px;">Logout </a>
+                                            {{#if user}}
+                                            <li style="color:red">{{user.name}}</li>
+                                            {{/if}}
+                                            <li><a href="/logout" style="margin-left: 510px;">Logout </a>
                                                
                                             </li>
                                        
@@ -59,10 +62,7 @@
                                             </form>
                                         </div>
                                     </div>
-                                    <div class="same-style-2">
-                                        <a href="login-register.html">
-                                            <i class="icon-user"></i>
-                                    </div>
+                                  
                                    
                                     <div class="same-style-2 header-cart">
                                         <a class="cart-active" href="#">
@@ -268,7 +268,7 @@
                         <h4>Subtotal: <span>$170.00</span></h4>
                     </div>
                     <div class="cart-checkout-btn">
-                        <a class="btn-hover cart-btn-style" href="cart.html">view cart</a>
+                        <a class="btn-hover cart-btn-style" href="/view-cart">view cart</a>
                         <a class="no-mrg btn-hover cart-btn-style" href="checkout.html">checkout</a>
                     </div>
                 </div>
@@ -311,49 +311,27 @@
                                 <div id="shop-1" class="tab-pane active">
                                     <div class="row">
                                        
-                                       
+                                       {{#each products}}
                                         <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
                                             <div class="single-product-wrap mb-35">
                                                 <div class="product-img product-img-zoom mb-15">
                                                     <a href="product-details.html">
-                                                        <img src="/images/product/product-15.jpg" alt="">
+                                                        <img src="/product-images/{{this._id}}.jpg" alt="">
                                                     </a>
-                                                    <div class="product-action-2 tooltip-style-2">
-                                                       
-                                                        <button title="Quick View" data-toggle="modal" data-target="#exampleModal"><i class="icon-size-fullscreen icons"></i></button>
-                                                      
-                                                    </div>
+                                                    
                                                 </div>
                                                 <div class="product-content-wrap-2 text-center">
-                                                    <div class="product-rating-wrap">
-                                                        <div class="product-rating">
-                                                            <i class="icon_star"></i>
-                                                            <i class="icon_star"></i>
-                                                            <i class="icon_star"></i>
-                                                            <i class="icon_star"></i>
-                                                            <i class="icon_star"></i>
-                                                        </div>
-                                                        <span>(4)</span>
-                                                    </div>
-                                                    <h3><a href="product-details.html">Basic White Simple Sneaker</a></h3>
+                                                    
+                                                    <h3><a href="product-details.html">{{this.productName}}</a></h3>
                                                     <div class="product-price-2">
-                                                        <span>$35.45</span>
+                                                        <span>Rs.{{this.productPrice}}</span>
                                                     </div>
                                                 </div>
                                                 <div class="product-content-wrap-2 product-content-position text-center">
-                                                    <div class="product-rating-wrap">
-                                                        <div class="product-rating">
-                                                            <i class="icon_star"></i>
-                                                            <i class="icon_star"></i>
-                                                            <i class="icon_star"></i>
-                                                            <i class="icon_star"></i>
-                                                            <i class="icon_star"></i>
-                                                        </div>
-                                                        <span>(4)</span>
-                                                    </div>
-                                                    <h3><a href="product-details.html">Basic White Simple Sneaker</a></h3>
+                                                    
+                                                    <h3><a href="product-details.html">{{this.productName}}</a></h3>
                                                     <div class="product-price-2">
-                                                        <span>$35.45</span>
+                                                        <span>Rs.{{this.productPrice}}</span>
                                                     </div>
                                                     <div class="pro-add-to-cart">
                                                         <button title="Add to Cart">Add To Cart</button>
@@ -361,6 +339,7 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        {{/each}}
                                         
                                        
                                         
@@ -379,52 +358,36 @@
                                     
                                     <div class="shop-list-wrap mb-30">
                                         <div class="row">
+                                            {{#each products}}
                                             <div class="col-xl-4 col-lg-5 col-md-6 col-sm-6">
                                                 <div class="product-list-img">
                                                     <a href="product-details.html">
-                                                        <img src="/images/product/product-17.jpg" alt="Product Style">
+                                                        <img src="/product-images/{{this._id}}.jpg" alt="Product Style">
                                                     </a>
-                                                    <div class="product-list-quickview">
-                                                        <button title="Quick View" data-toggle="modal" data-target="#exampleModal"><i class="icon-size-fullscreen icons"></i></button>
-                                                    </div>
+                                                    
                                                 </div>
                                             </div>
                                             <div class="col-xl-8 col-lg-7 col-md-6 col-sm-6">
                                                 <div class="shop-list-content">
-                                                    <h3><a href="product-details.html">Vintage Socks X3</a></h3>
+                                                    <h3><a href="product-details.html">{{this.productName}}</a></h3>
                                                     <div class="pro-list-price">
-                                                        <span class="new-price">$35.45</span>
-                                                        <span class="old-price">$45.80</span>
+                                                        <span class="new-price">Rs.{{this.productPrice}}</span>
+                                                        
                                                     </div>
-                                                    <div class="product-list-rating-wrap">
-                                                        <div class="product-list-rating">
-                                                            <i class="icon_star"></i>
-                                                            <i class="icon_star"></i>
-                                                            <i class="icon_star"></i>
-                                                            <i class="icon_star gray"></i>
-                                                            <i class="icon_star gray"></i>
-                                                        </div>
-                                                        <span>(3)</span>
-                                                    </div>
-                                                    <p>Lorem ipsum dolor sit amet, consectetur adipic it, sed do eiusmod tempor labor incididunt ut et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip.</p>
+                                                   
+                                                    <p>{{this.this.productDes}}</p>
                                                     <div class="product-list-action">
                                                         <button title="Add To Cart"><i class="icon-basket-loaded"></i></button>
                                                        
                                                     </div>
                                                 </div>
                                             </div>
+                                            {{/each}}
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="pro-pagination-style text-center mt-10">
-                                <ul>
-                                    <li><a class="prev" href="#"><i class="icon-arrow-left"></i></a></li>
-                                    <li><a class="active" href="#">1</a></li>
-                                    <li><a href="#">2</a></li>
-                                    <li><a class="next" href="#"><i class="icon-arrow-right"></i></a></li>
-                                </ul>
-                            </div>
+                            
                         </div>
                     </div>
                 </div>
