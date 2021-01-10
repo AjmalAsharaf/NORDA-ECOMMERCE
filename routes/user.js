@@ -104,7 +104,7 @@ router.get('/user-home', (req, res) => {
       
       productHelpers.viewAllProducts().then((products)=>{
         userHelpers.getSingleUser(userData).then((user)=>{
-          console.log('user data here',user);
+         
           res.render('users/shop-no-sidebar',{products,user})
         })
 
@@ -134,9 +134,13 @@ router.get('/view-cart',(req,res)=>{
     }else{
       let userData=req.session.user
       
-      userHelpers.getSingleUser(userData).then((user)=>{
+      userHelpers.getSingleUser(userData).then(async (user)=>{
+        
+
+        let products=await userHelpers.getCartProducts(user._id)
+        console.log(products,'======================================================================================================');
           
-          res.render('users/cart',{user})
+          res.render('users/cart',{user,products})
         })
       
     }
