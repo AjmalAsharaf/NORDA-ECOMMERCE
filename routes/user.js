@@ -106,9 +106,14 @@ router.get('/user-home', (req, res) => {
       productHelpers.viewAllProducts().then((products)=>{
         userHelpers.getSingleUser(userData).then(async(user)=>{
 
-          let cartProducts=await userHelpers.getCartProducts(user._id)
+          
+            userHelpers.getCartProducts(user._id).then((cartProducts)=>{
+              res.render('users/shop-no-sidebar',{products,user,cartProducts})
+            }).catch(()=>{
+              res.render('users/shop-no-sidebar',{products,user})
+            })
+          
          
-          res.render('users/shop-no-sidebar',{products,user,cartProducts})
         })
 
         

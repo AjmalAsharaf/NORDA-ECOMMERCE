@@ -19,7 +19,8 @@ module.exports = {
                     name: userData.name,
                     email: userData.email,
                     password: userData.password,
-                    admin: false
+                    admin: false,
+                    block:false
                 })
                 response.user = userData
                 response.status = true
@@ -106,28 +107,34 @@ module.exports = {
     },
     getCartProducts:function(userId){
         return new Promise(async (resolve,reject)=>{
-            let cartItems=await db.get().collection(collection.CART_COLLECTION).aggregate([
-                {
-                    $match:{user:objId(userId)}
-                },
-                {
-                    $lookup:{
-                        from:collection.PRODUCT_COLLECTION,
-                        let:{prodList:'$products'},
-                        pipeline:[
-                            {
-                                $match:{
-                                    $expr:{
-                                        $in:['$_id',"$$prodList"]
+            let userCart=await db.get().collection(collection.CART_COLLECTION).findOne({user:objId(userId)})
+            if(userCart){
+                let cartItems=await db.get().collection(collection.CART_COLLECTION).aggregate([
+                    {
+                        $match:{user:objId(userId)}
+                    },
+                    {
+                        $lookup:{
+                            from:collection.PRODUCT_COLLECTION,
+                            let:{prodList:'$products'},
+                            pipeline:[
+                                {
+                                    $match:{
+                                        $expr:{
+                                            $in:['$_id',"$$prodList"]
+                                        }
                                     }
                                 }
-                            }
-                        ],
-                        as:'cartItems'
+                            ],
+                            as:'cartItems'
+                        }
                     }
-                }
-            ]).toArray()
-            resolve(cartItems[0].cartItems)
+                ]).toArray()
+                resolve(cartItems[0].cartItems)
+            }else{
+                reject()
+            }
+           
         })
     },
     getAllUsers:function(){
