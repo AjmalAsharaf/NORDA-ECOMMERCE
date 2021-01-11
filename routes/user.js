@@ -108,7 +108,10 @@ router.get('/user-home', (req, res) => {
 
           
             userHelpers.getCartProducts(user._id).then((cartProducts)=>{
-              res.render('users/shop-no-sidebar',{products,user,cartProducts})
+              userHelpers.getCartCount(user._id).then((cartCount)=>{
+                res.render('users/shop-no-sidebar',{products,user,cartProducts,cartCount})
+              })
+             
             }).catch(()=>{
               res.render('users/shop-no-sidebar',{products,user})
             })
