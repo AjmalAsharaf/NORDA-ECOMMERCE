@@ -2,7 +2,8 @@ var express = require('express');
 var router = express.Router();
 var userHelpers = require('../helpers/user-helpers')
 var productHelpers=require('../helpers/product-helpers')
-var userHelpers=require('../helpers/user-helpers')
+var userHelpers=require('../helpers/user-helpers');
+const { response } = require('express');
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
@@ -190,10 +191,17 @@ router.get('/add-to-cart/:id',(req,res)=>{
 })
 
 router.post('/change-product-quantity',(req,res)=>{
-  console.log('Reqst body-----------------------------',req.body);
+ 
   
   userHelpers.changeProductQuantity(req.body).then((response)=>{
-    console.log('))))))))))))))))))))))))))))))',response);
+   
+    res.json(response)
+  })
+})
+
+router.post('/delete-one-cart',(req,res)=>{
+  console.log('______________delete',req.body);
+  userHelpers.deleteOneCartItem(req.body).then(()=>{
     res.json(response)
   })
 })

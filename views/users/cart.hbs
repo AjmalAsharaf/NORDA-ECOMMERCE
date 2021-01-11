@@ -312,7 +312,7 @@
                                             </td>
                                             <td class="product-subtotal">$110.00</td>
                                             <td class="product-remove">
-                                                <a href="#"><i class="icon_close"></i></a>
+                                                <a href="" onclick="deleteSingle('{{this._id}}','{{this.product._id}}')"><i class="icon_close"></i></a>
                                             </td>
 
                                         </tr>
@@ -388,4 +388,21 @@
         })
 
     }
+    function deleteSingle(cartId,proId){
+        
+        $.ajax({
+            url:'/delete-one-cart',
+            method:'post',
+            data:{
+                cart:cartId,
+                product:proId
+            },
+            success:(resoponse)=>{
+                if(resoponse){
+                    location.reload()
+                }
+            }
+        })
+    }
+    
 </script>

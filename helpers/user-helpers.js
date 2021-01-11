@@ -3,6 +3,7 @@ var collection = require('../config/collection')
 const bcrypt = require('bcrypt')
 var objId=require('mongodb').ObjectID
 const { ObjectID } = require('mongodb')
+const { response } = require('express')
 
 module.exports = {
     doSignup: function (userData) {
@@ -242,6 +243,16 @@ module.exports = {
                 })
             }
             
+        })
+    },
+    deleteOneCartItem:function(details){
+        return new Promise((resolve,reject)=>{
+            db.get().collection(collection.CART_COLLECTION).updateOne({_id:objId(details.cart)},
+                {
+                    $pull:{products:{item:objId(details.product)}}
+                }).then((response)=>{
+                    resolve(true)
+                })
         })
     }
 
