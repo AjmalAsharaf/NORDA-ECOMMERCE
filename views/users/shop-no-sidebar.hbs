@@ -244,6 +244,7 @@
                     <ul>
                        {{#each cartProducts}}
                         <li class="single-product-cart">
+                            {{#each product}}
                             <div class="cart-img">
                                 <a href="#"><img src="/product-images/{{this._id}}.jpg" alt="" style="height: 112px; width: 98px;"></a>
                             </div>
@@ -251,6 +252,7 @@
                                 <h4><a href="#">{{this.productName}}</a></h4>
                                 <span> Rs.{{this.productPrice}}</span>
                             </div>
+                            {{/each}}
                             <div class="cart-delete">
                                 <a href="#">×</a>
                             </div>
