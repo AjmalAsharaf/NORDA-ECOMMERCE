@@ -3,6 +3,7 @@ var collection = require('../config/collection')
 const bcrypt = require('bcrypt')
 var objId=require('mongodb').ObjectID
 const { ObjectID } = require('mongodb')
+const { response } = require('express')
 
 module.exports = {
     doSignup: function (userData) {
@@ -37,7 +38,7 @@ module.exports = {
             let user = await db.get().collection(collection.USER_COLLECTION).findOne({ email:userData.email})
 
             if (user && user.block==false) {
-                console.log('blocked user=============');
+                
                 if (user.admin) {
                     bcrypt.compare(userData.password, user.password).then((status) => {
 
@@ -84,21 +85,38 @@ module.exports = {
 
     },
     addToCart:function(proId,userId){
+        
+        let proObj={
+            item:objId(proId),
+            quantity:1
+        }
         return new Promise(async(resolve,reject)=>{
             let userCart=await db.get().collection(collection.CART_COLLECTION).findOne({user:objId(userId)})
             if(userCart){
-                
-                db.get().collection(collection.CART_COLLECTION).updateOne({user:objId(userId)},{
+                let proExist=userCart.products.findIndex(products=> products.item==proId)
+               
+                if(proExist!=-1){
+                    
+                    db.get().collection(collection.CART_COLLECTION).updateOne({'products.item':objId(proId),user:objId(userId)},{
+                        $inc:{'products.$.quantity':1}
+                    }).then(()=>{
+                        resolve()
+                    })
+                }else{
+                    db.get().collection(collection.CART_COLLECTION).updateOne({user:objId(userId)},{
                    
-                        $push:{products:objId(proId)}
+                        $push:{products:proObj}
                     
                 }).then((response)=>{
                     resolve()
                 })
+
+                }
+                
             }else{
                 let cartObj={
                     user:objId(userId),
-                    products:[objId(proId)]
+                    products:[proObj]
                 }
                 db.get().collection(collection.CART_COLLECTION).insertOne(cartObj).then((response)=>{
                     resolve()
@@ -115,23 +133,48 @@ module.exports = {
                         $match:{user:objId(userId)}
                     },
                     {
+                        $unwind:'$products'
+                    },
+                    {
+                        $project:{
+                            item:'$products.item',
+                            quantity:'$products.quantity'
+                        }
+                    },
+                    {
                         $lookup:{
                             from:collection.PRODUCT_COLLECTION,
-                            let:{prodList:'$products'},
-                            pipeline:[
-                                {
-                                    $match:{
-                                        $expr:{
-                                            $in:['$_id',"$$prodList"]
-                                        }
-                                    }
-                                }
-                            ],
-                            as:'cartItems'
+                            localField:'item',
+                            foreignField:'_id',
+                            as:'product'
                         }
-                    }
+                    },
+                    {
+                        $project:{
+                            item:1,
+                            quantity:1,
+                            product:{$arrayElemAt:['$product',0]}
+                        }
+                    },
+                    // {
+                    //     $lookup:{
+                    //         from:collection.PRODUCT_COLLECTION,
+                    //         let:{prodList:'$products'},
+                    //         pipeline:[
+                    //             {
+                    //                 $match:{
+                    //                     $expr:{
+                    //                         $in:['$_id',"$$prodList"]
+                    //                     }
+                    //                 }
+                    //             }
+                    //         ],
+                    //         as:'cartItems'
+                    //     }
+                    // }
                 ]).toArray()
-                resolve(cartItems[0].cartItems)
+                
+                resolve(cartItems)
             }else{
                 reject()
             }
@@ -175,6 +218,49 @@ module.exports = {
 
             }
             resolve(count)
+        })
+    },
+    changeProductQuantity:function(details){
+       console.log('mongo--------------------------------------',details);
+       quantity=parseInt(details.quantity   )
+        count=parseInt(details.count)
+        return new Promise((resolve,reject)=>{
+            if(count==-1 && quantity==1){
+                db.get().collection(collection.CART_COLLECTION).updateOne({_id:objId(details.cart)},
+                {
+                    $pull:{products:{item:objId(details.product)}}
+                }).then((response)=>{
+                    resolve({removeProduct:true})
+                })
+
+            }else{
+                db.get().collection(collection.CART_COLLECTION).updateOne({_id:objId(details.cart),'products.item':objId(details.product)},{
+                    $inc:{'products.$.quantity':count}
+                }).then((response)=>{
+                    
+                    
+                    resolve(true)
+                })
+            }
+            
+        })
+    },
+    deleteOneCartItem:function(details){
+        return new Promise((resolve,reject)=>{
+            db.get().collection(collection.CART_COLLECTION).updateOne({_id:objId(details.cart)},
+                {
+                    $pull:{products:{item:objId(details.product)}}
+                }).then((response)=>{
+                    resolve(true)
+                })
+        })
+    },
+    deleteCart:function(details){
+        
+        return new Promise((resolve,reject)=>{
+            db.get().collection(collection.CART_COLLECTION).removeOne({user:objId(details.user)}).then((response)=>{
+                resolve(true)
+            })
         })
     }
 

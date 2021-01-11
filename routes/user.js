@@ -2,7 +2,8 @@ var express = require('express');
 var router = express.Router();
 var userHelpers = require('../helpers/user-helpers')
 var productHelpers=require('../helpers/product-helpers')
-var userHelpers=require('../helpers/user-helpers')
+var userHelpers=require('../helpers/user-helpers');
+const { response } = require('express');
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
@@ -108,6 +109,7 @@ router.get('/user-home', (req, res) => {
 
           
             userHelpers.getCartProducts(user._id).then((cartProducts)=>{
+              
               userHelpers.getCartCount(user._id).then((cartCount)=>{
                 res.render('users/shop-no-sidebar',{products,user,cartProducts,cartCount})
               })
@@ -148,6 +150,7 @@ router.get('/view-cart',(req,res)=>{
       userHelpers.getSingleUser(userData).then((user)=>{
         
         userHelpers.getCartProducts(user._id).then((products)=>{
+         
           res.render('users/cart',{user,products})
         }).catch(()=>{
           res.render('users/cart',{user})
@@ -174,7 +177,7 @@ router.get('/add-to-cart/:id',(req,res)=>{
       
       userData=req.session.user
       userHelpers.getSingleUser(userData).then((userId)=>{
-        console.log('api call');
+        
         userHelpers.addToCart(proId,userId._id).then(()=>{
           res.json({status:true})
         })
@@ -188,5 +191,27 @@ router.get('/add-to-cart/:id',(req,res)=>{
   }
 })
 
+router.post('/change-product-quantity',(req,res)=>{
+ 
+  
+  userHelpers.changeProductQuantity(req.body).then((response)=>{
+   
+    res.json(response)
+  })
+})
+
+router.post('/delete-one-cart',(req,res)=>{
+  console.log('______________delete',req.body);
+  userHelpers.deleteOneCartItem(req.body).then((response)=>{
+    res.json(response)
+  })
+})
+
+router.post('/delete-cart',(req,res)=>{
+  console.log('SErver',req.body);
+  userHelpers.deleteCart(req.body).then((response)=>{
+    res.json(response)
+  })
+})
 
 module.exports = router;

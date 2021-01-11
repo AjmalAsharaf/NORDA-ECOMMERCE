@@ -244,13 +244,15 @@
                     <ul>
                        {{#each cartProducts}}
                         <li class="single-product-cart">
+                            
                             <div class="cart-img">
-                                <a href="#"><img src="/product-images/{{this._id}}.jpg" alt="" style="height: 112px; width: 98px;"></a>
+                                <a href="#"><img src="/product-images/{{this.product._id}}.jpg" alt="" style="height: 112px; width: 98px;"></a>
                             </div>
                             <div class="cart-title">
-                                <h4><a href="#">{{this.productName}}</a></h4>
-                                <span> Rs.{{this.productPrice}}</span>
+                                <h4><a href="#">{{this.product.productName}}</a></h4>
+                                <span> Rs.{{this.product.productPrice}}</span>
                             </div>
+                         
                             <div class="cart-delete">
                                 <a href="#">×</a>
                             </div>
