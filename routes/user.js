@@ -150,6 +150,7 @@ router.get('/view-cart',(req,res)=>{
       userHelpers.getSingleUser(userData).then((user)=>{
         
         userHelpers.getCartProducts(user._id).then((products)=>{
+         
           res.render('users/cart',{user,products})
         }).catch(()=>{
           res.render('users/cart',{user})
@@ -201,10 +202,16 @@ router.post('/change-product-quantity',(req,res)=>{
 
 router.post('/delete-one-cart',(req,res)=>{
   console.log('______________delete',req.body);
-  userHelpers.deleteOneCartItem(req.body).then(()=>{
+  userHelpers.deleteOneCartItem(req.body).then((response)=>{
     res.json(response)
   })
 })
 
+router.post('/delete-cart',(req,res)=>{
+  console.log('SErver',req.body);
+  userHelpers.deleteCart(req.body).then((response)=>{
+    res.json(response)
+  })
+})
 
 module.exports = router;

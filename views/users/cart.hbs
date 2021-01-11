@@ -330,7 +330,7 @@
                                         </div>
                                         <div class="cart-clear">
                                             <button>Update Cart</button>
-                                            <a href="#">Clear Cart</a>
+                                            <a href="#" onclick="deleteCart('{{user._id}}')">Clear Cart</a>
                                         </div>
                                     </div>
                                 </div>
@@ -399,6 +399,20 @@
             },
             success:(resoponse)=>{
                 if(resoponse){
+                    location.reload()
+                }
+            }
+        })
+    }
+    function deleteCart(userId){
+        $.ajax({
+            url:'/delete-cart',
+            method:'post',
+            data:{
+                user:userId
+            },
+            success:(response)=>{
+                if(response){
                     location.reload()
                 }
             }

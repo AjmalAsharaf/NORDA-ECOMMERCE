@@ -254,6 +254,14 @@ module.exports = {
                     resolve(true)
                 })
         })
+    },
+    deleteCart:function(details){
+        
+        return new Promise((resolve,reject)=>{
+            db.get().collection(collection.CART_COLLECTION).removeOne({user:objId(details.user)}).then((response)=>{
+                resolve(true)
+            })
+        })
     }
 
 }
