@@ -108,7 +108,7 @@ router.get('/user-home', (req, res) => {
 
           
             userHelpers.getCartProducts(user._id).then((cartProducts)=>{
-              console.log('cart products,',cartProducts);
+              
               userHelpers.getCartCount(user._id).then((cartCount)=>{
                 res.render('users/shop-no-sidebar',{products,user,cartProducts,cartCount})
               })
@@ -175,7 +175,7 @@ router.get('/add-to-cart/:id',(req,res)=>{
       
       userData=req.session.user
       userHelpers.getSingleUser(userData).then((userId)=>{
-        console.log('api call');
+        
         userHelpers.addToCart(proId,userId._id).then(()=>{
           res.json({status:true})
         })
@@ -187,6 +187,15 @@ router.get('/add-to-cart/:id',(req,res)=>{
   } else {
     res.redirect('/')
   }
+})
+
+router.post('/change-product-quantity',(req,res)=>{
+  console.log('Reqst body-----------------------------',req.body);
+  
+  userHelpers.changeProductQuantity(req.body).then((response)=>{
+    console.log('))))))))))))))))))))))))))))))',response);
+    res.json(response)
+  })
 })
 
 

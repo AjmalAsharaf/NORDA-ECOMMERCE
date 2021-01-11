@@ -1,14 +1,11 @@
-
-
-
 <body>
 
     <div class="main-wrapper">
-         <header class="header-area transparent-bar section-padding-1">
+        <header class="header-area transparent-bar section-padding-1">
             <div class="container-fluid">
                 <div class="header-large-device">
                     <div class="header-top header-top-ptb-1 border-bottom-1">
-                        
+
                     </div>
                     <div class="header-bottom">
                         <div class="row align-items-center">
@@ -22,9 +19,9 @@
                                     <nav>
                                         <ul>
                                             <li><a href="/">HOME </a>
-                                               
+
                                             </li>
-                                           
+
                                             <li><a href="#">PAGES </a>
                                                 <ul class="sub-menu-style">
                                                     <li><a href="about-us.html">about us </a></li>
@@ -42,9 +39,9 @@
                                             <li style="color:red">{{user.name}}</li>
                                             {{/if}}
                                             <li><a href="/logout" style="margin-left: 510px;">Logout </a>
-                                               
+
                                             </li>
-                                       
+
                                         </ul>
                                     </nav>
                                 </div>
@@ -63,9 +60,9 @@
                                             </form>
                                         </div>
                                     </div>
-                                  
-                                   
-                                    
+
+
+
                                 </div>
                             </div>
                         </div>
@@ -86,7 +83,8 @@
                                     <a href="login-register.html"><i class="icon-user"></i></a>
                                 </div>
                                 <div class="same-style-2">
-                                    <a href="wishlist.html"><i class="icon-heart"></i><span class="pro-count red">03</span></a>
+                                    <a href="wishlist.html"><i class="icon-heart"></i><span
+                                            class="pro-count red">03</span></a>
                                 </div>
                                 <div class="same-style-2 header-cart">
                                     <a class="cart-active" href="#">
@@ -102,14 +100,15 @@
                 </div>
             </div>
         </header>
-        
+
         <!-- Mobile menu start -->
         <div class="mobile-header-active mobile-header-wrapper-style">
             <div class="clickalbe-sidebar-wrap">
                 <a class="sidebar-close"><i class="icon_close"></i></a>
                 <div class="mobile-header-content-area">
                     <div class="header-offer-wrap mobile-header-padding-border-4">
-                        <p><i class="icon-paper-plane"></i> FREE SHIPPING world wide for all orders over <span>$199</span></p>
+                        <p><i class="icon-paper-plane"></i> FREE SHIPPING world wide for all orders over
+                            <span>$199</span></p>
                     </div>
                     <div class="mobile-search mobile-header-padding-border-1">
                         <form class="search-form" action="#">
@@ -192,7 +191,8 @@
                             <a href="order-tracking.html"><i class="lastudioicon-pin-3-2"></i> Track Your Order </a>
                         </div>
                         <div class="single-mobile-header-info">
-                            <a class="mobile-language-active" href="#">Language <span><i class="icon-arrow-down"></i></span></a>
+                            <a class="mobile-language-active" href="#">Language <span><i
+                                        class="icon-arrow-down"></i></span></a>
                             <div class="lang-curr-dropdown lang-dropdown-active">
                                 <ul>
                                     <li><a href="#">English</a></li>
@@ -203,7 +203,8 @@
                             </div>
                         </div>
                         <div class="single-mobile-header-info">
-                            <a class="mobile-currency-active" href="#">Currency <span><i class="icon-arrow-down"></i></span></a>
+                            <a class="mobile-currency-active" href="#">Currency <span><i
+                                        class="icon-arrow-down"></i></span></a>
                             <div class="lang-curr-dropdown curr-dropdown-active">
                                 <ul>
                                     <li><a href="#">USD</a></li>
@@ -237,14 +238,14 @@
                 <div class="cart-content">
                     <h3>Shopping Cart</h3>
                     <ul>
-                       {{#each products}}
+                        {{#each products}}
                         <li class="single-product-cart">
                             <div class="cart-img">
                                 <a href="#"><img src="/images/cart/cart-2.jpg" alt=""></a>
                             </div>
                             <div class="cart-title">
                                 <h4><a href="#">Norda Backpack</a></h4>
-                                <span> 1 × $49.00	</span>
+                                <span> 1 × $49.00 </span>
                             </div>
                             <div class="cart-delete">
                                 <a href="#">×</a>
@@ -262,7 +263,7 @@
                 </div>
             </div>
         </div>
-       
+
         <div class="cart-main-area pt-115 pb-120">
             <div class="container">
                 <h3 class="cart-page-title">Your cart items</h3>
@@ -284,27 +285,40 @@
                                     <tbody>
                                         {{#each products}}
                                         <tr>
-                                            {{#each this.product}}
+
                                             <td class="product-thumbnail">
-                                                <a href="#"><img src="/product-images/{{this._id}}.jpg" alt="" style="width: 98px; height: 112;"></a>
+                                                <a href="#"><img src="/product-images/{{this.product._id}}.jpg" alt=""
+                                                        style="width: 98px; height: 112;"></a>
                                             </td>
                                             <td class="product-name"><a href="#">{{this.productName}}</a></td>
-                                            <td class="product-price-cart"><span class="amount">Rs.{{this.productPrice}}</span></td>
-                                            {{/each}}
+                                            <td class="product-price-cart"><span
+                                                    class="amount">Rs.{{this.product.productPrice}}</span></td>
+
                                             <td class="product-quantity pro-details-quality">
-                                                <div class="cart-plus-minus">
-                                                    <input class="cart-plus-minus-box" type="text" name="qtybutton" value="{{this.quantity}}">
+                                                <div>
+                                                    <button class="cart-item-count" style="height: 31px;
+                                                        width: 31px;
+                                                        line-height: 31px;
+                                                        border: 1px solid #E3E4E9; margin-right: 10px" onclick="changeQuantity('{{this._id}}','{{this.product._id}}',-1)">-</button>
+                                                       <span id="{{this.product._id}}"> {{this.quantity}}</span>
+                                                        
+                                                        <button class="cart-item-count" style="height: 31px;
+                                                        width: 31px;
+                                                        line-height: 31px;
+                                                        border: 1px solid #E3E4E9; margin-left: 10px;" onclick="changeQuantity('{{this._id}}','{{this.product._id}}',1)">+</button>
+
                                                 </div>
+
                                             </td>
                                             <td class="product-subtotal">$110.00</td>
                                             <td class="product-remove">
                                                 <a href="#"><i class="icon_close"></i></a>
                                             </td>
-                                               
+
                                         </tr>
                                         {{/each}}
-                                       
-                                       
+
+
                                     </tbody>
                                 </table>
                             </div>
@@ -323,15 +337,15 @@
                             </div>
                         </form>
                         <div class="row">
-                            
-                            
+
+
                             <div class="col-lg-12 col-md-12">
                                 <div class="grand-totall">
                                     <div class="title-wrap">
                                         <h4 class="cart-bottom-title section-bg-gary-cart">Cart Total</h4>
                                     </div>
                                     <h5>Total products <span>$260.00</span></h5>
-                                    
+
                                     <h4 class="grand-totall-title">Grand Total <span>$260.00</span></h4>
                                     <a href="#">Proceed to Checkout</a>
                                 </div>
@@ -341,9 +355,37 @@
                 </div>
             </div>
         </div>
-       
+
     </div>
 
- 
-</body>
 
+</body>
+			<script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+
+<script>
+    function changeQuantity(cartId,proId,count){
+        count=parseInt(count)
+        let quantity=parseInt(document.getElementById(proId).innerHTML)
+        $.ajax({
+            url:'/change-product-quantity',
+            
+            data:{
+                cart:cartId,
+                product:proId,
+                count:count,
+                quantity:quantity
+            },
+            method:'post',
+            success:(response)=>{
+              if(response.removeProduct){
+                  alert('Item removed')
+                  location.reload()
+              }else{
+                  document.getElementById(proId).innerHTML=quantity+count
+              }
+                
+            }
+        })
+
+    }
+</script>
