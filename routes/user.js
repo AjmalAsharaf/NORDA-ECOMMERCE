@@ -174,9 +174,9 @@ router.get('/add-to-cart/:id',(req,res)=>{
       
       userData=req.session.user
       userHelpers.getSingleUser(userData).then((userId)=>{
-        console.log('user Id is',userId._id,'product Id',proId);
+        console.log('api call');
         userHelpers.addToCart(proId,userId._id).then(()=>{
-          res.redirect('/user-home')
+          res.json({status:true})
         })
       })
       
