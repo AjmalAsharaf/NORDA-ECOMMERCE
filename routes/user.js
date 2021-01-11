@@ -142,12 +142,16 @@ router.get('/view-cart',(req,res)=>{
     }else{
       let userData=req.session.user
       
-      userHelpers.getSingleUser(userData).then(async (user)=>{
+      userHelpers.getSingleUser(userData).then((user)=>{
         
-        
-        let products=await userHelpers.getCartProducts(user._id)
-          
+        userHelpers.getCartProducts(user._id).then((products)=>{
           res.render('users/cart',{user,products})
+        }).catch(()=>{
+          res.render('users/cart',{user})
+        })
+       
+          
+         
         })
       
     }
