@@ -37,7 +37,7 @@ module.exports = {
             let user = await db.get().collection(collection.USER_COLLECTION).findOne({ email:userData.email})
 
             if (user && user.block==false) {
-                console.log('blocked user=============');
+                
                 if (user.admin) {
                     bcrypt.compare(userData.password, user.password).then((status) => {
 
@@ -84,21 +84,38 @@ module.exports = {
 
     },
     addToCart:function(proId,userId){
+        console.log('MOngodb',userId,'dslkfkjasdlkfjklsdf',proId);
+        let proObj={
+            item:objId(proId),
+            quantity:1
+        }
         return new Promise(async(resolve,reject)=>{
             let userCart=await db.get().collection(collection.CART_COLLECTION).findOne({user:objId(userId)})
             if(userCart){
-                
-                db.get().collection(collection.CART_COLLECTION).updateOne({user:objId(userId)},{
+                let proExist=userCart.products.findIndex(products=> products.item==proId)
+                console.log(proExist);
+                if(proExist!=-1){
+                    console.log("user problem when add product",userId);
+                    db.get().collection(collection.CART_COLLECTION).updateOne({'products.item':objId(proId),user:objId(userId)},{
+                        $inc:{'products.$.quantity':1}
+                    }).then(()=>{
+                        resolve()
+                    })
+                }else{
+                    db.get().collection(collection.CART_COLLECTION).updateOne({user:objId(userId)},{
                    
-                        $push:{products:objId(proId)}
+                        $push:{products:proObj}
                     
                 }).then((response)=>{
                     resolve()
                 })
+
+                }
+                
             }else{
                 let cartObj={
                     user:objId(userId),
-                    products:[objId(proId)]
+                    products:[proObj]
                 }
                 db.get().collection(collection.CART_COLLECTION).insertOne(cartObj).then((response)=>{
                     resolve()
