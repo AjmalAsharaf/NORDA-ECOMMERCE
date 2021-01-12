@@ -271,6 +271,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        {{#if products}}
                                         {{#each products}}
                                         <tr>
 
@@ -307,7 +308,7 @@
 
                                         </tr>
                                         {{/each}}
-
+                                        
 
                                     </tbody>
                                 </table>
@@ -325,6 +326,8 @@
                                     </div>
                                 </div>
                             </div>
+                            
+                             
                         </form>
                         <div class="row">
 
@@ -341,6 +344,15 @@
                                 </div>
                             </div>
                         </div>
+                        {{else}}
+                             <div style="height: 700px; text-align: center;">
+                                 <h2 >Cart Is empty</h2>
+                                 <div class="cart-shiping-update">
+                                            <a href="/">Continue Shopping</a>
+                                        </div>
+                             </div>
+                        {{/if}}
+                        
                     </div>
                 </div>
             </div>
