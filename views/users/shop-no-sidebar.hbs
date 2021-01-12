@@ -24,23 +24,11 @@
                                                
                                             </li>
                                            
-                                            <li><a href="#">PAGES </a>
-                                                <ul class="sub-menu-style">
-                                                    <li><a href="about-us.html">about us </a></li>
-                                                    <li><a href="cart.html">cart page</a></li>
-                                                    <li><a href="checkout.html">checkout </a></li>
-                                                    <li><a href="my-account.html">my account</a></li>
-                                                    <li><a href="wishlist.html">wishlist </a></li>
-                                                    <li><a href="compare.html">compare </a></li>
-                                                    <li><a href="contact.html">contact us </a></li>
-                                                    <li><a href="order-tracking.html">order tracking</a></li>
-                                                    <li><a href="login-register.html">login / register </a></li>
-                                                </ul>
-                                            </li>
+                                           
                                             {{#if user}}
                                             <li style="color:red">{{user.name}}</li>
                                             {{/if}}
-                                            <li><a href="/logout" style="margin-left: 510px;">Logout </a>
+                                            <li><a href="/logout" style="margin-left: 600px;">Logout </a>
                                                
                                             </li>
                                        
@@ -278,26 +266,9 @@
                                     <a class="active" href="#shop-1" data-toggle="tab"><i class="icon-grid"></i></a>
                                     <a href="#shop-2" data-toggle="tab"><i class="icon-menu"></i></a>
                                 </div>
-                                <p>Showing 1 - 20 of 30 results </p>
+                               
                             </div>
-                            <div class="product-sorting-wrapper">
-                                <div class="product-shorting shorting-style">
-                                    <label>View :</label>
-                                    <select>
-                                        <option value=""> 20</option>
-                                        <option value=""> 23</option>
-                                        <option value=""> 30</option>
-                                    </select>
-                                </div>
-                                <div class="product-show shorting-style">
-                                    <label>Sort by :</label>
-                                    <select>
-                                        <option value="">Default</option>
-                                        <option value=""> Name</option>
-                                        <option value=""> price</option>
-                                    </select>
-                                </div>
-                            </div>
+                           
                         </div>
                         <div class="shop-bottom-area">
                             <div class="tab-content jump">
@@ -370,7 +341,7 @@
                                                    
                                                     <p>{{this.this.productDes}}</p>
                                                     <div class="product-list-action">
-                                                        <button title="Add To Cart"><i class="icon-basket-loaded"></i></button>
+                                                        <button title="Add To Cart" onclick="addToCart('{{this._id}}')"><i class="icon-basket-loaded"></i></button>
                                                        
                                                     </div>
                                                 </div>

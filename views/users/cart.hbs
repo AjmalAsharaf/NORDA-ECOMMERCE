@@ -22,23 +22,11 @@
 
                                             </li>
 
-                                            <li><a href="#">PAGES </a>
-                                                <ul class="sub-menu-style">
-                                                    <li><a href="about-us.html">about us </a></li>
-                                                    <li><a href="cart.html">cart page</a></li>
-                                                    <li><a href="checkout.html">checkout </a></li>
-                                                    <li><a href="my-account.html">my account</a></li>
-                                                    <li><a href="wishlist.html">wishlist </a></li>
-                                                    <li><a href="compare.html">compare </a></li>
-                                                    <li><a href="contact.html">contact us </a></li>
-                                                    <li><a href="order-tracking.html">order tracking</a></li>
-                                                    <li><a href="login-register.html">login / register </a></li>
-                                                </ul>
-                                            </li>
+                                            
                                             {{#if user}}
                                             <li style="color:red">{{user.name}}</li>
                                             {{/if}}
-                                            <li><a href="/logout" style="margin-left: 510px;">Logout </a>
+                                            <li><a href="/logout" style="margin-left: 600px;">Logout </a>
 
                                             </li>
 
@@ -295,18 +283,20 @@
                                                     class="amount">Rs.{{this.product.productPrice}}</span></td>
 
                                             <td class="product-quantity pro-details-quality">
-                                                <div>
+                                                <div class="row">
+                                                   
                                                     <button class="cart-item-count" style="height: 31px;
                                                         width: 31px;
                                                         line-height: 31px;
-                                                        border: 1px solid #E3E4E9; margin-right: 10px" onclick="changeQuantity('{{this._id}}','{{this.product._id}}',-1)">-</button>
-                                                       <span id="{{this.product._id}}"> {{this.quantity}}</span>
+                                                        border: 1px solid #E3E4E9;" onclick="changeQuantity('{{this._id}}','{{this.product._id}}',-1)">-</button>
+                                                       
+                                                       <span id="{{this.product._id}}" style="padding-right: 20px;padding-left: 20px;padding-top: 4px;"> {{this.quantity}}</span>
                                                         
                                                         <button class="cart-item-count" style="height: 31px;
                                                         width: 31px;
                                                         line-height: 31px;
-                                                        border: 1px solid #E3E4E9; margin-left: 10px;" onclick="changeQuantity('{{this._id}}','{{this.product._id}}',1)">+</button>
-
+                                                        border: 1px solid #E3E4E9; ;" onclick="changeQuantity('{{this._id}}','{{this.product._id}}',1)">+</button>
+                                                  
                                                 </div>
 
                                             </td>
@@ -329,7 +319,7 @@
                                             <a href="/">Continue Shopping</a>
                                         </div>
                                         <div class="cart-clear">
-                                            <button>Update Cart</button>
+                                           
                                             <a href="#" onclick="deleteCart('{{user._id}}')">Clear Cart</a>
                                         </div>
                                     </div>
