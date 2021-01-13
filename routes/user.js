@@ -16,7 +16,11 @@ router.get('/', function (req, res, next) {
     }
     
   } else {
-    res.render('users/index');
+    productHelpers.viewAllProducts().then((products)=>{
+      res.render('users/index',{products});
+    })
+    
+   
   }
 
 
