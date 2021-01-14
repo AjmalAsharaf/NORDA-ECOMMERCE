@@ -1,26 +1,31 @@
 var express = require('express');
 var router = express.Router();
 var userHelpers = require('../helpers/user-helpers')
-var productHelpers=require('../helpers/product-helpers')
-var userHelpers=require('../helpers/user-helpers');
+var productHelpers = require('../helpers/product-helpers')
+var userHelpers = require('../helpers/user-helpers');
 const { response } = require('express');
+var axios = require('axios');
+var FormData = require('form-data');
+
+
+var otpid;
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
   if (req.session.user) {
-    
+
     if (req.session.admin) {
       res.redirect('/admin')
-    }else{
+    } else {
       res.redirect('/user-home')
     }
-    
+
   } else {
-    productHelpers.viewAllProducts().then((products)=>{
-      res.render('users/index',{products});
+    productHelpers.viewAllProducts().then((products) => {
+      res.render('users/index', { products });
     })
-    
-   
+
+
   }
 
 
@@ -28,14 +33,14 @@ router.get('/', function (req, res, next) {
 
 router.get('/login-register', function (req, res) {
   if (req.session.user) {
-    if(req.session.admin){
+    if (req.session.admin) {
       res.redirect('/admin')
-    }else{
-      
-      
+    } else {
+
+
       res.redirect('/user-home')
     }
-    
+
   } else {
     res.render('users/login-register')
   }
@@ -43,14 +48,14 @@ router.get('/login-register', function (req, res) {
 })
 router.post('/register', (req, res) => {
   if (req.session.user) {
-    
-    if(req.session.admin){
+
+    if (req.session.admin) {
       res.redirect('/admin')
-    }else{
+    } else {
       res.redirect('/user-home')
     }
   }
-   else {
+  else {
     userData = req.body
     userHelpers.doSignup(userData).then((response) => {
       console.log(response);
@@ -67,10 +72,10 @@ router.post('/register', (req, res) => {
 router.post('/login', (req, res) => {
 
   if (req.session.user) {
-    
-    if(req.session.admin){
+
+    if (req.session.admin) {
       res.redirect('/admin')
-    }else{
+    } else {
       res.redirect('/user-home')
     }
   } else {
@@ -91,7 +96,7 @@ router.post('/login', (req, res) => {
 
 
     }).catch((response) => {
-      
+
       res.json(response)
     })
   }
@@ -103,34 +108,34 @@ router.post('/login', (req, res) => {
 router.get('/user-home', (req, res) => {
   if (req.session.user) {
 
-    if(req.session.admin){
+    if (req.session.admin) {
       res.redirect('/admin')
-    }else{
-      let userData=req.session.user
-      
-      productHelpers.viewAllProducts().then((products)=>{
-        userHelpers.getSingleUser(userData).then(async(user)=>{
+    } else {
+      let userData = req.session.user
 
-          
-            userHelpers.getCartProducts(user._id).then((cartProducts)=>{
-              
-              userHelpers.getCartCount(user._id).then((cartCount)=>{
-                res.render('users/shop-no-sidebar',{products,user,cartProducts,cartCount})
-              })
-             
-            }).catch(()=>{
-              res.render('users/shop-no-sidebar',{products,user})
+      productHelpers.viewAllProducts().then((products) => {
+        userHelpers.getSingleUser(userData).then(async (user) => {
+
+
+          userHelpers.getCartProducts(user._id).then((cartProducts) => {
+
+            userHelpers.getCartCount(user._id).then((cartCount) => {
+              res.render('users/shop-no-sidebar', { products, user, cartProducts, cartCount })
             })
-          
-         
+
+          }).catch(() => {
+            res.render('users/shop-no-sidebar', { products, user })
+          })
+
+
         })
 
-        
+
       })
-      
+
     }
-   
-    
+
+
   } else {
     res.redirect('/')
   }
@@ -143,79 +148,194 @@ router.get('/logout', (req, res) => {
   res.redirect('/')
 })
 
-router.get('/view-cart',(req,res)=>{
+router.get('/view-cart', (req, res) => {
   if (req.session.user) {
 
-    if(req.session.admin){
+    if (req.session.admin) {
       res.redirect('/admin')
-    }else{
-      let userData=req.session.user
-      
-      userHelpers.getSingleUser(userData).then((user)=>{
-        
-        userHelpers.getCartProducts(user._id).then((products)=>{
-         
-          res.render('users/cart',{user,products})
-        }).catch(()=>{
-          res.render('users/cart',{user})
+    } else {
+      let userData = req.session.user
+
+      userHelpers.getSingleUser(userData).then((user) => {
+
+        userHelpers.getCartProducts(user._id).then((products) => {
+
+          res.render('users/cart', { user, products })
+        }).catch(() => {
+          res.render('users/cart', { user })
         })
-       
-          
-         
-        })
-      
+
+
+
+      })
+
     }
-   
-    
+
+
   } else {
     res.redirect('/')
   }
 })
-router.get('/add-to-cart/:id',(req,res)=>{
+router.get('/add-to-cart/:id', (req, res) => {
   if (req.session.user) {
 
-    if(req.session.admin){
+    if (req.session.admin) {
       res.redirect('/admin')
-    }else{
-      proId=req.params.id
-      
-      userData=req.session.user
-      userHelpers.getSingleUser(userData).then((userId)=>{
-        
-        userHelpers.addToCart(proId,userId._id).then(()=>{
-          res.json({status:true})
+    } else {
+      proId = req.params.id
+
+      userData = req.session.user
+      userHelpers.getSingleUser(userData).then((userId) => {
+
+        userHelpers.addToCart(proId, userId._id).then(() => {
+          res.json({ status: true })
         })
       })
-      
+
     }
-   
-    
+
+
   } else {
     res.redirect('/')
   }
 })
 
-router.post('/change-product-quantity',(req,res)=>{
- 
+router.post('/change-product-quantity', (req, res) => {
+
+
+  userHelpers.changeProductQuantity(req.body).then((response) => {
+
+    res.json(response)
+  })
+})
+
+router.post('/delete-one-cart', (req, res) => {
+  console.log('______________delete', req.body);
+  userHelpers.deleteOneCartItem(req.body).then((response) => {
+    res.json(response)
+  })
+})
+
+router.post('/delete-cart', (req, res) => {
+  console.log('SErver', req.body);
+  userHelpers.deleteCart(req.body).then((response) => {
+    res.json(response)
+  })
+})
+
+router.get('/otp', (req, res) => {
+  res.render('users/otp-register')
+})
+
+router.post('/otp-register', (req, res) => {
+
+  console.log('Otp register body', req.body);
+  userHelpers.otpUserCheck(req.body).then(() => {
+    console.log('New user');
+    var data = new FormData();
+
+    console.log(req.body.mobile);
+
+
+    data.append('mobile', +91 + req.body.mobile);
+    data.append('sender_id', 'SMSINFO');
+    data.append('message', 'Your otp code for registering {code}');
+    data.append('expiry', '900');
+
+
+    var config = {
+      method: 'post',
+      url: 'https://d7networks.com/api/verifier/send',
+      headers: {
+        'Authorization': 'Token c90ee15e2423f88dd13af44bf8c5780600099ab8',
+        ...data.getHeaders()
+      },
+      data: data
+    };
+
+    axios(config)
+      .then(function (response) {
+
+        otpid = response.data.otp_id
+        res.json({ status: true })
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  })
+    .catch(() => {
+      console.log('Existing user');
+      res.json({ status: false })
+
+    })
+
+
+
+})
+
+router.post('/verify-otp', (req, res) => {
+  var data = new FormData();
+  console.log('Alll data in verify login', req.body);
+  userData = req.body
+  otpNumber = req.body.otp
+  console.log('Otp number is', otpNumber);
+  console.log('Otp id in verify', otpid);
+
+  data.append('otp_id', otpid);
+  data.append('otp_code', otpNumber);
+
+  var config = {
+    method: 'post',
+    url: 'https://d7networks.com/api/verifier/verify',
+    headers: {
+      'Authorization': 'Token c90ee15e2423f88dd13af44bf8c5780600099ab8',
+      ...data.getHeaders()
+    },
+    data: data
+  };
+
+  axios(config)
+.then(function (response) {
+  console.log(JSON.stringify(response.data));
   
-  userHelpers.changeProductQuantity(req.body).then((response)=>{
-   
-    res.json(response)
-  })
+  if(response.data.status=='success'){
+    res.json({status:true})
+  }else{
+    res.json({status:false})
+
+  }
+ 
+})
+.catch(function (error) {
+  console.log(error); 
+  res.json({status:false})
+});
+
 })
 
-router.post('/delete-one-cart',(req,res)=>{
-  console.log('______________delete',req.body);
-  userHelpers.deleteOneCartItem(req.body).then((response)=>{
-    res.json(response)
-  })
-})
+router.post('/resend-otp', (req, res) => {
 
-router.post('/delete-cart',(req,res)=>{
-  console.log('SErver',req.body);
-  userHelpers.deleteCart(req.body).then((response)=>{
-    res.json(response)
-  })
-})
+  console.log('Iam here and Otp id is,',otpid);
 
+  var data = new FormData();
+  data.append('otp_id', otpid);
+
+  var config = {
+    method: 'post',
+    url: 'https://d7networks.com/api/verifier/resend',
+    headers: {
+      'Authorization': 'Token c90ee15e2423f88dd13af44bf8c5780600099ab8',
+      ...data.getHeaders()
+    },
+    data: data
+  };
+
+  axios(config)
+    .then(function (response) {
+      console.log(JSON.stringify(response.data));
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+})
 module.exports = router;
