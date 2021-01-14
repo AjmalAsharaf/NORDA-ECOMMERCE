@@ -299,7 +299,10 @@ router.post('/verify-otp', (req, res) => {
   console.log(JSON.stringify(response.data));
   
   if(response.data.status=='success'){
-    res.json({status:true})
+    userHelpers.otpSignup(userData).then(()=>{
+      res.json({status:true})
+    })
+    
   }else{
     res.json({status:false})
 

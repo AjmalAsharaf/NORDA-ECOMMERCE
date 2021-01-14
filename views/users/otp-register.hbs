@@ -331,7 +331,7 @@
 			},
 			success:(response)=>{
 				if(response.status){
-                    alert('account created')
+                    window.location.href='/otp'
                 }else{
                     $('#wrong-otp').show()
                 }
