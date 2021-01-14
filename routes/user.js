@@ -333,6 +333,7 @@ router.post('/resend-otp', (req, res) => {
   axios(config)
     .then(function (response) {
       console.log(JSON.stringify(response.data));
+      res.json({status:true})
     })
     .catch(function (error) {
       console.log(error);

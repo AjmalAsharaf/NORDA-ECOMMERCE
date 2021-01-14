@@ -257,7 +257,7 @@
                                                 <div class="button-box">
                                                     <h4 style="color: red; display: none;" id="invalid1" >Number already Taken</h4>
                                                      
-                                                    <button type="submit">send Otp</button> 
+                                                    <button type="submit" id="send-otp-button">send Otp</button> 
                                                 </div>
                                             </form>
                                             <form id="otp-register-submit" style="display: none ;margin-top: 30px;">
@@ -305,6 +305,9 @@
 			success:(response)=>{
 				if(response.status){
 					$('#otp-register-submit').show()
+                    $('#send-otp-button').hide()
+                    $('#name').attr('readonly',true)
+                    $('#number').attr('readonly',true)
 					
 				}else{
                     $('#invalid1').show()
@@ -343,7 +346,9 @@
             url:'/resend-otp',
             method:'post',
             success:(response)=>{
-                
+                if(response.status){
+                     $('#wrong-otp').hide()
+                }
             }
         })
     })
