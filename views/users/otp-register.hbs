@@ -235,13 +235,24 @@
                                 <div id="lg1" class="tab-pane active">
                                     <div class="login-form-container">
                                         <div class="login-register-form">
-                                            <form id="login">
-                                                <input type="number" name="user-name" placeholder="Enter your registered number" id="login-number" required>
+                                            <form id="otp-login">
+                                                <input type="number" name="user-name" placeholder="Enter your registered number" id="number-login" required>
                                               
                                                 <div class="button-box">
-                                                     <h4 style="color: red; display: none;" id="invalid2">Invalid Email or password</h4> 
-                                                    <button type="submit">Sent Otp</button>
+                                                     <h4 style="color: red; display: none;" id="invalid2">Number not found</h4> 
+                                                    <button type="submit" id="sent-login-otp-button">Sent Otp</button>
+                                                   
                                                 </div>
+                                            </form>
+                                             <form id="otp-login-submit" style="display: none ;margin-top: 30px;">
+                                                 <input type="number" name="otp" placeholder="Enter your otp" required id="otp-in-login">
+                                                 <h4 style="color: red; display: none;" id="wrong-otp-ub-login" >OTP wrong</h4>
+                                                 <div class="button-box">
+                                                  
+                                                     
+                                                    <button type="submit">Submit Otp</button> 
+                                                </div>
+                                                <button class="otp-style mt-2" id="resend-otp-in-login">Resend</button>
                                             </form>
                                         </div>
                                     </div>
@@ -252,10 +263,12 @@
                                             <form id="otp-register" >
                                                 <input type="text" name="name" placeholder="Name" required id="name">
                                                 <input type="number" name="number" placeholder="Enter your number" required id="number">
+                                                <input type="email" name="email" placeholder="Enter your email" required id="email-register">
                                                 
                                              
                                                 <div class="button-box">
-                                                    <h4 style="color: red; display: none;" id="invalid1" >Number already Taken</h4>
+                                                    <h4 style="color: red; display: none;" id="email-invalid" >Email already Taken</h4>
+                                                    <h4 style="color: red; display: none;" id="number-invalid" >Number already Taken</h4>
                                                      
                                                     <button type="submit" id="send-otp-button">send Otp</button> 
                                                 </div>
@@ -295,12 +308,16 @@
         e.preventDefault()
         let name=$('#name').val()
         let mobile=$('#number').val()
+        let email=$('#email-register').val()
+        $('#number-invalid').hide()
+        $('#email-invalid').hide()
        
         $.ajax({
 			url:'/otp-register',
 			method:'post',
 			data:{
-				name,mobile
+
+				name,mobile,email
 			},
 			success:(response)=>{
 				if(response.status){
@@ -308,9 +325,12 @@
                     $('#send-otp-button').hide()
                     $('#name').attr('readonly',true)
                     $('#number').attr('readonly',true)
+                    $('#email-register').attr('readonly',true)
 					
-				}else{
-                    $('#invalid1').show()
+				}else if(response.number){
+                    $('#number-invalid').show()
+                }else if(response.email){   
+                    $('#email-invalid').show()
                 }
 			}
 		})
@@ -322,12 +342,13 @@
         let otp=$('#otp').val()
         let name=$('#name').val()
         let mobile=$('#number').val()
+        let email=$('#email-register').val()
 
           $.ajax({
 			url:'/verify-otp',
 			method:'post',
 			data:{
-				otp,name,mobile
+				otp,name,mobile,email
 			},
 			success:(response)=>{
 				if(response.status){
@@ -353,6 +374,51 @@
         })
     })
 
-    
+    $('#otp-login').submit((e)=>{
+        e.preventDefault()
+        let mobile=$('#number-login').val()
+        $.ajax({
+            url:'/otp-login',
+            method:'post',
+            data:{
+                mobile,
+            },
+            success:(response)=>{
+                if(response.status){
+                    $('#sent-login-otp-button').hide()
+                    $('#number-login').attr('readonly',true)
+                    $('#otp-login-submit').show()
+                    $('#invalid2').hide()
+                }else{
+                    $('#invalid2').show()
+                }
+            }
+        })
+        
+    })
+
+    $('#otp-login-submit').submit((e)=>{
+        e.preventDefault()
+        let mobile=$('#number-login').val()
+        let otp=$('#otp-in-login').val()
+        $('#wrong-otp-ub-login').hide()
+
+        $.ajax({
+            url:'/otp-login-verify',
+            method:'post',
+            data:{
+                mobile,otp
+            },
+            success:(response)=>{
+                if(response.status){
+                    window.location.href='/user-home'
+                }else{
+                    $('#wrong-otp-ub-login').show()
+                }
+
+            }
+        })    
+
+    })
 
 </script>

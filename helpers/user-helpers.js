@@ -265,12 +265,14 @@ module.exports = {
         })
     },
     otpSignup: function (userData) {
+        console.log('MOngo part',userData);
         
         return new Promise(async (resolve, reject) => {
             
                 db.get().collection(collection.USER_COLLECTION).insertOne({
                     name: userData.name,
                     mobile: userData.mobile,
+                    email:userData.email,
                     admin: false,
                     block: false
                 }).then(() => {
@@ -282,13 +284,40 @@ module.exports = {
         })
     },
     otpUserCheck:function(userData){
+        
         return new Promise(async(resolve,reject)=>{
            let user=await db.get().collection(collection.USER_COLLECTION).findOne({mobile:userData.mobile})
+           
            if(user){
+               
                 reject()
            }else{
                resolve()
            }
         })
+    },
+    otpEmailCheck:function(userData){
+        
+        return new Promise(async(resolve,reject)=>{
+            let user=await db.get().collection(collection.USER_COLLECTION).findOne({email:userData.email})
+            if(user){
+                console.log('Existing user email');
+                reject()
+            }else{
+                console.log('new user email');
+                resolve()
+            }
+        })
+    },
+
+    otpLogin:function(userData){
+        return new Promise(async(resolve,reject)=>{
+            let user=await db.get().collection(collection.USER_COLLECTION).findOne({mobile:userData.mobile})
+
+            resolve(user)
+            
+        })
     }
+
+
 }
