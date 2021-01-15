@@ -313,8 +313,12 @@ module.exports = {
     otpLogin:function(userData){
         return new Promise(async(resolve,reject)=>{
             let user=await db.get().collection(collection.USER_COLLECTION).findOne({mobile:userData.mobile})
-
-            resolve(user)
+            if(user.block){
+                reject()
+            }else{
+                resolve(user)
+            }
+           
             
         })
     }

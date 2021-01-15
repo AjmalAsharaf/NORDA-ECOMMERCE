@@ -412,6 +412,8 @@ axios(config)
       req.session.user=user
       console.log('Session User',req.session.user);
       res.json({status:true})
+    }).catch(()=>{
+      res.json({block:true})
     })
    
   }else{

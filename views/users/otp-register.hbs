@@ -240,6 +240,7 @@
                                               
                                                 <div class="button-box">
                                                      <h4 style="color: red; display: none;" id="invalid2">Number not found</h4> 
+                                                     <h4 style="color: red; display: none;" id="blocked-user" >User is blocked</h4>
                                                     <button type="submit" id="sent-login-otp-button">Sent Otp</button>
                                                    
                                                 </div>
@@ -269,7 +270,7 @@
                                                 <div class="button-box">
                                                     <h4 style="color: red; display: none;" id="email-invalid" >Email already Taken</h4>
                                                     <h4 style="color: red; display: none;" id="number-invalid" >Number already Taken</h4>
-                                                     
+  
                                                     <button type="submit" id="send-otp-button">send Otp</button> 
                                                 </div>
                                             </form>
@@ -412,7 +413,10 @@
             success:(response)=>{
                 if(response.status){
                     window.location.href='/user-home'
-                }else{
+                }else if(response.block){
+                    $('#blocked-user').show()
+                }
+                else{
                     $('#wrong-otp-ub-login').show()
                 }
 
