@@ -150,12 +150,17 @@ router.get('/add-category',(req,res)=>{
   
 })
 router.post('/add-category',(req,res)=>{
-  console.log('Added Category is ',req.body);
+  if(req.session.admin){
+    console.log('Added Category is ',req.body);
   productHelpers.insertCategory(req.body).then(()=>{
     res.json({status:true})
   }).catch(()=>{
     res.json({status:false})
   })
+  }else{
+    res.redirect('/')
+  }
+  
 })
 
 module.exports = router;

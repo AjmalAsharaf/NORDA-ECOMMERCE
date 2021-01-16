@@ -147,7 +147,7 @@
             },
             success:(response)=>{
                 if(response.status){
-                    alert('Category added')
+                    window.location.href='/admin'
                 }else{
                     $('#exists').show()
                 }
