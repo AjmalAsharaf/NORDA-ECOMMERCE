@@ -39,7 +39,11 @@ router.get('/product-management',function(req,res){
 
 router.get('/add-product',(req,res)=>{
   if(req.session.admin){
-    res.render('admin/add-product',{admin:true})
+    productHelpers.showCategory().then((category)=>{
+      
+      res.render('admin/add-product',{admin:true,category})
+    })
+   
   }else{
     res.redirect('/')
   }
@@ -83,8 +87,10 @@ router.get('/edit-product/:id',(req,res)=>{
   
   if(req.session.admin){
     productHelpers.viewOnePorduct(proId).then((product)=>{
-      console.log('single product',product);
-      res.render('admin/edit-product',{admin:true,product})
+      productHelpers.showCategory().then((category)=>{
+        res.render('admin/edit-product',{admin:true,product,category})
+      })
+     
     })
   }else{
     res.redirect('/')
@@ -130,6 +136,31 @@ router.get('/unblock-user/:id',(req,res)=>{
     userHelpers.unblockUser(proId).then(()=>{
       res.redirect('/admin/user-management')
     })
+  }else{
+    res.redirect('/')
   }
 })
+
+router.get('/add-category',(req,res)=>{
+  if(req.session.user){
+    res.render('admin/add-category',({admin:true}))
+  }else{
+    res.redirect('/')
+  }
+  
+})
+router.post('/add-category',(req,res)=>{
+  if(req.session.admin){
+    console.log('Added Category is ',req.body);
+  productHelpers.insertCategory(req.body).then(()=>{
+    res.json({status:true})
+  }).catch(()=>{
+    res.json({status:false})
+  })
+  }else{
+    res.redirect('/')
+  }
+  
+})
+
 module.exports = router;

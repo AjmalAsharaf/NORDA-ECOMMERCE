@@ -13,7 +13,7 @@
                         <div class="row align-items-center">
                             <div class="col-xl-2 col-lg-2">
                                 <div class="logo">
-                                    <a href="index.html"><img src="/images/logo/logo.png" alt="logo"></a>
+                                    <a href="/"><img src="/images/logo/logo.png" alt="logo"></a>
                                 </div>
                             </div>
                             <div class="col-xl-8 col-lg-7">
@@ -24,23 +24,11 @@
                                                
                                             </li>
                                            
-                                            <li><a href="#">PAGES </a>
-                                                <ul class="sub-menu-style">
-                                                    <li><a href="about-us.html">about us </a></li>
-                                                    <li><a href="cart.html">cart page</a></li>
-                                                    <li><a href="checkout.html">checkout </a></li>
-                                                    <li><a href="my-account.html">my account</a></li>
-                                                    <li><a href="wishlist.html">wishlist </a></li>
-                                                    <li><a href="compare.html">compare </a></li>
-                                                    <li><a href="contact.html">contact us </a></li>
-                                                    <li><a href="order-tracking.html">order tracking</a></li>
-                                                    <li><a href="login-register.html">login / register </a></li>
-                                                </ul>
-                                            </li>
+                                           
                                             {{#if user}}
                                             <li style="color:red">{{user.name}}</li>
                                             {{/if}}
-                                            <li><a href="/logout" style="margin-left: 510px;">Logout </a>
+                                            <li><a href="/logout" style="margin-left: 600px;">Logout </a>
                                                
                                             </li>
                                        
@@ -278,26 +266,9 @@
                                     <a class="active" href="#shop-1" data-toggle="tab"><i class="icon-grid"></i></a>
                                     <a href="#shop-2" data-toggle="tab"><i class="icon-menu"></i></a>
                                 </div>
-                                <p>Showing 1 - 20 of 30 results </p>
+                               
                             </div>
-                            <div class="product-sorting-wrapper">
-                                <div class="product-shorting shorting-style">
-                                    <label>View :</label>
-                                    <select>
-                                        <option value=""> 20</option>
-                                        <option value=""> 23</option>
-                                        <option value=""> 30</option>
-                                    </select>
-                                </div>
-                                <div class="product-show shorting-style">
-                                    <label>Sort by :</label>
-                                    <select>
-                                        <option value="">Default</option>
-                                        <option value=""> Name</option>
-                                        <option value=""> price</option>
-                                    </select>
-                                </div>
-                            </div>
+                           
                         </div>
                         <div class="shop-bottom-area">
                             <div class="tab-content jump">
@@ -308,14 +279,14 @@
                                         <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
                                             <div class="single-product-wrap mb-35">
                                                 <div class="product-img product-img-zoom mb-15">
-                                                    <a href="product-details.html">
+                                                    <a href="/product-view/{{this._id}}">
                                                         <img src="/product-images/{{this._id}}.jpg" alt="" >
                                                     </a>
                                                     
                                                 </div>
                                                 <div class="product-content-wrap-2 text-center">
                                                     
-                                                    <h3><a href="product-details.html">{{this.productName}}</a></h3>
+                                                    <h3><a href="/product-view/{{this._id}}">{{this.productName}}</a></h3>
                                                     <div class="product-price-2">
                                                         <span>Rs.{{this.productPrice}}</span>
                                                     </div>
@@ -370,7 +341,7 @@
                                                    
                                                     <p>{{this.this.productDes}}</p>
                                                     <div class="product-list-action">
-                                                        <button title="Add To Cart"><i class="icon-basket-loaded"></i></button>
+                                                        <button title="Add To Cart" onclick="addToCart('{{this._id}}')"><i class="icon-basket-loaded"></i></button>
                                                        
                                                     </div>
                                                 </div>

@@ -213,7 +213,7 @@
                         <li>
                             <a href="/">Home</a>
                         </li>
-                        <li class="active">login - register </li>
+                        <li class="active">OTP login & register </li>
                     </ul>
                 </div>
             </div>
@@ -235,42 +235,60 @@
                                 <div id="lg1" class="tab-pane active">
                                     <div class="login-form-container">
                                         <div class="login-register-form">
-                                            <form id="login">
-                                                <input type="email" name="user-name" placeholder="Email" id="login-email" required>
-                                                <input type="password" name="user-password" placeholder="Password" id="login-password" required>
+                                            <form id="otp-login">
+                                                <input type="number" name="user-name" placeholder="Enter your registered number" id="number-login" required>
+                                              
                                                 <div class="button-box">
-                                                     <h4 style="color: red; display: none;" id="invalid2">Invalid Email or password</h4> 
-                                                    <button type="submit">Login</button>
+                                                     <h4 style="color: red; display: none;" id="invalid2">Number not found</h4> 
+                                                     <h4 style="color: red; display: none;" id="blocked-user" >User is blocked</h4>
+                                                    <button type="submit" id="sent-login-otp-button">Sent Otp</button>
+                                                   
                                                 </div>
-                                                
-
                                             </form>
-                                            <div class="button-box mt-2">
-                                            <a href="/otp">
-                                            <button class="otp-style">Login with otp</button></a>
-                                            </div>
+                                             <form id="otp-login-submit" style="display: none ;margin-top: 30px;">
+                                                 <input type="number" name="otp" placeholder="Enter your otp" required id="otp-in-login">
+                                                 <h4 style="color: red; display: none;" id="wrong-otp-ub-login" >OTP wrong</h4>
+                                                 <div class="button-box">
+                                                  
+                                                     
+                                                    <button type="submit">Submit Otp</button> 
+                                                </div>
+                                                <button class="otp-style mt-2" id="resend-otp-in-login">Resend</button>
+                                            </form>
                                         </div>
                                     </div>
                                 </div>
                                 <div id="lg2" class="tab-pane">
                                     <div class="login-form-container">
                                         <div class="login-register-form">
-                                            <form id="register">
-                                                <input type="text" name="user-name" placeholder="Name" required id="name">
-                                                <input type="email" name="email-name" placeholder="Email" required id="email">
-                                                <input type="password" name="user-password" placeholder="Password" required id="password">
+                                            <form id="otp-register" >
+                                                <input type="text" name="name" placeholder="Name" required id="name">
+                                                <input type="number" name="number" placeholder="Enter your number" required id="number">
+                                                <input type="email" name="email" placeholder="Enter your email" required id="email-register">
+                                                
                                              
                                                 <div class="button-box">
-                                                    <h4 style="color: red; display: none;" id="invalid1">Email already Taken</h4>
-                                                    <button type="submit">Register</button> 
+                                                    <h4 style="color: red; display: none;" id="email-invalid" >Email already Taken</h4>
+                                                    <h4 style="color: red; display: none;" id="number-invalid" >Number already Taken</h4>
+  
+                                                    <button type="submit" id="send-otp-button">send Otp</button> 
                                                 </div>
                                             </form>
-                                            <div class="button-box mt-2">
-                                            <a href="/otp">
-                                            <button class="otp-style">Wanna Register with otp?</button></a>
-                                            </div>
+                                            <form id="otp-register-submit" style="display: none ;margin-top: 30px;">
+                                                 <input type="number" name="otp" placeholder="Enter your otp" required id="otp">
+                                                 <h4 style="color: red; display: none;" id="wrong-otp" >OTP wrong</h4>
+                                                 <div class="button-box">
+                                                  
+                                                     
+                                                    <button type="submit">Submit Otp</button> 
+                                                </div>
+                                                <button class="otp-style mt-2" id="resend">Resend</button>
+                                            </form>
+                                            
                                         </div>
                                     </div>
+                                    
+                                    
                                 </div>
                             </div>
                         </div>
@@ -287,53 +305,139 @@
 			<script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
 
 <script>
-    $('#register').submit((e)=>{
+    $('#otp-register').submit((e)=>{
         e.preventDefault()
         let name=$('#name').val()
-        let email=$('#email').val()
-        let password=$('#password').val()
-        $('#invalid1').hide()
+        let mobile=$('#number').val()
+        let email=$('#email-register').val()
+        $('#number-invalid').hide()
+        $('#email-invalid').hide()
+       
         $.ajax({
-			url:'/register',
+			url:'/otp-register',
 			method:'post',
 			data:{
-				name,email,password
+
+				name,mobile,email
 			},
 			success:(response)=>{
-				if(response.status==true){
+				if(response.status){
+					$('#otp-register-submit').show()
+                    $('#send-otp-button').hide()
+                    $('#name').attr('readonly',true)
+                    $('#number').attr('readonly',true)
+                    $('#email-register').attr('readonly',true)
 					
-					window.location.href='/login-register'
-				}else{
-					$('#invalid1').show()
-				}
+				}else if(response.number){
+                    $('#number-invalid').show()
+                }else if(response.email){   
+                    $('#email-invalid').show()
+                }
 			}
 		})
     })
 
-    $('#login').submit((e)=>{
+    $('#otp-register-submit').submit((e)=>{
         e.preventDefault()
-        let email=$('#login-email').val()
-        let password=$('#login-password').val()
+       
+        let otp=$('#otp').val()
+        let name=$('#name').val()
+        let mobile=$('#number').val()
+        let email=$('#email-register').val()
+        $('#wrong-otp').hide()
+
+          $.ajax({
+			url:'/verify-otp',
+			method:'post',
+			data:{
+				otp,name,mobile,email
+			},
+			success:(response)=>{
+				if(response.status){
+                    window.location.href='/otp'
+                }else{
+                    $('#wrong-otp').show()
+                }
+			}
+		})
+       
+    })
+
+    $('#resend').click((e)=>{
+        e.preventDefault()
+        $('#wrong-otp').hide()
+        $.ajax({
+            url:'/resend-otp',
+            method:'post',
+            success:(response)=>{
+                if(response.status){
+                     $('#wrong-otp').hide()
+                }
+            }
+        })
+    })
+
+    $('#otp-login').submit((e)=>{
+        e.preventDefault()
+        let mobile=$('#number-login').val()
         $('#invalid2').hide()
         $.ajax({
-            url:'/login',
+            url:'/otp-login',
             method:'post',
             data:{
-                email,password
+                mobile,
             },
             success:(response)=>{
                 if(response.status){
-                    if(response.user.admin){
-                        window.location.href='/admin'
-                    }else{
-                         window.location.href='/user-home'
-                    }
-                   
+                    $('#sent-login-otp-button').hide()
+                    $('#number-login').attr('readonly',true)
+                    $('#otp-login-submit').show()
+                    $('#invalid2').hide()
                 }else{
                     $('#invalid2').show()
                 }
-                
+            }
+        })
+        
+    })
 
+    $('#otp-login-submit').submit((e)=>{
+        e.preventDefault()
+        let mobile=$('#number-login').val()
+        let otp=$('#otp-in-login').val()
+        $('#wrong-otp-ub-login').hide()
+
+        $.ajax({
+            url:'/otp-login-verify',
+            method:'post',
+            data:{
+                mobile,otp
+            },
+            success:(response)=>{
+                if(response.status){
+                    window.location.href='/user-home'
+                }else if(response.block){
+                    $('#blocked-user').show()
+                }
+                else{
+                    $('#wrong-otp-ub-login').show()
+                }
+
+            }
+        })    
+
+    })
+    $('#resend-otp-in-login').click((e)=>{
+        e.preventDefault()
+        
+        $('#wrong-otp-ub-login').hide()
+        $.ajax({
+            url:'/resend-otp',
+            method:'post',
+            success:(response)=>{
+                if(response.status){
+                     $('#wrong-otp').hide()
+                }
             }
         })
     })

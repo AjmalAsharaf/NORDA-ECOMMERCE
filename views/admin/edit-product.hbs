@@ -73,7 +73,7 @@
                             <span class="text">Settings</span>
                         </a>
                     </li>
-                    <li class="nav-item">
+                    {{!-- <li class="nav-item">
                         <a href="#" class="nav-link px-2">
                             <i class="material-icons icon">
                                 pages
@@ -88,7 +88,7 @@
                             </i>
                             <span class="text">Demo</span>
                         </a>
-                    </li>
+                    </li> --}}
                     <li class="nav-item">
                         <a href="#" class="nav-link px-2 sideMenuToggler">
                             <i class="material-icons icon expandView ">
@@ -138,9 +138,10 @@
                                                 <label for="sel1">Sub Category</label>
                                                 <select class="form-control" id="sel1" name="productSubCat"
                                                     value="{{product.productSubCat}}">
-                                                    <option>Tshirt</option>
-                                                    <option>Shirt</option>
-
+                                                    {{#each category}}
+                                                    <option>{{this.productSubCat}}</option>
+                                                    
+                                                    {{/each}}
                                                 </select>
 
                                             </div>
@@ -170,7 +171,7 @@
 
                                                 </div>
                                                 <input type="file" class="form-control" id="exampleInputPassword1"
-                                                    name="Image" onchange="viewImage(event)">
+                                                    name="Image" accept="images/ .jpg, .jpeg, .png" onchange="viewImage(event)">
                                             </div>
                                             <div>
 

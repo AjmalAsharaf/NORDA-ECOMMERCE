@@ -51,5 +51,23 @@ module.exports={
             })
             
         })
-    }
+    },
+    insertCategory:function (data){
+        return new Promise(async(resolve,reject)=>{
+            let category= await db.get().collection(collection.CATEGORY).findOne({productSubCat:data.productSubCat})
+            if(category){
+                reject()
+            }else{
+                db.get().collection(collection.CATEGORY).insertOne({productSubCat:data.productSubCat})
+                resolve()
+            }
+        })
+    },
+    showCategory:function(){
+        return new Promise(async(resolve,reject)=>{
+            let category= await db.get().collection(collection.CATEGORY).find().toArray()
+            resolve(category)
+        })
+    }  
+       
 }
