@@ -344,6 +344,7 @@
         let name=$('#name').val()
         let mobile=$('#number').val()
         let email=$('#email-register').val()
+        $('#wrong-otp').hide()
 
           $.ajax({
 			url:'/verify-otp',
@@ -364,6 +365,7 @@
 
     $('#resend').click((e)=>{
         e.preventDefault()
+        $('#wrong-otp').hide()
         $.ajax({
             url:'/resend-otp',
             method:'post',
@@ -378,6 +380,7 @@
     $('#otp-login').submit((e)=>{
         e.preventDefault()
         let mobile=$('#number-login').val()
+        $('#invalid2').hide()
         $.ajax({
             url:'/otp-login',
             method:'post',
@@ -423,6 +426,20 @@
             }
         })    
 
+    })
+    $('#resend-otp-in-login').click((e)=>{
+        e.preventDefault()
+        
+        $('#wrong-otp-ub-login').hide()
+        $.ajax({
+            url:'/resend-otp',
+            method:'post',
+            success:(response)=>{
+                if(response.status){
+                     $('#wrong-otp').hide()
+                }
+            }
+        })
     })
 
 </script>
