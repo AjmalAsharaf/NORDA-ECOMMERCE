@@ -138,9 +138,10 @@
                                                 <label for="sel1">Sub Category</label>
                                                 <select class="form-control" id="sel1" name="productSubCat"
                                                     value="{{product.productSubCat}}">
-                                                    <option>Tshirt</option>
-                                                    <option>Shirt</option>
-
+                                                    {{#each category}}
+                                                    <option>{{this.productSubCat}}</option>
+                                                    
+                                                    {{/each}}
                                                 </select>
 
                                             </div>
