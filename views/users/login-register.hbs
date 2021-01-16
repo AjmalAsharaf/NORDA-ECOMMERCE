@@ -292,6 +292,7 @@
         let name=$('#name').val()
         let email=$('#email').val()
         let password=$('#password').val()
+        $('#invalid1').hide()
         $.ajax({
 			url:'/register',
 			method:'post',
@@ -313,6 +314,7 @@
         e.preventDefault()
         let email=$('#login-email').val()
         let password=$('#login-password').val()
+        $('#invalid2').hide()
         $.ajax({
             url:'/login',
             method:'post',
