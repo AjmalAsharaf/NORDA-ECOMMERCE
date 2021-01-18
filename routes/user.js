@@ -433,6 +433,7 @@ axios(config)
 router.get('/product-view/:id',(req,res)=>{
   console.log('Product view id',req.params.id);
   productHelpers.viewOnePorduct(req.params.id).then((product)=>{
+    console.log('Recieved product',product);
     res.render('users/product-details',{product})
   })
  
