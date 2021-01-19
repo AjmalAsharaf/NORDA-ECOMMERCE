@@ -68,6 +68,38 @@ module.exports={
             let category= await db.get().collection(collection.CATEGORY).find().toArray()
             resolve(category)
         })
-    }  
+    },
+    deleteCategory:function(proId){
+        return new Promise(async(resolve,reject)=>{
+            db.get().collection(collection.CATEGORY).removeOne({_id:objId(proId)})
+            resolve()
+        })
+    },
+    showOneCategory:function(proId){
+        return new Promise(async(resolve,reject)=>{
+            category=await db.get().collection(collection.CATEGORY).findOne({_id:objId(proId)})
+
+            resolve(category)
+        })
+    },
+    updateCategory:function(proId,subCategory){
+        
+        return new Promise(async(resolve,reject)=>{
+            category=await db.get().collection(collection.CATEGORY).findOne({productSubCat:subCategory})
+            if(category){
+                reject()
+            }else{
+                
+                db.get().collection(collection.CATEGORY).updateOne({_id:objId(proId)},{
+                    $set:{
+                        productSubCat:subCategory
+                    }
+                }).then((response)=>{
+                    resolve()
+                })
+                
+            }
+        })
+    }
        
 }

@@ -150,8 +150,9 @@ router.get('/add-category',(req,res)=>{
   
 })
 router.post('/add-category',(req,res)=>{
+  console.log(req.body,'add-category');
   if(req.session.admin){
-    console.log('Added Category is ',req.body);
+   
   productHelpers.insertCategory(req.body).then(()=>{
     res.json({status:true})
   }).catch(()=>{
@@ -161,6 +162,37 @@ router.post('/add-category',(req,res)=>{
     res.redirect('/')
   }
   
+})
+router.get('/category-management',(req,res)=>{
+  productHelpers.showCategory().then((category)=>{
+    res.render('admin/category-manager',{admin:true,category})
+  })
+ 
+})
+
+router.get('/delete-category/:id',(req,res)=>{
+  proId=req.params.id
+  productHelpers.deleteCategory(proId).then(()=>{
+    res.redirect('/admin/category-management')
+  })
+})
+
+router.get('/edit-category/:id',(req,res)=>{
+  proId=req.params.id
+
+  productHelpers.showOneCategory(proId).then((category)=>{
+    res.render('admin/edit-category',{admin:true,category})
+  })
+})
+
+router.post('/edit-category',(req,res)=>{
+  
+  productHelpers.updateCategory(req.body.proId,req.body.productSubCat).then(()=>{
+    res.json({status:true})
+  })
+  .catch(()=>{
+    res.json({status:false})
+  })
 })
 
 module.exports = router;

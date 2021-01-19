@@ -91,7 +91,7 @@
                     <div class="row">
                         <div class="col-md-6 m-auto">
                             <div class="bg-mattBlackLight my-2 p-3">
-                                <h2 style="color: aliceblue;" class="text-center">Category management</h2>
+                                <h2 style="color: aliceblue;" class="text-center">Edit Category</h2>
                             </div>
                         </div>
                         <div class="container-fluid">
@@ -103,12 +103,13 @@
                                                 <label for="exampleInputEmail1">Sub Category</label>
                                                 <input type="text" class="form-control" id="sub-category"
                                                     aria-describedby="emailHelp" placeholder="Enter new category"
-                                                    required name="productName">
+                                                    required name="productName" value="{{category.productSubCat}}" >
+                                                    <input type="text" name="" id="pro-id" value="{{category._id}}" style="display: none;">
 
                                             </div>
                                             <div>
                                                 <h5 style="color: red; display: none;" id="exists">Category exists</h5>
-                                            <button type="submit" class="btn btn-primary">Add Category</button>
+                                            <button type="submit" class="btn btn-primary" id="button-submit">Update Category</button>
                                             </div>
                                         </form>
 
@@ -134,16 +135,18 @@
 <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
 
 <script>
+    
     $('#add-category').submit((e)=>{
         e.preventDefault()
         
         let productSubCat=$('#sub-category').val()
+        let proId=$('#pro-id').val()
         $('#exists').hide()
         $.ajax({
-            url:'/admin/add-category',
+            url:'/admin/edit-category',
             method:'post',
             data:{
-                productSubCat
+                productSubCat,proId
             },
             success:(response)=>{
                 if(response.status){
