@@ -164,35 +164,54 @@ router.post('/add-category',(req,res)=>{
   
 })
 router.get('/category-management',(req,res)=>{
-  productHelpers.showCategory().then((category)=>{
-    res.render('admin/category-manager',{admin:true,category})
-  })
+  if(req.session.admin){
+    productHelpers.showCategory().then((category)=>{
+      res.render('admin/category-manager',{admin:true,category})
+    })
+  }else{
+    res.redirect('/')
+  }
+  
  
 })
 
 router.get('/delete-category/:id',(req,res)=>{
-  proId=req.params.id
+  if(res.session.admin){
+    proId=req.params.id
   productHelpers.deleteCategory(proId).then(()=>{
     res.redirect('/admin/category-management')
   })
+  }else{
+    res.redirect('/')
+  }
+  
 })
 
 router.get('/edit-category/:id',(req,res)=>{
-  proId=req.params.id
+  if(req.session.admin){
+    proId=req.params.id
 
   productHelpers.showOneCategory(proId).then((category)=>{
     res.render('admin/edit-category',{admin:true,category})
   })
+  }else{
+    res.redirect('/')
+  }
+  
 })
 
 router.post('/edit-category',(req,res)=>{
-  
-  productHelpers.updateCategory(req.body.proId,req.body.productSubCat).then(()=>{
-    res.json({status:true})
-  })
-  .catch(()=>{
-    res.json({status:false})
-  })
+  if(req.session.admin){
+    productHelpers.updateCategory(req.body.proId,req.body.productSubCat).then(()=>{
+      res.json({status:true})
+    })
+    .catch(()=>{
+      res.json({status:false})
+    })
+  }else{
+    res.redirect('/')
+  }
+ 
 })
 
 module.exports = router;
