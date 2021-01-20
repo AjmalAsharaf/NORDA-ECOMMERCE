@@ -84,11 +84,11 @@ router.post('/login', (req, res) => {
     userHelpers.doLogin(userData).then((response) => {
 
       if (response.user.admin) {
-        req.session.user = req.body
+        req.session.user = response.user
         req.session.admin = true
         res.json(response)
       } else {
-        req.session.user = req.body
+        req.session.user = response.user
         res.json(response)
       }
 
@@ -437,5 +437,10 @@ router.get('/product-view/:id',(req,res)=>{
     res.render('users/product-details',{product})
   })
  
+})
+
+router.get('/checkout',async (req,res)=>{
+  let total= await userHelpers.getTotalAmount(req.session.user._id)
+  res.render('users/checkout',{total})
 })
 module.exports = router;

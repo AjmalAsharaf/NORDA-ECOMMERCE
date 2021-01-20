@@ -7,6 +7,10 @@ const { response } = require('express')
 
 module.exports={
     addProducts:function(product){
+        
+        product.productPrice=parseInt(product.productPrice)
+        product.productQty=parseInt(product.productQty)
+        
         return new Promise((resolve,reject)=>{
             db.get().collection(collection.PRODUCT_COLLECTION).insertOne(product).then((data)=>{
                
@@ -35,7 +39,9 @@ module.exports={
         })
     },
     updateProduct:function(proId,product){
-        console.log(product,'mongo');
+        product.productPrice=parseInt(product.productPrice)
+        product.productQty=parseInt(product.productQty)
+
         return new Promise((resolve,reject)=>{
             db.get().collection(collection.PRODUCT_COLLECTION).updateOne({_id:objId(proId)},{
                 $set:{
