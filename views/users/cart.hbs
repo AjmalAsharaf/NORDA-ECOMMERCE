@@ -289,14 +289,14 @@
                                                     <button class="cart-item-count" style="height: 31px;
                                                         width: 31px;
                                                         line-height: 31px;
-                                                        border: 1px solid #E3E4E9;" onclick="changeQuantity('{{this._id}}','{{this.product._id}}',-1)">-</button>
+                                                        border: 1px solid #E3E4E9;" onclick="changeQuantity('{{this._id}}','{{this.product._id}}','{{../user._id}}',-1)">-</button>
                                                        
                                                        <span id="{{this.product._id}}" style="padding-right: 20px;padding-left: 20px;padding-top: 4px;"> {{this.quantity}}</span>
                                                         
                                                         <button class="cart-item-count" style="height: 31px;
                                                         width: 31px;
                                                         line-height: 31px;
-                                                        border: 1px solid #E3E4E9; ;" onclick="changeQuantity('{{this._id}}','{{this.product._id}}',1)">+</button>
+                                                        border: 1px solid #E3E4E9; ;" onclick="changeQuantity('{{this._id}}','{{this.product._id}}','{{../user._id}}',1)">+</button>
                                                   
                                                 </div>
 
@@ -337,9 +337,9 @@
                                     <div class="title-wrap">
                                         <h4 class="cart-bottom-title section-bg-gary-cart">Cart Total</h4>
                                     </div>
-                                    <h5>Total products <span>$260.00</span></h5>
+                                    <h5>Total products <span>Rs.{{totalValue}}</span></h5>
 
-                                    <h4 class="grand-totall-title">Grand Total <span>$260.00</span></h4>
+                                    <h4 class="grand-totall-title">Grand Total <span id="total">Rs.{{totalValue}}.00</span></h4>
                                     <a href="/checkout">Proceed to Checkout</a>
                                 </div>
                             </div>
@@ -365,13 +365,14 @@
 			<script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
 
 <script>
-    function changeQuantity(cartId,proId,count){
+    function changeQuantity(cartId,proId,userId,count){
         count=parseInt(count)
         let quantity=parseInt(document.getElementById(proId).innerHTML)
         $.ajax({
             url:'/change-product-quantity',
             
             data:{
+                user:userId,
                 cart:cartId,
                 product:proId,
                 count:count,
@@ -384,6 +385,8 @@
                   location.reload()
               }else{
                   document.getElementById(proId).innerHTML=quantity+count
+                  document.getElementById('total').innerHTML=response.total
+
               }
                 
             }

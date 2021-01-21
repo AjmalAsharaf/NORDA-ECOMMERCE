@@ -154,20 +154,24 @@ router.get('/view-cart', (req, res) => {
     if (req.session.admin) {
       res.redirect('/admin')
     } else {
-      let userData = req.session.user
-
-      userHelpers.getSingleUser(userData).then((user) => {
-
-        userHelpers.getCartProducts(user._id).then((products) => {
-
-          res.render('users/cart', { user, products })
-        }).catch(() => {
-          res.render('users/cart', { user })
-        })
 
 
+      user = req.session.user
+      console.log('user name', user);
 
+      userHelpers.getCartProducts(req.session.user._id).then(async (products) => {
+        let totalValue = await userHelpers.getTotalAmount(req.session.user._id)
+
+        res.render('users/cart', { user, products, totalValue })
       })
+      
+      .catch(() => {
+        res.render('users/cart', { user })
+      })
+
+
+
+
 
     }
 
@@ -203,8 +207,10 @@ router.get('/add-to-cart/:id', (req, res) => {
 router.post('/change-product-quantity', (req, res) => {
 
 
-  userHelpers.changeProductQuantity(req.body).then((response) => {
-
+  userHelpers.changeProductQuantity(req.body).then(async (response) => {
+    
+    response.total = await userHelpers.getTotalAmount(req.body.user)
+    console.log('Response', response);
     res.json(response)
   })
 })
@@ -224,9 +230,9 @@ router.post('/delete-cart', (req, res) => {
 })
 
 router.get('/otp', (req, res) => {
-  if(req.session.user){
+  if (req.session.user) {
     res.redirect('/user-home')
-  }else{
+  } else {
     res.render('users/otp-register')
 
   }
@@ -236,19 +242,19 @@ router.post('/otp-register', (req, res) => {
 
   console.log('Otp register body', req.body);
   userHelpers.otpUserCheck(req.body).then(() => {
-    userHelpers.otpEmailCheck(req.body).then(()=>{
+    userHelpers.otpEmailCheck(req.body).then(() => {
       console.log('New user');
       var data = new FormData();
-  
+
       console.log(req.body.mobile);
-  
-  
+
+
       data.append('mobile', +91 + req.body.mobile);
       data.append('sender_id', 'SMSINFO');
       data.append('message', 'Your otp code for registering {code}');
       data.append('expiry', '900');
-  
-  
+
+
       var config = {
         method: 'post',
         url: 'https://d7networks.com/api/verifier/send',
@@ -258,24 +264,24 @@ router.post('/otp-register', (req, res) => {
         },
         data: data
       };
-  
+
       axios(config)
         .then(function (response) {
-  
+
           otpid = response.data.otp_id
           res.json({ status: true })
         })
         .catch(function (error) {
           console.log(error);
         });
-    }).catch(()=>{
-      res.json({email:true})
+    }).catch(() => {
+      res.json({ email: true })
     })
-    
+
   })
     .catch(() => {
       console.log('Existing user');
-      res.json({number: true})
+      res.json({ number: true })
 
     })
 
@@ -288,7 +294,7 @@ router.post('/verify-otp', (req, res) => {
   console.log('Alll data in verify login', req.body);
   userData = req.body
   otpNumber = req.body.otp
-  
+
 
   data.append('otp_id', otpid);
   data.append('otp_code', otpNumber);
@@ -358,9 +364,9 @@ router.post('/otp-login', (req, res) => {
   userHelpers.otpUserCheck(req.body).then(() => {
     res.json({ status: false })
   }).catch(() => {
-    
+
     var data = new FormData();
-    data.append('mobile', +91+req.body.mobile);
+    data.append('mobile', +91 + req.body.mobile);
     data.append('sender_id', 'SMSINFO');
     data.append('message', 'Your otp code is {code}');
     data.append('expiry', '900');
@@ -389,58 +395,68 @@ router.post('/otp-login', (req, res) => {
 
 router.post('/otp-login-verify', (req, res) => {
   console.log('Otp in verify', req.body);
-  userData=req.body
+  userData = req.body
   var data = new FormData();
-data.append('otp_id', otpid);
-data.append('otp_code', req.body.otp);
+  data.append('otp_id', otpid);
+  data.append('otp_code', req.body.otp);
 
-var config = {
-  method: 'post',
-  url: 'https://d7networks.com/api/verifier/verify',
-  headers: { 
-    'Authorization': 'Token 6006332f15b6afb6c2a4b9527f3e21fe63dd41fa', 
-    ...data.getHeaders()
-  },
-  data : data
-};
+  var config = {
+    method: 'post',
+    url: 'https://d7networks.com/api/verifier/verify',
+    headers: {
+      'Authorization': 'Token 6006332f15b6afb6c2a4b9527f3e21fe63dd41fa',
+      ...data.getHeaders()
+    },
+    data: data
+  };
 
-axios(config)
-.then(function (response) {
-  console.log(JSON.stringify(response.data));
-  if (response.data.status == 'success'){
-    userHelpers.otpLogin(req.body).then((user)=>{
-      req.session.user=user
-      console.log('Session User',req.session.user);
-      res.json({status:true})
-    }).catch(()=>{
-      res.json({block:true})
+  axios(config)
+    .then(function (response) {
+      console.log(JSON.stringify(response.data));
+      if (response.data.status == 'success') {
+        userHelpers.otpLogin(req.body).then((user) => {
+          req.session.user = user
+          console.log('Session User', req.session.user);
+          res.json({ status: true })
+        }).catch(() => {
+          res.json({ block: true })
+        })
+
+      } else {
+        res.json({ status: false })
+
+      }
+
     })
-   
-  }else{
-    res.json({status:false})
-    
-  }
+    .catch(function (error) {
+      console.log(error);
 
-})
-.catch(function (error) {
-  console.log(error);
-
-  res.json({status:false})
-});
+      res.json({ status: false })
+    });
 
 })
 
-router.get('/product-view/:id',(req,res)=>{
-  console.log('Product view id',req.params.id);
-  productHelpers.viewOnePorduct(req.params.id).then((product)=>{
-    console.log('Recieved product',product);
-    res.render('users/product-details',{product})
+router.get('/product-view/:id', (req, res) => {
+  console.log('Product view id', req.params.id);
+  productHelpers.viewOnePorduct(req.params.id).then((product) => {
+    console.log('Recieved product', product);
+    res.render('users/product-details', { product })
   })
- 
+
 })
 
-router.get('/checkout',async (req,res)=>{
-  let total= await userHelpers.getTotalAmount(req.session.user._id)
-  res.render('users/checkout',{total})
+router.get('/checkout', async (req, res) => {
+  let total = await userHelpers.getTotalAmount(req.session.user._id)
+  res.render('users/checkout', { total,user:req.session.user })
+})
+
+router.post('/place-order',async(req,res)=>{
+  console.log('Req',req.body);
+  let products=await userHelpers.getCartProductList(req.body.user)
+  let totalPrice=await userHelpers.getTotalAmount(req.body.user)
+  userHelpers.placeOrder(req.body,products,totalPrice).then((response)=>{
+    res.json({status:true})
+  })
+  
 })
 module.exports = router;

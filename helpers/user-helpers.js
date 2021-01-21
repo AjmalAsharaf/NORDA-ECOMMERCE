@@ -125,9 +125,11 @@ module.exports = {
         })
     },
     getCartProducts: function (userId) {
+        console.log('Mongo',userId);
         return new Promise(async (resolve, reject) => {
             let userCart = await db.get().collection(collection.CART_COLLECTION).findOne({ user: objId(userId) })
             if (userCart) {
+                console.log('Cart is teher');
                 let cartItems = await db.get().collection(collection.CART_COLLECTION).aggregate([
                     {
                         $match: { user: objId(userId) }
@@ -161,6 +163,7 @@ module.exports = {
 
                 resolve(cartItems)
             } else {
+                console.log('No cart');
                 reject()
             }
 
@@ -206,7 +209,7 @@ module.exports = {
         })
     },
     changeProductQuantity: function (details) {
-        console.log('mongo--------------------------------------', details);
+        
         quantity = parseInt(details.quantity)
         count = parseInt(details.count)
         return new Promise((resolve, reject) => {
@@ -224,7 +227,7 @@ module.exports = {
                 }).then((response) => {
 
 
-                    resolve(true)
+                    resolve({status:true})
                 })
             }
 
@@ -346,12 +349,48 @@ module.exports = {
                     }
                     
                 ]).toArray()
-                console.log('total is',total);
+               
                 resolve(total[0].total)
             
         })
             
-    }
+    },
+    placeOrder:(order,products,total)=>{
+        
+        return new Promise((resolve,reject)=>{
+            let status=order.payment_method==='cod'?'placed':'pending'
+            let orderObj={
+                deliveryDetails:{
+                    firstName:order.fname,
+                    lastName:order.lname,
+                    houseName:order.houseName,
+                    streetAddress:order.streetAddress,
+                    town:order.town,
+                    state:order.state,
+                    zip:order.zip,
+                    phone:order.phone
+
+                },
+                userId:objId(order.user),
+                paymentMethod:order.payment_method,
+                totalAmount:total,
+                products:products,
+                status:status,
+                date:new Date
+            }
+            db.get().collection(collection.ORDER_COLLECTION).insertOne(orderObj).then((response)=>{
+                db.get().collection(collection.CART_COLLECTION).removeOne({user:objId(order.user)})
+                resolve()
+            })
+
+        })
+    },
+    getCartProductList:(userId)=>{
+        return new Promise(async(resolve,reject)=>{
+            let cart=await db.get().collection(collection.CART_COLLECTION).findOne({user:objId(userId)})
+            resolve(cart.products)
+        })
+    },
 
 
 }
