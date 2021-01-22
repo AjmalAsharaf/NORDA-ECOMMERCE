@@ -459,4 +459,8 @@ router.post('/place-order',async(req,res)=>{
   })
   
 })
+
+router.get('/my-account',(req,res)=>{
+  res.render('users/my-account')
+})
 module.exports = router;

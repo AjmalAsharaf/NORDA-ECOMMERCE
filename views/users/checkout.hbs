@@ -409,7 +409,8 @@
             data:$('#place-order').serialize(),
             success:(response)=>{
                 if(response.status){
-                    location.href='/'
+                    console.log('Order placed')
+                    location.href='/my-account'
                 }
             }
 
