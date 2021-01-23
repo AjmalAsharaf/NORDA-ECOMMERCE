@@ -159,10 +159,15 @@ router.get('/view-cart', (req, res) => {
       user = req.session.user
       console.log('user name', user);
 
-      userHelpers.getCartProducts(req.session.user._id).then(async (products) => {
-        let totalValue = await userHelpers.getTotalAmount(req.session.user._id)
-
-        res.render('users/cart', { user, products, totalValue })
+      userHelpers.getCartProducts(req.session.user._id).then(async(products) => {
+        console.log(products);
+        
+         let totalValue = await userHelpers.getTotalAmount(req.session.user._id)
+         
+          console.log('single,',totalValue);
+          res.render('users/cart', { user, products, totalValue})
+        
+       
       })
       
       .catch(() => {

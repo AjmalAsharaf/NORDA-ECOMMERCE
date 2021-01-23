@@ -183,7 +183,7 @@
                             </div>
                          
                             <div class="cart-delete">
-                                <a href="#">×</a>
+                                <a href="" onclick="deleteSingle('{{this._id}}','{{this.product._id}}')">×</a>
                             </div>
                         </li>
                         {{/each}}
@@ -441,6 +441,22 @@
                 }
                
 
+            }
+        })
+    }
+     function deleteSingle(cartId,proId){
+        
+        $.ajax({
+            url:'/delete-one-cart',
+            method:'post',
+            data:{
+                cart:cartId,
+                product:proId
+            },
+            success:(resoponse)=>{
+                if(resoponse){
+                    location.reload()
+                }
             }
         })
     }
