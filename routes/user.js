@@ -157,14 +157,13 @@ router.get('/view-cart', (req, res) => {
 
 
       user = req.session.user
-      console.log('user name', user);
+     
 
       userHelpers.getCartProducts(req.session.user._id).then(async(products) => {
-        console.log(products);
-        
+       
          let totalValue = await userHelpers.getTotalAmount(req.session.user._id)
          
-          console.log('single,',totalValue);
+          console.log('user cart products',products);
           res.render('users/cart', { user, products, totalValue})
         
        
@@ -213,9 +212,12 @@ router.post('/change-product-quantity', (req, res) => {
 
 
   userHelpers.changeProductQuantity(req.body).then(async (response) => {
-    
+    console.log('change quantity',req.body);
+    response.singleTotal=await userHelpers.getSingeTotal(req.body.user,req.body.product)
+    console.log('rws',response.singleTotal);
     response.total = await userHelpers.getTotalAmount(req.body.user)
-    console.log('Response', response);
+    
+    console.log('Response ', response);
     res.json(response)
   })
 })

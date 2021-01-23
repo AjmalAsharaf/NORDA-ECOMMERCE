@@ -225,9 +225,10 @@
                                                 <a href="#"><img src="/product-images/{{this.product._id}}.jpg" alt=""
                                                         style="width: 98px; height: 112;"></a>
                                             </td>
-                                            <td class="product-name"><a href="#">{{this.productName}}</a></td>
-                                            <td class="product-price-cart"><span
-                                                    class="amount">Rs.{{this.product.productPrice}}</span></td>
+                                            <td class="product-name"><a href="#">{{this.product.productName}}</a></td>
+                                            <td class="product-price-cart">Rs.<span
+                                                    class="amount" >{{this.product.productPrice}}</span></td>
+                                                   
 
                                             <td class="product-quantity pro-details-quality">
                                                 <div class="row">
@@ -248,7 +249,7 @@
 
                                             </td>
                                            
-                                            <td class="product-subtotal">Rs{{this.singleProTotal}}</td>
+                                            <td class="product-subtotal" >Rs.<span id="{{this.product._id}}2">{{this.singleProTotal}}</span> </td>
                                             
                                             <td class="product-remove">
                                                 <a href="" onclick="deleteSingle('{{this._id}}','{{this.product._id}}')"><i class="icon_close"></i></a>
@@ -282,12 +283,10 @@
 
                             <div class="col-lg-12 col-md-12">
                                 <div class="grand-totall">
-                                    <div class="title-wrap">
-                                        <h4 class="cart-bottom-title section-bg-gary-cart">Cart Total</h4>
-                                    </div>
-                                    <h5>Total products <span>Rs.{{totalValue}}</span></h5>
+                                   
+                                    
 
-                                    <h4 class="grand-totall-title">Grand Total <span id="total">Rs.{{totalValue}}.00</span></h4>
+                                    <h4 class="grand-totall-title">Grand Total <span>Rs.<span id="total">{{totalValue}}</span></span></h4>
                                     <a href="/checkout">Proceed to Checkout</a>
                                 </div>
                             </div>
@@ -316,6 +315,7 @@
     function changeQuantity(cartId,proId,userId,count){
         count=parseInt(count)
         let quantity=parseInt(document.getElementById(proId).innerHTML)
+        
         $.ajax({
             url:'/change-product-quantity',
             
@@ -328,13 +328,17 @@
             },
             method:'post',
             success:(response)=>{
+                console.log('response',response.singleTotal)
               if(response.removeProduct){
                   alert('Item removed')
                   location.reload()
               }else{
+                  document.getElementById(proId+2).innerHTML=response.singleTotal
                   document.getElementById(proId).innerHTML=quantity+count
                   document.getElementById('total').innerHTML=response.total
-
+                
+                  
+                  
               }
                 
             }
