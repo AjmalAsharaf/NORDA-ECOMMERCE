@@ -454,8 +454,12 @@ router.get('/product-view/:id', (req, res) => {
 })
 
 router.get('/checkout', async (req, res) => {
-  let total = await userHelpers.getTotalAmount(req.session.user._id)
-  res.render('users/checkout', { total,user:req.session.user })
+  userHelpers.getCartProducts(req.session.user._id).then(async(products)=>{
+    console.log('Checkout',products);
+    let total = await userHelpers.getTotalAmount(req.session.user._id)
+  res.render('users/checkout', { total,user:req.session.user,products })
+  })
+  
 })
 
 router.post('/place-order',async(req,res)=>{
