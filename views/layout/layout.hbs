@@ -34,6 +34,9 @@
 
 <body>
     {{{body}}}
+    {{#if user}}
+    {{>user-header}}
+    {{/if}}
     {{#if admin}}
     {{else}}
     <div class="subscribe-area bg-gray pt-115 pb-115">

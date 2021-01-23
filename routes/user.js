@@ -111,16 +111,16 @@ router.get('/user-home', (req, res) => {
     if (req.session.admin) {
       res.redirect('/admin')
     } else {
-      let userData = req.session.user
+      let user = req.session.user
 
       productHelpers.viewAllProducts().then((products) => {
-        userHelpers.getSingleUser(userData).then(async (user) => {
+        
 
 
-          userHelpers.getCartProducts(user._id).then((cartProducts) => {
+          userHelpers.getCartProducts(req.session.user._id).then((cartProducts) => {
 
-            userHelpers.getCartCount(user._id).then((cartCount) => {
-              res.render('users/shop-no-sidebar', { products, user, cartProducts, cartCount })
+            userHelpers.getCartCount(req.session.user._id).then((cartCount) => {
+              res.render('users/shop-no-sidebar', { products,user,cartProducts, cartCount })
             })
 
           }).catch(() => {
@@ -128,7 +128,7 @@ router.get('/user-home', (req, res) => {
           })
 
 
-        })
+        
 
 
       })
@@ -437,10 +437,11 @@ router.post('/otp-login-verify', (req, res) => {
 })
 
 router.get('/product-view/:id', (req, res) => {
+  let user=req.session.user
   console.log('Product view id', req.params.id);
   productHelpers.viewOnePorduct(req.params.id).then((product) => {
     console.log('Recieved product', product);
-    res.render('users/product-details', { product })
+    res.render('users/product-details', { product,user })
   })
 
 })
@@ -460,7 +461,15 @@ router.post('/place-order',async(req,res)=>{
   
 })
 
+
+
 router.get('/my-account',(req,res)=>{
-  res.render('users/my-account')
+  let user=req.session.user
+  userHelpers.getUserOrders(req.session.user._id).then((orders)=>{
+    console.log('orders',orders);
+    res.render('users/my-account',{orders,user})
+    
+  })
+  
 })
 module.exports = router;

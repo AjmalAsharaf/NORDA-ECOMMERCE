@@ -6,6 +6,7 @@ var logger = require('morgan');
 var db=require('./config/connection')
 const session = require('express-session')
 var fileUpload=require('express-fileupload')
+var hbs=require('express-handlebars')
 
 var userRouter = require('./routes/user');
 var adminRouter = require('./routes/admin');
@@ -15,6 +16,7 @@ var app = express();
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
+app.engine('hbs',hbs({extname:'hbs',defaultLayout:'layout',layoutsDir:__dirname+'/views/layout/',partialsDir:__dirname+'/views/partials/'}))
 
 app.use(logger('dev'));
 app.use(express.json());
