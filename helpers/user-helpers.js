@@ -2,7 +2,7 @@ var db = require('../config/connection')
 var collection = require('../config/collection')
 const bcrypt = require('bcrypt')
 var objId = require('mongodb').ObjectID
-const { ObjectID } = require('mongodb')
+const { ObjectID, ObjectId } = require('mongodb')
 const { response } = require('express')
 
 const Razorpay=require('razorpay')
@@ -444,8 +444,21 @@ module.exports = {
             }
             db.get().collection(collection.ORDER_COLLECTION).insertOne(orderObj).then((response) => {
                 db.get().collection(collection.CART_COLLECTION).removeOne({ user: objId(order.user) })
+                db.get().collection(collection.ADDRESS_COLLECTION).insert({
+                    user: objId(order.user),
+                    firstName: order.fname,
+                    lastName: order.lname,
+                    houseName: order.houseName,
+                    streetAddress: order.streetAddress,
+                    town: order.town,
+                    state: order.state,
+                    zip: order.zip,
+                    phone: order.phone
+
+                })
                 resolve(response.ops[0]._id)
             })
+            
 
         })
     },
@@ -502,6 +515,16 @@ module.exports = {
             }).then(()=>{
                 resolve()
             })
+        })
+    },
+    getAddress:(userId)=>{
+        return new Promise(async(resolve,reject)=>{
+            let address=await db.get().collection(collection.ADDRESS_COLLECTION).findOne({user:objId(userId)})
+            if(address){
+                resolve(address)
+            }else{
+                reject()
+            }
         })
     }
 

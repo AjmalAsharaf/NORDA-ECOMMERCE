@@ -60,7 +60,7 @@ router.post('/register', (req, res) => {
   else {
     userData = req.body
     userHelpers.doSignup(userData).then((response) => {
-      console.log(response);
+     
       res.json(response)
     }).catch((response) => {
       res.json(response)
@@ -165,7 +165,7 @@ router.get('/view-cart', (req, res) => {
         
         if(products.length>0){
           let totalValue = await userHelpers.getTotalAmount(req.session.user._id)
-          console.log('user cart products',products);
+          
           res.render('users/cart', { user, products, totalValue})
         }else{
           res.render('users/cart', { user })
@@ -220,7 +220,7 @@ router.post('/change-product-quantity', (req, res) => {
 
 
   userHelpers.changeProductQuantity(req.body).then(async (response) => {
-    console.log('Response in change product', response);
+    
     response.singleTotal=await userHelpers.getSingeTotal(req.body.user,req.body.product)
     
     response.total = await userHelpers.getTotalAmount(req.body.user)
@@ -231,14 +231,14 @@ router.post('/change-product-quantity', (req, res) => {
 })
 
 router.post('/delete-one-cart', (req, res) => {
-  console.log('______________delete', req.body);
+ 
   userHelpers.deleteOneCartItem(req.body).then((response) => {
     res.json(response)
   })
 })
 
 router.post('/delete-cart', (req, res) => {
-  console.log('SErver', req.body);
+  
   userHelpers.deleteCart(req.body).then((response) => {
     res.json(response)
   })
@@ -255,13 +255,13 @@ router.get('/otp', (req, res) => {
 
 router.post('/otp-register', (req, res) => {
 
-  console.log('Otp register body', req.body);
+  
   userHelpers.otpUserCheck(req.body).then(() => {
     userHelpers.otpEmailCheck(req.body).then(() => {
-      console.log('New user');
+      
       var data = new FormData();
 
-      console.log(req.body.mobile);
+      
 
 
       data.append('mobile', +91 + req.body.mobile);
@@ -295,7 +295,7 @@ router.post('/otp-register', (req, res) => {
 
   })
     .catch(() => {
-      console.log('Existing user');
+      
       res.json({ number: true })
 
     })
@@ -306,7 +306,7 @@ router.post('/otp-register', (req, res) => {
 
 router.post('/verify-otp', (req, res) => {
   var data = new FormData();
-  console.log('Alll data in verify login', req.body);
+  
   userData = req.body
   otpNumber = req.body.otp
 
@@ -348,7 +348,7 @@ router.post('/verify-otp', (req, res) => {
 
 router.post('/resend-otp', (req, res) => {
 
-  console.log('Iam here and Otp id is,', otpid);
+  
 
   var data = new FormData();
   data.append('otp_id', otpid);
@@ -374,7 +374,7 @@ router.post('/resend-otp', (req, res) => {
 })
 /// write success code in catch here
 router.post('/otp-login', (req, res) => {
-  console.log('MObile number in otp-login route', req.body.mobile);
+  
 
   userHelpers.otpUserCheck(req.body).then(() => {
     res.json({ status: false })
@@ -409,7 +409,7 @@ router.post('/otp-login', (req, res) => {
 })
 
 router.post('/otp-login-verify', (req, res) => {
-  console.log('Otp in verify', req.body);
+  
   userData = req.body
   var data = new FormData();
   data.append('otp_id', otpid);
@@ -431,7 +431,7 @@ router.post('/otp-login-verify', (req, res) => {
       if (response.data.status == 'success') {
         userHelpers.otpLogin(req.body).then((user) => {
           req.session.user = user
-          console.log('Session User', req.session.user);
+          
           res.json({ status: true })
         }).catch(() => {
           res.json({ block: true })
@@ -453,9 +453,9 @@ router.post('/otp-login-verify', (req, res) => {
 
 router.get('/product-view/:id', (req, res) => {
   let user=req.session.user
-  console.log('Product view id', req.params.id);
+ 
   productHelpers.viewOnePorduct(req.params.id).then((product) => {
-    console.log('Recieved product', product);
+    
     res.render('users/product-details', { product,user })
   })
 
@@ -463,7 +463,7 @@ router.get('/product-view/:id', (req, res) => {
 
 router.get('/checkout', async (req, res) => {
   userHelpers.getCartProducts(req.session.user._id).then(async(products)=>{
-    console.log('Checkout',products);
+    
     let total = await userHelpers.getTotalAmount(req.session.user._id)
   res.render('users/checkout', { total,user:req.session.user,products })
   })
@@ -471,7 +471,7 @@ router.get('/checkout', async (req, res) => {
 })
 
 router.post('/place-order',async(req,res)=>{
-  console.log('Req',req.body);
+  
   let products=await userHelpers.getCartProductList(req.body.user)
   let totalPrice=await userHelpers.getTotalAmount(req.body.user)
   userHelpers.placeOrder(req.body,products,totalPrice).then((orderId)=>{
@@ -479,7 +479,7 @@ router.post('/place-order',async(req,res)=>{
       res.json({codSuccess:true})
     }else{
       userHelpers.generateRazorpay(orderId,totalPrice).then((response)=>{
-        console.log('placeorder-razorpay',response);
+        
         res.json(response)
       })
     }
@@ -493,23 +493,28 @@ router.post('/place-order',async(req,res)=>{
 router.get('/my-account',(req,res)=>{
   let user=req.session.user
   userHelpers.getUserOrders(req.session.user._id).then((orders)=>{
-    console.log('orders',orders);
-    res.render('users/my-account',{orders,user})
+    userHelpers.getAddress(req.session.user._id).then((address)=>{
+      console.log('address',address);
+      res.render('users/my-account',{orders,user,address})
+    }).catch(()=>{
+      res.render('users/my-account',{orders,user})
+    })
+    
     
   })
   
 })
 
 router.post('/verify-payment',(req,res)=>{
-  console.log('verify payment',req.body);
+  
   userHelpers.verifyPayment(req.body).then(()=>{
-    console.log('payment success');
+    
     userHelpers.changePaymentStatus(req.body['order[receipt]']).then(()=>{
 
       res.json({status:true})
     })
   }).catch(()=>{
-    console.log('payment failed')
+    
     res.json({status:false})
   })
 })
