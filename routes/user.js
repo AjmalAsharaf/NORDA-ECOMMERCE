@@ -8,6 +8,8 @@ var axios = require('axios');
 var FormData = require('form-data');
 
 
+
+
 var otpid;
 
 /* GET home page. */
@@ -466,8 +468,16 @@ router.post('/place-order',async(req,res)=>{
   console.log('Req',req.body);
   let products=await userHelpers.getCartProductList(req.body.user)
   let totalPrice=await userHelpers.getTotalAmount(req.body.user)
-  userHelpers.placeOrder(req.body,products,totalPrice).then((response)=>{
-    res.json({status:true})
+  userHelpers.placeOrder(req.body,products,totalPrice).then((orderId)=>{
+    if(req.body.payment_method=='cod'){
+      res.json({codSuccess:true})
+    }else{
+      userHelpers.generateRazorpay(orderId,totalPrice).then((response)=>{
+        console.log('placeorder-razorpay',response);
+        res.json(response)
+      })
+    }
+    
   })
   
 })
@@ -482,5 +492,9 @@ router.get('/my-account',(req,res)=>{
     
   })
   
+})
+
+router.post('/verify-payment',(req,res)=>{
+  console.log('verify payment',req.body);
 })
 module.exports = router;
