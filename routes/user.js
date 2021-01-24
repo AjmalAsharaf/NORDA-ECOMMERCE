@@ -162,11 +162,17 @@ router.get('/view-cart', (req, res) => {
      
 
       userHelpers.getCartProducts(req.session.user._id).then(async(products) => {
-       
-         let totalValue = await userHelpers.getTotalAmount(req.session.user._id)
-         
+        
+        if(products.length>0){
+          let totalValue = await userHelpers.getTotalAmount(req.session.user._id)
           console.log('user cart products',products);
           res.render('users/cart', { user, products, totalValue})
+        }else{
+          res.render('users/cart', { user })
+        }
+         
+         
+         
         
        
       })
@@ -214,12 +220,12 @@ router.post('/change-product-quantity', (req, res) => {
 
 
   userHelpers.changeProductQuantity(req.body).then(async (response) => {
-    console.log('change quantity',req.body);
+    console.log('Response in change product', response);
     response.singleTotal=await userHelpers.getSingeTotal(req.body.user,req.body.product)
-    console.log('rws',response.singleTotal);
+    
     response.total = await userHelpers.getTotalAmount(req.body.user)
     
-    console.log('Response ', response);
+    
     res.json(response)
   })
 })
@@ -496,5 +502,15 @@ router.get('/my-account',(req,res)=>{
 
 router.post('/verify-payment',(req,res)=>{
   console.log('verify payment',req.body);
+  userHelpers.verifyPayment(req.body).then(()=>{
+    console.log('payment success');
+    userHelpers.changePaymentStatus(req.body['order[receipt]']).then(()=>{
+
+      res.json({status:true})
+    })
+  }).catch(()=>{
+    console.log('payment failed')
+    res.json({status:false})
+  })
 })
 module.exports = router;

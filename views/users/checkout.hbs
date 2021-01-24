@@ -391,7 +391,7 @@
                 "key": "rzp_test_PsmupTEePvHbkM", // Enter the Key ID generated from the Dashboard
                 "amount": order.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
                 "currency": "INR",
-                "name": "Acme Corp",
+                "name": "Shopping Cart",
                 "description": "Test Transaction",
                 "image": "https://example.com/your_logo",
                 "order_id": order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
@@ -423,7 +423,15 @@
                     payment,
                     order
                 },
-                method:'post'
+                method:'post',
+                success:(response)=>{
+                    if(response.status){
+                        location.href = '/my-account'
+                    }
+                    else{
+                        alert('Payment failed')
+                    }
+                }
 
             })
         }
