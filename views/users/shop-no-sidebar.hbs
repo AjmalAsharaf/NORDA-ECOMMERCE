@@ -429,6 +429,7 @@
 
 <script>
     function addToCart(proId){
+        alert('item added')
         $.ajax({
             url:'/add-to-cart/'+proId,
             method:'get',
