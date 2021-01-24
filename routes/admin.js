@@ -213,5 +213,11 @@ router.post('/edit-category',(req,res)=>{
   }
  
 })
+router.get('/get-all-orders',(req,res)=>{
+  userHelpers.getAllOrders().then((allorders)=>{
+    console.log('find',allorders);
+    res.render('admin/order-details',{admin:true,allorders})
+  })
+})
 
 module.exports = router;
