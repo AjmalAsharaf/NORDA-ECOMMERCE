@@ -159,16 +159,16 @@
                                                 <label for="exampleInputPassword1">Image</label>
                                                  <div class="form-group">
                                                     <img src="" alt=""
-                                                        style="width: 100px; height: 100px;" id="imgView">
+                                                        style="width: 100px; height: 100px; display: none;" id="imgView">
 
                                                 </div>
-                                                <input type="file" accept="image/x-png,image/gif,image/jpeg" class="form-control" id="exampleInputPassword1"
+                                                <input type="file" accept="image/x-png,image/gif,image/jpeg" class="form-control" id="image"
                                                   required name="Image" onchange="viewImage(event)" >
                                             </div>
                                             <div>
 
-                                            
-                                            <button type="submit" class="btn btn-primary">Add Product</button>
+                                            <h5 style="color: red; display:none;" id="image-warning">Please upload only images</h5>
+                                            <button type="submit" class="btn btn-primary" id="add-product-button">Add Product</button>
                                             </div>
                                         </form>
 
@@ -191,8 +191,22 @@
         integrity="sha256-qE/6vdSYzQu9lgosKxhFplETvWvqAAlmAuR+yPh/0SI=" crossorigin="anonymous"></script>
     <script src="/js/script1.js"></script>
 </body>
+
 <script>
     function viewImage(event){
         document.getElementById('imgView').src=URL.createObjectURL(event.target.files[0])
+        let file=event.target.files[0].name
+        console.log('file',file)
+        let filename=file.split('.').pop()
+        if(filename=='jpeg' || filename =='png' || filename=='jpg'){
+            $('#add-product-button').show()
+            $('#image-warning').hide()
+            $('#imgView').show()
+        }else{
+            $('#image-warning').show()
+            $('#add-product-button').hide()
+        }
     }
+
+
 </script>
