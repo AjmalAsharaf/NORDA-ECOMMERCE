@@ -106,6 +106,13 @@ module.exports={
                 
             }
         })
+    },
+    productFileter:(category)=>{
+        return new Promise(async(resolve,reject)=>{
+            let products=await db.get().collection(collection.PRODUCT_COLLECTION).find({productCategory:category}).toArray()
+
+            resolve(products)
+        })
     }
        
 }

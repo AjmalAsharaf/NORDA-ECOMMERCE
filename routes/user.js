@@ -519,4 +519,29 @@ router.post('/verify-payment',(req,res)=>{
   })
 })
 
+router.get('/userhome-category/:id',(req,res)=>{
+    console.log('user home params',req.params.id);
+    let user = req.session.user
+
+      productHelpers.productFileter(req.params.id).then((products) => {
+        
+
+
+          userHelpers.getCartProducts(req.session.user._id).then((cartProducts) => {
+
+            userHelpers.getCartCount(req.session.user._id).then((cartCount) => {
+              res.render('users/shop-no-sidebar', { products,user,cartProducts, cartCount })
+            })
+
+          }).catch(() => {
+            res.render('users/shop-no-sidebar', { products, user })
+          })
+
+
+        
+
+
+      })
+})
+
 module.exports = router;
