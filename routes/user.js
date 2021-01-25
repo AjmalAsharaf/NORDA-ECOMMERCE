@@ -493,6 +493,7 @@ router.post('/place-order',async(req,res)=>{
 router.get('/my-account',(req,res)=>{
   let user=req.session.user
   userHelpers.getUserOrders(req.session.user._id).then((orders)=>{
+    console.log('user orders',orders);
     userHelpers.getAddress(req.session.user._id).then((address)=>{
       console.log('address',address);
       res.render('users/my-account',{orders,user,address})

@@ -147,6 +147,8 @@
                                                     <th scope="col" class="table-text">Payment Method</th>
                                                     <th scope="col" class="table-text">Order Date</th>
                                                     <th scope="col" class="table-text">Order Status</th>
+                                                    <th scope="col" class="table-text">Shipping Status</th>
+                                                    
                                                     <th scope="col" class="table-text">Action</th>
 
 
@@ -164,7 +166,8 @@
                                                     <td class="table-text">{{this.paymentMethod}}</td>
                                                     <td class="table-text">{{this.date}}</td>
                                                     <td class="table-text">{{this.status}}</td>
-                                                    <td class="table-text"><a class="btn btn-success" href="/admin/edit-product/{{this._id}}">Ship</a> <a class="btn btn-danger" href="/admin/delete-product/{{this._id}}" onclick="return confirm(`Are you want to delete {{this.productName}}`)"> Cancel</a></td>
+                                                    <td class="table-text">{{this.ship}}</td>
+                                                    <td class="table-text"><a class="btn btn-success" href="/admin/ship-order/{{this._id}}">Ship</a> <a class="btn btn-danger" href="/admin/cancel-order/{{this._id}}" onclick="return confirm(`Are you want to delete {{this.productName}}`)"> Cancel</a></td>
                                                    
 
 

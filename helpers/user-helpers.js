@@ -440,6 +440,7 @@ module.exports = {
                 totalAmount: total,
                 products: products,
                 status: status,
+                ship:'not dispatched',
                 date: new Date
             }
             db.get().collection(collection.ORDER_COLLECTION).insertOne(orderObj).then((response) => {
@@ -453,7 +454,8 @@ module.exports = {
                     town: order.town,
                     state: order.state,
                     zip: order.zip,
-                    phone: order.phone
+                    phone: order.phone,
+                    
 
                 })
                 resolve(response.ops[0]._id)
@@ -531,6 +533,29 @@ module.exports = {
         return new Promise(async(resolve,reject)=>{
             let allOrders=await db.get().collection(collection.ORDER_COLLECTION).find().toArray()
             resolve(allOrders)
+        })
+    },
+    cancelOrder:(id)=>{
+        return new Promise((resolve,reject)=>{
+            db.get().collection(collection.ORDER_COLLECTION).updateOne({_id:objId(id)},{
+                $set:{
+                    ship:'Order Canelled',
+                }
+            }).then(()=>{
+                resolve()
+            })
+            
+        })
+    },
+    shipOrder:(id)=>{
+        return new Promise((resolve,reject)=>{
+            db.get().collection(collection.ORDER_COLLECTION).updateOne({_id:objId(id)},{
+                $set:{
+                    ship:'Order Dispatched',
+                }
+            }).then(()=>{
+                resolve()
+            })
         })
     }
 

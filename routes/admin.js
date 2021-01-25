@@ -215,9 +215,21 @@ router.post('/edit-category',(req,res)=>{
 })
 router.get('/get-all-orders',(req,res)=>{
   userHelpers.getAllOrders().then((allorders)=>{
-    console.log('find',allorders);
+    
     res.render('admin/order-details',{admin:true,allorders})
   })
 })
 
+router.get('/cancel-order/:id',(req,res)=>{
+  console.log('cancel',req.params.id);
+  userHelpers.cancelOrder(req.params.id).then(()=>{
+    res.redirect('/admin/get-all-orders')
+  })
+})
+
+router.get('/ship-order/:id',(req,res)=>{
+  userHelpers.shipOrder(req.params.id).then(()=>{
+    res.redirect('/admin/get-all-orders')
+  })
+})
 module.exports = router;
