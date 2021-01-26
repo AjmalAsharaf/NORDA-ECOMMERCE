@@ -113,6 +113,18 @@ module.exports={
 
             resolve(products)
         })
+    },
+    searchProduct:(data)=>{
+        console.log('Mongo data',data);
+        return new Promise(async(resolve,reject)=>{
+            let products=await db.get().collection(collection.PRODUCT_COLLECTION).find({productName:data}).toArray()
+            
+            if(products.length>0){
+                resolve(products)
+            }else{
+                reject()
+            }
+        })
     }
        
 }

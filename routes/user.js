@@ -60,7 +60,7 @@ router.post('/register', (req, res) => {
   else {
     userData = req.body
     userHelpers.doSignup(userData).then((response) => {
-     
+
       res.json(response)
     }).catch((response) => {
       res.json(response)
@@ -116,21 +116,21 @@ router.get('/user-home', (req, res) => {
       let user = req.session.user
 
       productHelpers.viewAllProducts().then((products) => {
-        
 
 
-          userHelpers.getCartProducts(req.session.user._id).then((cartProducts) => {
 
-            userHelpers.getCartCount(req.session.user._id).then((cartCount) => {
-              res.render('users/shop-no-sidebar', { products,user,cartProducts, cartCount })
-            })
+        userHelpers.getCartProducts(req.session.user._id).then((cartProducts) => {
 
-          }).catch(() => {
-            res.render('users/shop-no-sidebar', { products, user })
+          userHelpers.getCartCount(req.session.user._id).then((cartCount) => {
+            res.render('users/shop-no-sidebar', { products, user, cartProducts, cartCount })
           })
 
+        }).catch(() => {
+          res.render('users/shop-no-sidebar', { products, user })
+        })
 
-        
+
+
 
 
       })
@@ -159,27 +159,27 @@ router.get('/view-cart', (req, res) => {
 
 
       user = req.session.user
-     
 
-      userHelpers.getCartProducts(req.session.user._id).then(async(products) => {
-        
-        if(products.length>0){
+
+      userHelpers.getCartProducts(req.session.user._id).then(async (products) => {
+
+        if (products.length > 0) {
           let totalValue = await userHelpers.getTotalAmount(req.session.user._id)
-          
-          res.render('users/cart', { user, products, totalValue})
-        }else{
+
+          res.render('users/cart', { user, products, totalValue })
+        } else {
           res.render('users/cart', { user })
         }
-         
-         
-         
-        
-       
+
+
+
+
+
       })
-      
-      .catch(() => {
-        res.render('users/cart', { user })
-      })
+
+        .catch(() => {
+          res.render('users/cart', { user })
+        })
 
 
 
@@ -220,25 +220,25 @@ router.post('/change-product-quantity', (req, res) => {
 
 
   userHelpers.changeProductQuantity(req.body).then(async (response) => {
-    
-    response.singleTotal=await userHelpers.getSingeTotal(req.body.user,req.body.product)
-    
+
+    response.singleTotal = await userHelpers.getSingeTotal(req.body.user, req.body.product)
+
     response.total = await userHelpers.getTotalAmount(req.body.user)
-    
-    
+
+
     res.json(response)
   })
 })
 
 router.post('/delete-one-cart', (req, res) => {
- 
+
   userHelpers.deleteOneCartItem(req.body).then((response) => {
     res.json(response)
   })
 })
 
 router.post('/delete-cart', (req, res) => {
-  
+
   userHelpers.deleteCart(req.body).then((response) => {
     res.json(response)
   })
@@ -255,13 +255,13 @@ router.get('/otp', (req, res) => {
 
 router.post('/otp-register', (req, res) => {
 
-  
+
   userHelpers.otpUserCheck(req.body).then(() => {
     userHelpers.otpEmailCheck(req.body).then(() => {
-      
+
       var data = new FormData();
 
-      
+
 
 
       data.append('mobile', +91 + req.body.mobile);
@@ -295,7 +295,7 @@ router.post('/otp-register', (req, res) => {
 
   })
     .catch(() => {
-      
+
       res.json({ number: true })
 
     })
@@ -306,7 +306,7 @@ router.post('/otp-register', (req, res) => {
 
 router.post('/verify-otp', (req, res) => {
   var data = new FormData();
-  
+
   userData = req.body
   otpNumber = req.body.otp
 
@@ -348,7 +348,7 @@ router.post('/verify-otp', (req, res) => {
 
 router.post('/resend-otp', (req, res) => {
 
-  
+
 
   var data = new FormData();
   data.append('otp_id', otpid);
@@ -374,7 +374,7 @@ router.post('/resend-otp', (req, res) => {
 })
 /// write success code in catch here
 router.post('/otp-login', (req, res) => {
-  
+
 
   userHelpers.otpUserCheck(req.body).then(() => {
     res.json({ status: false })
@@ -409,7 +409,7 @@ router.post('/otp-login', (req, res) => {
 })
 
 router.post('/otp-login-verify', (req, res) => {
-  
+
   userData = req.body
   var data = new FormData();
   data.append('otp_id', otpid);
@@ -431,7 +431,7 @@ router.post('/otp-login-verify', (req, res) => {
       if (response.data.status == 'success') {
         userHelpers.otpLogin(req.body).then((user) => {
           req.session.user = user
-          
+
           res.json({ status: true })
         }).catch(() => {
           res.json({ block: true })
@@ -452,97 +452,117 @@ router.post('/otp-login-verify', (req, res) => {
 })
 
 router.get('/product-view/:id', (req, res) => {
-  let user=req.session.user
- 
+  let user = req.session.user
+
   productHelpers.viewOnePorduct(req.params.id).then((product) => {
-    
-    res.render('users/product-details', { product,user })
+
+    res.render('users/product-details', { product, user })
   })
 
 })
 
 router.get('/checkout', async (req, res) => {
-  userHelpers.getCartProducts(req.session.user._id).then(async(products)=>{
-    
+  userHelpers.getCartProducts(req.session.user._id).then(async (products) => {
+
     let total = await userHelpers.getTotalAmount(req.session.user._id)
-  res.render('users/checkout', { total,user:req.session.user,products })
+    res.render('users/checkout', { total, user: req.session.user, products })
   })
-  
+
 })
 
-router.post('/place-order',async(req,res)=>{
-  
-  let products=await userHelpers.getCartProductList(req.body.user)
-  let totalPrice=await userHelpers.getTotalAmount(req.body.user)
-  userHelpers.placeOrder(req.body,products,totalPrice).then((orderId)=>{
-    if(req.body.payment_method=='cod'){
-      res.json({codSuccess:true})
-    }else{
-      userHelpers.generateRazorpay(orderId,totalPrice).then((response)=>{
-        
+router.post('/place-order', async (req, res) => {
+
+  let products = await userHelpers.getCartProductList(req.body.user)
+  let totalPrice = await userHelpers.getTotalAmount(req.body.user)
+  userHelpers.placeOrder(req.body, products, totalPrice).then((orderId) => {
+    if (req.body.payment_method == 'cod') {
+      res.json({ codSuccess: true })
+    } else {
+      userHelpers.generateRazorpay(orderId, totalPrice).then((response) => {
+
         res.json(response)
       })
     }
-    
+
   })
-  
+
 })
 
 
 
-router.get('/my-account',(req,res)=>{
-  let user=req.session.user
-  userHelpers.getUserOrders(req.session.user._id).then((orders)=>{
-    console.log('user orders',orders);
-    userHelpers.getAddress(req.session.user._id).then((address)=>{
-      console.log('address',address);
-      res.render('users/my-account',{orders,user,address})
-    }).catch(()=>{
-      res.render('users/my-account',{orders,user})
+router.get('/my-account', (req, res) => {
+  let user = req.session.user
+  userHelpers.getUserOrders(req.session.user._id).then((orders) => {
+    console.log('user orders', orders);
+    userHelpers.getAddress(req.session.user._id).then((address) => {
+      console.log('address', address);
+      res.render('users/my-account', { orders, user, address })
+    }).catch(() => {
+      res.render('users/my-account', { orders, user })
     })
-    
-    
+
+
   })
-  
+
 })
 
-router.post('/verify-payment',(req,res)=>{
-  
-  userHelpers.verifyPayment(req.body).then(()=>{
-    
-    userHelpers.changePaymentStatus(req.body['order[receipt]']).then(()=>{
+router.post('/verify-payment', (req, res) => {
 
-      res.json({status:true})
+  userHelpers.verifyPayment(req.body).then(() => {
+
+    userHelpers.changePaymentStatus(req.body['order[receipt]']).then(() => {
+
+      res.json({ status: true })
     })
-  }).catch(()=>{
-    
-    res.json({status:false})
+  }).catch(() => {
+
+    res.json({ status: false })
   })
 })
 
-router.get('/userhome-category/:id',(req,res)=>{
-    console.log('user home params',req.params.id);
-    let user = req.session.user
+router.get('/userhome-category/:id', (req, res) => {
+  console.log('user home params', req.params.id);
+  let user = req.session.user
 
-      productHelpers.productFileter(req.params.id).then((products) => {
-        
-
-
-          userHelpers.getCartProducts(req.session.user._id).then((cartProducts) => {
-
-            userHelpers.getCartCount(req.session.user._id).then((cartCount) => {
-              res.render('users/shop-no-sidebar', { products,user,cartProducts, cartCount })
-            })
-
-          }).catch(() => {
-            res.render('users/shop-no-sidebar', { products, user })
-          })
+  productHelpers.productFileter(req.params.id).then((products) => {
 
 
-        
 
+    userHelpers.getCartProducts(req.session.user._id).then((cartProducts) => {
 
+      userHelpers.getCartCount(req.session.user._id).then((cartCount) => {
+        res.render('users/shop-no-sidebar', { products, user, cartProducts, cartCount })
       })
+
+    }).catch(() => {
+      res.render('users/shop-no-sidebar', { products, user })
+    })
+
+
+
+
+
+  })
+})
+
+router.get('/search', (req, res) => {
+  let user = req.session.user
+  productHelpers.searchProduct(req.query.text).then((products)=>{
+    console.log('better',products);
+    userHelpers.getCartProducts(req.session.user._id).then((cartProducts) => {
+
+      userHelpers.getCartCount(req.session.user._id).then((cartCount) => {
+        res.render('users/shop-no-sidebar', { products, user, cartProducts, cartCount })
+      })
+
+    }).catch(() => {
+      res.render('users/shop-no-sidebar', { products, user })
+    })
+    
+  }).catch(()=>{
+    res.redirect('/user-home')
+  })
+
 })
 
 module.exports = router;
