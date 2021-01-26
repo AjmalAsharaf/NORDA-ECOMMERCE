@@ -334,14 +334,18 @@
                                             <div class="myaccount-content">
                                                 {{#if address}}
                                                 <h3>Billing Address</h3>
+                                                {{#each address}}
                                                 <address>
-                                                    <p><strong>{{address.firstName}} {{address.lastName}}</strong></p>
-                                                    <p>{{address.houseName}}(H)<br>
-                                                    {{address.streetAddress}}, {{address.town}}<br>
-                                                    {{address.town}}, PIN: {{address.zip}}</p>
-                                                    <p>Mobile: (+91) {{address.phone}}</p>
+                                                    <p><strong>{{this.firstName}} {{this.lastName}}</strong></p>
+                                                    <p>{{this.houseName}}(H)<br>
+                                                    {{this.streetAddress}}, {{this.town}}<br>
+                                                    {{this.town}}, PIN: {{this.zip}}</p>
+                                                    <p>Mobile: (+91) {{this.phone}}</p>
                                                 </address>
-                                                <a href="#" class="check-btn sqr-btn "><i class="fa fa-edit"></i> Edit Address</a>
+                                                <a href="/edit-address/{{this._id}}" class="check-btn sqr-btn "><i class="fa fa-edit"></i> Edit Address</a><br>
+                                                
+                                                {{/each}}
+                                                <a href="/add-address">+ Add address</a>
                                                 {{else}}
                                                 <h3>Billing Address</h3>
                                                 <p>No added address</p>

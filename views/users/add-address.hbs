@@ -6,23 +6,22 @@
                     <div class="row">
                         <div class="col-lg-7 m-auto" >
                             <div class="billing-info-wrap mr-50">
-                                <h3>Edit address New Address</h3>
+                                <h3>Add New Address</h3>
                                 <div class="row">
                                     <div class="col-lg-6 col-md-6">
-                                        <form id="place-order" action="/edit-address" method="POST">
+                                        <form id="place-order" action="/add-address" method="POST">
                                             <div class="billing-info mb-20">
                                                 <label>First Name <abbr class="required"
                                                         title="required">*</abbr></label>
-                                                        
-                                                <input type="text" required name="firstName" value="{{address.firstName}}">
-                                                <input type="text" required name="id" value="{{address._id}}" hidden>
+                                                        <input type="text" required name="user" value="{{user._id}}" hidden>
+                                                <input type="text" required name="firstName">
                                                 
                                             </div>
                                     </div>
                                     <div class="col-lg-6 col-md-6">
                                         <div class="billing-info mb-20">
                                             <label>Last Name <abbr class="required" title="required">*</abbr></label>
-                                            <input type="text" required name="lastName" value="{{address.lastName}}">
+                                            <input type="text" required name="lastName">
                                         </div>
                                     </div>
 
@@ -32,34 +31,34 @@
                                             <label>Street Address <abbr class="required"
                                                     title="required">*</abbr></label>
                                             <input class="billing-address" placeholder="House name" type="text" required
-                                                name="houseName" value="{{address.houseName}}">
+                                                name="houseName">
                                             <input placeholder="Street address" type="text" required
-                                                name="streetAddress" value="{{address.streetAddress}}">
+                                                name="streetAddress">
                                         </div>
                                     </div>
                                     <div class="col-lg-12">
                                         <div class="billing-info mb-20">
                                             <label>Town / City <abbr class="required" title="required">*</abbr></label>
-                                            <input type="text" required name="town" value="{{address.town}}">
+                                            <input type="text" required name="town">
                                         </div>
                                     </div>
                                     <div class="col-lg-12 col-md-12">
                                         <div class="billing-info mb-20">
                                             <label>State<abbr class="required" title="required">*</abbr></label>
-                                            <input type="text" required name="state" value="{{address.state}}">
+                                            <input type="text" required name="state">
                                         </div>
                                     </div>
                                     <div class="col-lg-12 col-md-12">
                                         <div class="billing-info mb-20">
                                             <label>Postcode / ZIP <abbr class="required"
                                                     title="required">*</abbr></label>
-                                            <input type="number" required name="zip" value="{{address.zip}}">
+                                            <input type="number" required name="zip">
                                         </div>
                                     </div>
                                     <div class="col-lg-12 col-md-12">
                                         <div class="billing-info mb-20">
                                             <label>Phone <abbr class="required" title="required">*</abbr></label>
-                                            <input type="number" required name="phone" value="{{address.phone}}">
+                                            <input type="number" required name="phone">
                                             
                                         </div>
                                     </div>
@@ -68,7 +67,7 @@
 
 
                                 
-                                  <button type="submit" class="btn btn-danger">Update Address</button>
+                                  <button type="submit" class="btn btn-danger">Add Address</button>
                             </div>
                         </div>
                         

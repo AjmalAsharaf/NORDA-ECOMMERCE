@@ -411,7 +411,7 @@ module.exports = {
 
 
             ]).toArray()
-            console.log('Total mongo',total);
+            
             resolve(total[0].singleTotal)
 
 
@@ -486,7 +486,7 @@ module.exports = {
                 receipt: ""+userId
               };
               instance.orders.create(options, function(err, order) {
-                console.log('razor',order);
+                
                 resolve(order)
               });
 
@@ -521,10 +521,12 @@ module.exports = {
     },
     getAddress:(userId)=>{
         return new Promise(async(resolve,reject)=>{
-            let address=await db.get().collection(collection.ADDRESS_COLLECTION).findOne({user:objId(userId)})
-            if(address){
+            let address=await db.get().collection(collection.ADDRESS_COLLECTION).find({user:objId(userId)}).toArray()
+            
+            if(address.length>0){
                 resolve(address)
             }else{
+
                 reject()
             }
         })
@@ -556,6 +558,49 @@ module.exports = {
             }).then(()=>{
                 resolve()
             })
+        })
+    },
+    addAddress:(details)=>{
+        return new Promise((resolve,reject)=>{
+            db.get().collection(collection.ADDRESS_COLLECTION).insert({
+                user:objId(details.user),
+                firstName:details.firstName,
+                lastName:details.lastName,
+                houseName:details.houseName,
+                streetAddress:details.streetAddress,
+                town:details.town,
+                state:details.state,
+                zip:details.zip,
+                phone:details.phone
+            })
+            resolve()
+        })
+    },
+    editOneaddress:(id)=>{
+        return new Promise(async(resolve,reject)=>{
+           let address=await db.get().collection(collection.ADDRESS_COLLECTION).findOne({_id:objId(id)})
+            resolve(address)
+        })
+    },
+    updateAddress:(details)=>{
+        console.log('udate address',details);
+        return new Promise((resolve,reject)=>{
+            db.get().collection(collection.ADDRESS_COLLECTION).updateOne({_id:objId(details.id)},{
+                $set:{
+                firstName:details.firstName,
+                lastName:details.lastName,
+                houseName:details.houseName,
+                streetAddress:details.streetAddress,
+                town:details.town,
+                state:details.state,
+                zip:details.zip,
+                phone:details.phone
+                }
+            }).then(()=>{
+                resolve()
+            })
+
+
         })
     }
 

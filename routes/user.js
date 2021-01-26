@@ -463,15 +463,21 @@ router.get('/product-view/:id', (req, res) => {
 
 router.get('/checkout', async (req, res) => {
   userHelpers.getCartProducts(req.session.user._id).then(async (products) => {
+    userHelpers.getAddress(req.session.user._id).then(async (address) => {
 
-    let total = await userHelpers.getTotalAmount(req.session.user._id)
-    res.render('users/checkout', { total, user: req.session.user, products })
+      let total = await userHelpers.getTotalAmount(req.session.user._id)
+      res.render('users/checkout', { total, user: req.session.user, products, address })
+    }).catch(async () => {
+      let total = await userHelpers.getTotalAmount(req.session.user._id)
+      res.render('users/checkout', { total, user: req.session.user, products })
+    })
+
   })
 
 })
 
 router.post('/place-order', async (req, res) => {
-
+  console.log('place order', req.body);
   let products = await userHelpers.getCartProductList(req.body.user)
   let totalPrice = await userHelpers.getTotalAmount(req.body.user)
   userHelpers.placeOrder(req.body, products, totalPrice).then((orderId) => {
@@ -495,7 +501,8 @@ router.get('/my-account', (req, res) => {
   userHelpers.getUserOrders(req.session.user._id).then((orders) => {
     console.log('user orders', orders);
     userHelpers.getAddress(req.session.user._id).then((address) => {
-      console.log('address', address);
+
+     
       res.render('users/my-account', { orders, user, address })
     }).catch(() => {
       res.render('users/my-account', { orders, user })
@@ -547,8 +554,8 @@ router.get('/userhome-category/:id', (req, res) => {
 
 router.get('/search', (req, res) => {
   let user = req.session.user
-  productHelpers.searchProduct(req.query.text).then((products)=>{
-    console.log('better',products);
+  productHelpers.searchProduct(req.query.text).then((products) => {
+    console.log('better', products);
     userHelpers.getCartProducts(req.session.user._id).then((cartProducts) => {
 
       userHelpers.getCartCount(req.session.user._id).then((cartCount) => {
@@ -558,9 +565,38 @@ router.get('/search', (req, res) => {
     }).catch(() => {
       res.render('users/shop-no-sidebar', { products, user })
     })
-    
-  }).catch(()=>{
+
+  }).catch(() => {
     res.redirect('/user-home')
+  })
+
+})
+
+router.get('/add-address',(req,res)=>{
+  let user=req.session.user
+  res.render('users/add-address',{user})
+})
+
+router.post('/add-address',(req,res)=>{
+  
+  
+  userHelpers.addAddress(req.body).then(()=>{
+    res.redirect('/my-account')
+  })
+})
+
+router.get('/edit-address/:id',(req,res)=>{
+  console.log('paramas',req.params.id);
+  userHelpers.editOneaddress(req.params.id).then((address)=>{
+    
+    res.render('users/edit-address',{address})
+  })
+})
+
+router.post('/edit-address',(req,res)=>{
+  console.log('put',req.body);
+  userHelpers.updateAddress(req.body).then(()=>{
+    res.redirect('/my-account')
   })
 
 })

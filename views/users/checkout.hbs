@@ -371,7 +371,7 @@
             $.ajax({
                 url: '/place-order',
                 method: 'post',
-                data: $('#place-order').serialize(),
+                data: $('#place-order').serialize(),    
                 success: (response) => {
                     if (response.codSuccess) {
 
