@@ -440,7 +440,7 @@ module.exports = {
                 totalAmount: total,
                 products: products,
                 status: status,
-                ship:'not dispatched',
+                ship:'Not Dispatched',
                 date: new Date
             }
             db.get().collection(collection.ORDER_COLLECTION).insertOne(orderObj).then((response) => {
@@ -541,7 +541,7 @@ module.exports = {
         return new Promise((resolve,reject)=>{
             db.get().collection(collection.ORDER_COLLECTION).updateOne({_id:objId(id)},{
                 $set:{
-                    ship:'Order Canelled',
+                    ship:'Order Cancelled',
                 }
             }).then(()=>{
                 resolve()

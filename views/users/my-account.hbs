@@ -263,7 +263,7 @@
                                                         <tbody>
                                                             {{#each orders}}
                                                             <tr>
-                                                                <td>{{@index}}</td>
+                                                                <td>{{math @index "+" 1}}</td>
                                                                 <td>{{this.date}}</td>
                                                                 <td>{{this.status}}</td>
                                                                 <td>{{this.totalAmount}}</td>
@@ -277,8 +277,12 @@
 
 
                                                                  <td>{{this.ship}}</td>
-                                                                <td><a href="" class="check-btn sqr-btn ">View</a></td>
-                                                               
+                                                                 {{#if (neqw this.ship 'Order Cancelled')}}
+                                                                 
+                                                                <td><a href="/cancel-order/{{this._id}}" class="check-btn sqr-btn ">Cancel</a></td>
+                                                                {{else}}
+                                                                <td>Item is Cancelled</td>
+                                                                {{/if}}
                                                             </tr>
                                                             {{/each}}
                                                             

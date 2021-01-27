@@ -601,6 +601,13 @@ router.post('/edit-address',(req,res)=>{
 
 })
 
+router.get('/cancel-order/:id',(req,res)=>{
+  
+  userHelpers.cancelOrder(req.params.id).then(()=>{
+      res.redirect('/my-account')
+  })
+})
+
 
 
 module.exports = router;
