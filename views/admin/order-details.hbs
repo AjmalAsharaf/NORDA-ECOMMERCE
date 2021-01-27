@@ -158,7 +158,7 @@
                                                 {{#each allorders}}
                                                 <tr>
 
-                                                    <td class="table-text">{{@index}}</td>
+                                                    <td class="table-text">{{math @index "+" 1}}</td>
                                                     <td class="table-text">{{this.deliveryDetails.firstName}}</td>
                                                     <td class="table-text">{{this.deliveryDetails.houseName}},<br> {{this.deliveryDetails.streetAddress}}, 
                                                     <br> {{this.deliveryDetails.town}},<br> {{this.deliveryDetails.state}}, Pin: {{this.deliveryDetails.zip}}</td>
@@ -167,8 +167,19 @@
                                                     <td class="table-text">{{this.date}}</td>
                                                     <td class="table-text">{{this.status}}</td>
                                                     <td class="table-text">{{this.ship}}</td>
-                                                    <td class="table-text"><a class="btn btn-success" href="/admin/ship-order/{{this._id}}">Ship</a> <a class="btn btn-danger" href="/admin/cancel-order/{{this._id}}" onclick="return confirm(`Are you want to delete {{this.productName}}`)"> Cancel</a></td>
-                                                   
+                                                    <td class="table-text">
+                                                      
+                                                      
+                                                      
+                                                      
+                                                      {{#if (eqw this.ship 'not dispatched')}}
+                                                     
+                                                      <a class="btn btn-success" href="/admin/ship-order/{{this._id}}">Ship</a> 
+                                                       {{else if (eqw this.ship 'Order Canelled')}}
+                                                       {{else}}
+                                                      <a class="btn btn-danger" href="/admin/cancel-order/{{this._id}}" onclick="return confirm(`Are you want to delete {{this.productName}}`)"> Cancel</a></td>
+                                                      
+                                                   {{/if}}
 
 
 

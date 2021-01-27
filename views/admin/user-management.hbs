@@ -139,7 +139,12 @@
                                                 <tr>
                                                     <td class="table-text">{{this.name}}</td>
                                                     <td class="table-text">{{this.email}}</td>
-                                                    <td class="table-text"><a class="btn btn-success" href="/admin/unblock-user/{{this._id}}">Unblock</a> <a class="btn btn-danger" href="/admin/block-user/{{this._id}}" onclick="return confirm(`Are you want to Block {{this.name}}`)"> Block</a></td>
+                                                    <td class="table-text">
+                                                     {{#if this.block}}   
+                                                    <a class="btn btn-success" href="/admin/unblock-user/{{this._id}}">Unblock</a>
+                                                    {{else}}
+                                                     <a class="btn btn-danger" href="/admin/block-user/{{this._id}}" onclick="return confirm(`Are you want to Block {{this.name}}`)"> Block</a></td>
+                                                     {{/if}}
                                                     {{#if this.block}}
                                                     <td class="table-text" style="color: red;">Blocked</td>
                                                     
