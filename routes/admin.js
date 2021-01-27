@@ -150,8 +150,9 @@ router.get('/add-category',(req,res)=>{
   
 })
 router.post('/add-category',(req,res)=>{
+  console.log(req.body,'add-category');
   if(req.session.admin){
-    console.log('Added Category is ',req.body);
+   
   productHelpers.insertCategory(req.body).then(()=>{
     res.json({status:true})
   }).catch(()=>{
@@ -162,5 +163,73 @@ router.post('/add-category',(req,res)=>{
   }
   
 })
+router.get('/category-management',(req,res)=>{
+  if(req.session.admin){
+    productHelpers.showCategory().then((category)=>{
+      res.render('admin/category-manager',{admin:true,category})
+    })
+  }else{
+    res.redirect('/')
+  }
+  
+ 
+})
 
+router.get('/delete-category/:id',(req,res)=>{
+  if(res.session.admin){
+    proId=req.params.id
+  productHelpers.deleteCategory(proId).then(()=>{
+    res.redirect('/admin/category-management')
+  })
+  }else{
+    res.redirect('/')
+  }
+  
+})
+
+router.get('/edit-category/:id',(req,res)=>{
+  if(req.session.admin){
+    proId=req.params.id
+
+  productHelpers.showOneCategory(proId).then((category)=>{
+    res.render('admin/edit-category',{admin:true,category})
+  })
+  }else{
+    res.redirect('/')
+  }
+  
+})
+
+router.post('/edit-category',(req,res)=>{
+  if(req.session.admin){
+    productHelpers.updateCategory(req.body.proId,req.body.productSubCat).then(()=>{
+      res.json({status:true})
+    })
+    .catch(()=>{
+      res.json({status:false})
+    })
+  }else{
+    res.redirect('/')
+  }
+ 
+})
+router.get('/get-all-orders',(req,res)=>{
+  userHelpers.getAllOrders().then((allorders)=>{
+    
+    res.render('admin/order-details',{admin:true,allorders})
+  })
+})
+
+router.get('/cancel-order/:id',(req,res)=>{
+  console.log('cancel',req.params.id);
+  userHelpers.cancelOrder(req.params.id).then(()=>{
+    res.redirect('/admin/get-all-orders')
+  })
+})
+
+router.get('/ship-order/:id',(req,res)=>{
+  userHelpers.shipOrder(req.params.id).then(()=>{
+    res.redirect('/admin/get-all-orders')
+  })
+})
 module.exports = router;

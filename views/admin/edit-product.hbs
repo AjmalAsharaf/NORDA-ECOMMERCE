@@ -168,7 +168,7 @@
                                                 <div class="form-group">
                                                     <img src="/product-images/{{product._id}}.jpg" alt=""
                                                         style="width: 100px; height: 100px;" id="imgView">
-
+                                                    <h5 style="color: red; display:none;" id="image-warning">Please upload only images</h5>
                                                 </div>
                                                 <input type="file" class="form-control" id="exampleInputPassword1"
                                                     name="Image" accept="images/ .jpg, .jpeg, .png" onchange="viewImage(event)">
@@ -176,7 +176,7 @@
                                             <div>
 
 
-                                                <button type="submit" class="btn btn-success">Update Product</button>
+                                                <button type="submit" class="btn btn-success" id="update-product-button">Update Product</button>
                                             </div>
                                         </form>
 
@@ -202,5 +202,17 @@
 <script>
     function viewImage(event){
         document.getElementById('imgView').src=URL.createObjectURL(event.target.files[0])
+        let file=event.target.files[0].name
+        
+        let filename=file.split('.').pop()
+        if(filename=='jpeg' || filename =='png' || filename=='jpg'){
+            $('#update-product-button').show()
+            $('#image-warning').hide()
+            $('#imgView').show()
+        }else{
+            $('#image-warning').show()
+            $('#update-product-button').hide()
+            $('#imgView').hide()
+        }
     }
 </script>

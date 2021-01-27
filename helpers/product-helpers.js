@@ -7,6 +7,10 @@ const { response } = require('express')
 
 module.exports={
     addProducts:function(product){
+        
+        product.productPrice=parseInt(product.productPrice)
+        product.productQty=parseInt(product.productQty)
+        
         return new Promise((resolve,reject)=>{
             db.get().collection(collection.PRODUCT_COLLECTION).insertOne(product).then((data)=>{
                
@@ -35,7 +39,9 @@ module.exports={
         })
     },
     updateProduct:function(proId,product){
-        console.log(product,'mongo');
+        product.productPrice=parseInt(product.productPrice)
+        product.productQty=parseInt(product.productQty)
+
         return new Promise((resolve,reject)=>{
             db.get().collection(collection.PRODUCT_COLLECTION).updateOne({_id:objId(proId)},{
                 $set:{
@@ -68,6 +74,57 @@ module.exports={
             let category= await db.get().collection(collection.CATEGORY).find().toArray()
             resolve(category)
         })
-    }  
+    },
+    deleteCategory:function(proId){
+        return new Promise(async(resolve,reject)=>{
+            db.get().collection(collection.CATEGORY).removeOne({_id:objId(proId)})
+            resolve()
+        })
+    },
+    showOneCategory:function(proId){
+        return new Promise(async(resolve,reject)=>{
+            category=await db.get().collection(collection.CATEGORY).findOne({_id:objId(proId)})
+
+            resolve(category)
+        })
+    },
+    updateCategory:function(proId,subCategory){
+        
+        return new Promise(async(resolve,reject)=>{
+            category=await db.get().collection(collection.CATEGORY).findOne({productSubCat:subCategory})
+            if(category){
+                reject()
+            }else{
+                
+                db.get().collection(collection.CATEGORY).updateOne({_id:objId(proId)},{
+                    $set:{
+                        productSubCat:subCategory
+                    }
+                }).then((response)=>{
+                    resolve()
+                })
+                
+            }
+        })
+    },
+    productFileter:(category)=>{
+        return new Promise(async(resolve,reject)=>{
+            let products=await db.get().collection(collection.PRODUCT_COLLECTION).find({productCategory:category}).toArray()
+
+            resolve(products)
+        })
+    },
+    searchProduct:(data)=>{
+        console.log('Mongo data',data);
+        return new Promise(async(resolve,reject)=>{
+            let products=await db.get().collection(collection.PRODUCT_COLLECTION).find({productName:data}).toArray()
+            
+            if(products.length>0){
+                resolve(products)
+            }else{
+                reject()
+            }
+        })
+    }
        
 }

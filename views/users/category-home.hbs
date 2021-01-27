@@ -168,13 +168,13 @@
         <div class="sidebar-cart-active">
             <div class="sidebar-cart-all">
                 <a class="cart-close" href="#"><i class="icon_close"></i></a>
-                <div class="cart-content" id="cart-refresh">
+                <div class="cart-content">
                     <h3>Shopping Cart</h3>
                     <ul>
                        {{#each cartProducts}}
                         <li class="single-product-cart">
                             
-                            <div class="cart-img" >
+                            <div class="cart-img">
                                 <a href="#"><img src="/product-images/{{this.product._id}}.jpg" alt="" style="height: 112px; width: 98px;"></a>
                             </div>
                             <div class="cart-title">
@@ -207,8 +207,8 @@
                                     <a class="active" href="#shop-1" data-toggle="tab"><i class="icon-grid"></i></a>
                                     <a href="#shop-2" data-toggle="tab"><i class="icon-menu"></i></a>
                                     <a href='/user-home' style="margin-left: 100px;">Show All</a>
-                                    <a href="/userhome-category/Male" style="margin-left: 30px;">Men</a>
-                                    <a href="/userhome-category/Female"  style="margin-left: 30px;">Women</a>
+                                    <a href="" style="margin-left: 30px;">Men</a>
+                                    <a href=""  style="margin-left: 30px;">Women</a>
                                 </div>
                                
                             </div>
@@ -269,7 +269,7 @@
                                             {{#each products}}
                                             <div class="col-xl-4 col-lg-5 col-md-6 col-sm-6">
                                                 <div class="product-list-img">
-                                                    <a href="/product-view/{{this._id}}">
+                                                    <a href="product-details.html">
                                                         <img src="/product-images/{{this._id}}.jpg" alt="Product Style">
                                                     </a>
                                                     
@@ -442,7 +442,6 @@
                     let count=$('#cart-counts').html()
                     count=parseInt(count)+1
                     $('#cart-counts').html(count)
-                    $('#cart-refresh').location.load()
                 }
                
 

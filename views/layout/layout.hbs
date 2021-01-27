@@ -30,10 +30,16 @@
 
     <title>{{title}}</title>
     <link rel='stylesheet' href='/stylesheets/style.css' />
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+     <script src="https://code.jquery.com/jquery-3.5.1.js"
+        integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
 </head>
 
 <body>
     {{{body}}}
+    {{#if user}}
+    {{>user-header}}
+    {{/if}}
     {{#if admin}}
     {{else}}
     <div class="subscribe-area bg-gray pt-115 pb-115">
