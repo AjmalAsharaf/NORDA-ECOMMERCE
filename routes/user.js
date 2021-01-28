@@ -6,6 +6,8 @@ var userHelpers = require('../helpers/user-helpers');
 const { response } = require('express');
 var axios = require('axios');
 var FormData = require('form-data');
+const { Db } = require('mongodb');
+const { getUserProfile } = require('../helpers/user-helpers');
 
 
 
@@ -122,10 +124,12 @@ router.get('/user-home', (req, res) => {
         userHelpers.getCartProducts(req.session.user._id).then((cartProducts) => {
 
           userHelpers.getCartCount(req.session.user._id).then((cartCount) => {
+            
             res.render('users/shop-no-sidebar', { products, user, cartProducts, cartCount })
           })
 
         }).catch(() => {
+          
           res.render('users/shop-no-sidebar', { products, user })
         })
 
@@ -165,7 +169,7 @@ router.get('/view-cart', (req, res) => {
 
         if (products.length > 0) {
           let totalValue = await userHelpers.getTotalAmount(req.session.user._id)
-
+          
           res.render('users/cart', { user, products, totalValue })
         } else {
           res.render('users/cart', { user })
@@ -483,7 +487,11 @@ router.post('/place-order', async (req, res) => {
   userHelpers.placeOrder(req.body, products, totalPrice).then((orderId) => {
     if (req.body.payment_method == 'cod') {
       res.json({ codSuccess: true })
-    } else {
+    }else if(req.body.payment_method=='paypal'){
+      console.log('paypal here');
+    }
+    
+    else {
       userHelpers.generateRazorpay(orderId, totalPrice).then((response) => {
 
         res.json(response)
@@ -499,13 +507,15 @@ router.post('/place-order', async (req, res) => {
 router.get('/my-account', (req, res) => {
   let user = req.session.user
   userHelpers.getUserOrders(req.session.user._id).then((orders) => {
-    console.log('user orders', orders);
-    userHelpers.getAddress(req.session.user._id).then((address) => {
+   
+    userHelpers.getAddress(req.session.user._id).then(async(address) => {
 
-     
-      res.render('users/my-account', { orders, user, address })
-    }).catch(() => {
-      res.render('users/my-account', { orders, user })
+      let userProfile=await userHelpers.getUserProfile(req.session.user._id)
+      console.log('user profile',userProfile);
+      res.render('users/my-account', { orders, user, address,userProfile })
+    }).catch(async() => {
+      let userProfile=await userHelpers.getUserProfile(req.session.user._id)
+      res.render('users/my-account', { orders, user,userProfile })
     })
 
 
@@ -608,6 +618,17 @@ router.get('/cancel-order/:id',(req,res)=>{
   })
 })
 
+router.post('/update-account',(req,res)=>{
+  
+  userHelpers.updateUserProfile(req.body).then((response)=>{
+    console.log('new data from update user',response)
+    req.session.user=response.user
+    res.json(response)
+  }).catch((response)=>{
+    console.log('router',response);
+    res.json(response)
+  })
+})
 
 
 module.exports = router;
