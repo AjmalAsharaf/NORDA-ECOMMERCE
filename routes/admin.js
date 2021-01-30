@@ -2,11 +2,20 @@ var express = require('express');
 var router = express.Router();
 var productHelpers=require('../helpers/product-helpers');
 const userHelpers = require('../helpers/user-helpers');
+const orderHelpers=require('../helpers/order-helpers')
 /* GET users listing. */
 router.get('/', function(req, res, next) {
   if(req.session.admin){
-   
-    res.render('admin/admin',{admin:true})
+    orderHelpers.getTotalOrderNum().then((orderNum)=>{
+      orderHelpers.graphStatus().then((response)=>{
+        res.render('admin/admin',{admin:true,orderNum,response})
+      })
+     
+    }).catch(()=>{
+      res.render('admin/admin',{admin:true})
+
+    })
+    
   }else{
     res.redirect('/')
   }
@@ -232,4 +241,8 @@ router.get('/ship-order/:id',(req,res)=>{
     res.redirect('/admin/get-all-orders')
   })
 })
+
+
+
+
 module.exports = router;

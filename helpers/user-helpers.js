@@ -2,6 +2,9 @@ var db = require('../config/connection')
 var collection = require('../config/collection')
 const bcrypt = require('bcrypt')
 var objId = require('mongodb').ObjectID
+
+const moment=require('moment')
+
 const { ObjectID, ObjectId } = require('mongodb')
 const { response } = require('express')
 
@@ -355,6 +358,7 @@ module.exports = {
                         _id: null,
                         total: { $sum: { $multiply: ['$quantity', '$product.productPrice'] } }
                     }
+                    
                 }
 
             ]).toArray()
@@ -441,7 +445,7 @@ module.exports = {
                 products: products,
                 status: status,
                 ship: 'Not Dispatched',
-                date: new Date
+                date:moment(new Date()).format('L')
             }
             db.get().collection(collection.ORDER_COLLECTION).insertOne(orderObj).then((response) => {
                 db.get().collection(collection.CART_COLLECTION).removeOne({ user: objId(order.user) })
@@ -473,7 +477,7 @@ module.exports = {
     getUserOrders: (userId) => {
         return new Promise(async (resolve, reject) => {
             let orders = await db.get().collection(collection.ORDER_COLLECTION).find({ user: objId(userId) }).toArray()
-
+            
             resolve(orders)
 
         })
@@ -663,6 +667,11 @@ module.exports = {
                 response.email=false
                 reject(response)
             }
+        })
+    },
+    AllorderStatus:()=>{
+        return new Promise((resolve,reject)=>{
+            db.get().collection(collection.ORDER_COLLECTION).find()
         })
     }
 

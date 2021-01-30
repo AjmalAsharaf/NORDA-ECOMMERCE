@@ -488,7 +488,9 @@ router.post('/place-order', async (req, res) => {
     if (req.body.payment_method == 'cod') {
       res.json({ codSuccess: true })
     }else if(req.body.payment_method=='paypal'){
-      console.log('paypal here');
+      response.paypalTotal=totalPrice
+      response.paypal=true
+      res.json(response)
     }
     
     else {
