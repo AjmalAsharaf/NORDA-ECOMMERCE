@@ -125,6 +125,41 @@ module.exports={
                 reject()
             }
         })
+    },
+    updateOffer:(proId,data)=>{
+        console.log('data ',data)
+        offer=parseInt(data.offer)
+        price=parseInt(data.productPrice)
+        offerPrice=price -  ((price*offer)/100)
+        console.log('offer',offerPrice);
+        return new Promise(async(resolve,reject)=>{
+            let product=await db.get().collection(collection.PRODUCT_COLLECTION).updateOne({_id:objId(proId)},{
+                $set:{
+                    offer:offer,
+                    productPrice:offerPrice,
+                    oldPrice:price
+                }
+            })
+            resolve()
+        })
+    },
+    removeOffer:(proId)=>{
+        return new Promise(async(resolve,reject)=>{
+            let oldPrice=await db.get().collection(collection.PRODUCT_COLLECTION).findOne({_id:objId(proId)})
+            console.log('oldprice',oldPrice.oldPrice);
+            db.get().collection(collection.PRODUCT_COLLECTION).updateOne({_id:objId(proId)},{
+                $set:{
+                    productPrice:oldPrice.oldPrice
+                },
+                $unset:{
+                    oldPrice:1,
+                    offer:1
+                }
+            }).then((response)=>{
+                resolve()
+            })
+        })
+
     }
        
 }
