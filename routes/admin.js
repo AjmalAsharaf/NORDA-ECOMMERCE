@@ -2,7 +2,8 @@ var express = require('express');
 var router = express.Router();
 var productHelpers=require('../helpers/product-helpers');
 const userHelpers = require('../helpers/user-helpers');
-const orderHelpers=require('../helpers/order-helpers')
+const orderHelpers=require('../helpers/order-helpers');
+const { response } = require('express');
 /* GET users listing. */
 router.get('/', function(req, res, next) {
   if(req.session.admin){
@@ -242,7 +243,31 @@ router.get('/ship-order/:id',(req,res)=>{
   })
 })
 
+router.get('/report',(req,res)=>{
 
+  res.render('admin/report',{admin:true})
+})
+
+// router.post('/report',(req,res)=>{
+//   console.log('hi');
+//       console.log('body date',req.body);
+//       orderHelpers.getReports(req.body).then((response)=>{
+//         res.json(response)
+//       })
+// })
+
+router.get('/report-date',(req,res)=>{
+  console.log('params',req.query);
+  orderHelpers.getReports(req.query).then((report)=>{
+    console.log('Response',report);
+    if(report.length>0){
+      res.render('admin/report',{admin:true,report})
+    }else{
+      res.redirect('/admin/report')
+    }
+    
+  })
+})
 
 
 module.exports = router;
