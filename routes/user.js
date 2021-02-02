@@ -7,7 +7,7 @@ const { response } = require('express');
 var axios = require('axios');
 var FormData = require('form-data');
 const { Db } = require('mongodb');
-const { getUserProfile } = require('../helpers/user-helpers');
+const { getUserProfile, couponsCheck } = require('../helpers/user-helpers');
 
 
 
@@ -484,6 +484,18 @@ router.post('/place-order', async (req, res) => {
   console.log('place order', req.body);
   let products = await userHelpers.getCartProductList(req.body.user)
   let totalPrice = await userHelpers.getTotalAmount(req.body.user)
+  
+    let discound=parseInt(req.body.offerPrice)
+    if(discound){
+       totalPrice=totalPrice-discound
+    }else{
+      console.log('not a number');
+    }
+    
+
+ 
+  console.log('total price',totalPrice,'offer',discound);
+  
   userHelpers.placeOrder(req.body, products, totalPrice).then((orderId) => {
     if (req.body.payment_method == 'cod') {
       res.json({ codSuccess: true })
@@ -632,5 +644,17 @@ router.post('/update-account',(req,res)=>{
   })
 })
 
+router.post('/check-coupon',(req,res)=>{
+  console.log('coupon code',req.body);
+  userHelpers.couponsCheck(req.body).then((coupon)=>{
+    console.log('valid');
+   
+    res.json({coupon})
+  }).catch(()=>{
+    console.log('Not valid');
+    
+    res.json({status:false})
+  })
 
+})
 module.exports = router;

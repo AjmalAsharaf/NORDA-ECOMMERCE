@@ -362,6 +362,7 @@ module.exports = {
                 }
 
             ]).toArray()
+            
 
             resolve(total[0].total)
 
@@ -685,7 +686,8 @@ module.exports = {
             db.get().collection(collection.COUPON_COLLECTION).insertOne({
                 from:fromDate,
                 to:toDate,
-                offer:offer
+                offer:offer,
+                coupon:coupon
             }).then(()=>{
                 resolve()
             })
@@ -696,6 +698,18 @@ module.exports = {
             let coupons= await db.get().collection(collection.COUPON_COLLECTION).find().toArray()
 
             resolve(coupons)
+        })
+    },
+    couponsCheck:(code)=>{
+        return new Promise(async(resolve,reject)=>{
+            console.log('code',code);
+            let coupon=await db.get().collection(collection.COUPON_COLLECTION).findOne({coupon:code.coupon})
+            console.log('coupon',coupon)
+            if(coupon){
+                resolve(coupon)
+            }else{
+                reject()
+            }
         })
     }
 
