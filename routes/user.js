@@ -468,9 +468,9 @@ router.get('/product-view/:id', (req, res) => {
 router.get('/checkout', async (req, res) => {
   userHelpers.getCartProducts(req.session.user._id).then(async (products) => {
     userHelpers.getAddress(req.session.user._id).then(async (address) => {
-
+      console.log('address',address)
       let total = await userHelpers.getTotalAmount(req.session.user._id)
-      res.render('users/checkout', { total, user: req.session.user, products, address })
+      res.render('users/checkout-with-address', { total, user: req.session.user, products, address })
     }).catch(async () => {
       let total = await userHelpers.getTotalAmount(req.session.user._id)
       res.render('users/checkout', { total, user: req.session.user, products })
