@@ -673,6 +673,30 @@ module.exports = {
         return new Promise((resolve,reject)=>{
             db.get().collection(collection.ORDER_COLLECTION).find()
         })
+    },
+    saveCoupen:(coupon,date)=>{
+        console.log('date',date,'coupen',coupon);
+        let fromDate=moment(date.fromDate).format('L')
+        let toDate=moment(date.toDate).format('L')
+        let offer=parseInt(date.offer)
+        console.log('result',fromDate,toDate,offer);
+        
+        return new Promise((resolve,reject)=>{
+            db.get().collection(collection.COUPON_COLLECTION).insertOne({
+                from:fromDate,
+                to:toDate,
+                offer:offer
+            }).then(()=>{
+                resolve()
+            })
+        })
+    },
+    getAllCoupons:()=>{
+        return new Promise(async(resolve,reject)=>{
+            let coupons= await db.get().collection(collection.COUPON_COLLECTION).find().toArray()
+
+            resolve(coupons)
+        })
     }
 
 

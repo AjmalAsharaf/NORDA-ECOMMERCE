@@ -116,52 +116,48 @@
                     <div class="row">
                         <div class="col-md-12 m-auto">
                             <div class="bg-mattBlackLight my-2 p-3" id="mad-max">
-                                {{!-- <a href="/admin/allCategory-offer" class="btn btn-success mb-5" >Add offer to a Category</a> --}}
-                                <table class="table mt-" id="offer-table">
+                               
+                                <table class="table mt-" id="offer-to-category-table">
                                     <thead>
                                         <tr>
-                                            <th scope="col" class="table-text">Name</th>
-                                            <th scope="col" class="table-text">Category</th>
-                                            <th scope="col" class="table-text">Sub-Category</th>
-                                            <th scope="col" class="table-text">Price</th>
+                                            <th scope="col" class="table-text">Category Name</th>
                                             <th scope="col" class="table-text">Offer</th>
-
-                                            <th scope="col" class="table-text">Options</th>
-                                            <th scope="col" class="table-text">Images</th>
+                                            <th scope="col" class="table-text">Action</th>
+                                            
 
 
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {{#each products}}
+                                      {{#each categories}}
                                         <tr>
 
-                                            <td class="table-text">{{this.productName}}</td>
-                                            <td class="table-text">{{this.productCategory}}</td>
+                                            
                                             <td class="table-text">{{this.productSubCat}}</td>
-                                            <td class="table-text">{{this.productPrice}}</td>
                                             {{#if this.offer}}
                                             <td class="table-text">{{this.offer}}</td>
                                             {{else}}
                                             <td class="table-text">NILL</td>
                                             {{/if}}
+                                            
+                                            
 
                                             <td class="table-text"><a class="btn btn-primary"
-                                                    href="/admin/add-offer/{{this._id}}">Update Offer</a>
-                                                {{#if this.offer}}
-                                                <a class="btn btn-danger" href="/admin/delete-offer/{{this._id}}"
-                                                    onclick="return confirm(`Are you want to Remove offer {{this.productName}}`)">
+                                                    href="/admin/add-category-offer/{{this._id}}">Update Offer</a>
+                                                
+                                                <a class="btn btn-danger" href="/admin/delete-category-offer/{{this._id}}"
+                                                    onclick="return confirm(`Are you want to Remove offer {{this.productSubCat}}`)">
                                                     Remove Offer</a>
-                                                    {{/if}}
+                                                   
                                             </td>
-                                            <td class="table-text"><img src="/product-images/{{this._id}}.jpg" alt=""
-                                                    style="width: 50px;height: 50px;"> </td>
+                                            
 
 
 
                                         </tr>
-
                                         {{/each}}
+
+                                        
                                     </tbody>
                                 </table>
                             </div>
@@ -174,7 +170,7 @@
     </div>
 <script>
         $(document).ready(function () {
-            $('#offer-table').DataTable();
+            $('#offer-to-category-table').DataTable();
         });
     </script>
 

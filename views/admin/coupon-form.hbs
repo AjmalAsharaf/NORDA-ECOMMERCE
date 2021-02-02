@@ -74,7 +74,7 @@
                     </li>
 
                     <li class="nav-item">
-                        <a href="#" class="nav-link px-2">
+                        <a href="/admin/report" class="nav-link px-2">
                             <i class="material-icons icon">
                                 account_balance
                             </i>
@@ -82,11 +82,19 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link px-2">
+                        <a href="/admin/coupon" class="nav-link px-2">
                             <i class="material-icons icon">
                                 local_offer
                             </i>
                             <span class="text">Coupon</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/admin/offer" class="nav-link px-2">
+                            <i class="material-icons icon">
+                                card_giftcard
+                            </i>
+                            <span class="text">Offer</span>
                         </a>
                     </li>
                     <li class="nav-item">
@@ -103,79 +111,41 @@
         <div class="content">
             <main>
                 <div class="container-fluid">
-
-                    <div class="row">
-                        <div class="col-md-12 m-auto">
-
-                            <div class="bg-mattBlackLight my-2 p-3">
-
-                                <h2 style="color: aliceblue;" class="text-center">Offer Manage</h2>
-                            </div>
+                    <div class="col-md-12 m-auto">
+                        <div class="bg-mattBlackLight my-2 p-3" id="mad-max">
+                            <h2 style="color: aliceblue;" class="text-center">Voucher Manage</h2>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-md-12 m-auto">
-                            <div class="bg-mattBlackLight my-2 p-3" id="mad-max">
-                                {{!-- <a href="/admin/allCategory-offer" class="btn btn-success mb-5" >Add offer to a Category</a> --}}
-                                <table class="table mt-" id="offer-table">
-                                    <thead>
-                                        <tr>
-                                            <th scope="col" class="table-text">Name</th>
-                                            <th scope="col" class="table-text">Category</th>
-                                            <th scope="col" class="table-text">Sub-Category</th>
-                                            <th scope="col" class="table-text">Price</th>
-                                            <th scope="col" class="table-text">Offer</th>
+                    <div class="col-md-12 m-auto">
+                        <div class="bg-mattBlackLight my-2 p-3" id="mad-max">
 
-                                            <th scope="col" class="table-text">Options</th>
-                                            <th scope="col" class="table-text">Images</th>
-
-
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {{#each products}}
-                                        <tr>
-
-                                            <td class="table-text">{{this.productName}}</td>
-                                            <td class="table-text">{{this.productCategory}}</td>
-                                            <td class="table-text">{{this.productSubCat}}</td>
-                                            <td class="table-text">{{this.productPrice}}</td>
-                                            {{#if this.offer}}
-                                            <td class="table-text">{{this.offer}}</td>
-                                            {{else}}
-                                            <td class="table-text">NILL</td>
-                                            {{/if}}
-
-                                            <td class="table-text"><a class="btn btn-primary"
-                                                    href="/admin/add-offer/{{this._id}}">Update Offer</a>
-                                                {{#if this.offer}}
-                                                <a class="btn btn-danger" href="/admin/delete-offer/{{this._id}}"
-                                                    onclick="return confirm(`Are you want to Remove offer {{this.productName}}`)">
-                                                    Remove Offer</a>
-                                                    {{/if}}
-                                            </td>
-                                            <td class="table-text"><img src="/product-images/{{this._id}}.jpg" alt=""
-                                                    style="width: 50px;height: 50px;"> </td>
+                            <form action="/admin/generate-code" method="POST">
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">From date</label>
+                                    <input type="date" required name="fromDate">
 
 
 
-                                        </tr>
+                                </div>
+                                <div class="form-group">
+                                    <label for="">To date</label required>
+                                    <input type="date" name="toDate" id="">
+                                </div>
+                                <div class="form-group">
+                                    <input type="number" id="coupon-code" name="offer" value="" required>
 
-                                        {{/each}}
-                                    </tbody>
-                                </table>
-                            </div>
+                                </div>
+                                <div>
+
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
+            </main>
         </div>
-        </main>
     </div>
-    </div>
-<script>
-        $(document).ready(function () {
-            $('#offer-table').DataTable();
-        });
-    </script>
+
 
 </body>

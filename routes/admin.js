@@ -4,6 +4,7 @@ var productHelpers = require('../helpers/product-helpers');
 const userHelpers = require('../helpers/user-helpers');
 const orderHelpers = require('../helpers/order-helpers');
 const { response } = require('express');
+var voucher_codes = require('voucher-code-generator');
 /* GET users listing. */
 router.get('/', function (req, res, next) {
   if (req.session.admin) {
@@ -299,6 +300,55 @@ router.get('/delete-offer/:id',(req,res)=>{
     res.redirect('/admin/offer')
   })
 })
+
+// router.get('/allCategory-offer',(req,res)=>{
+//   productHelpers.showCategory().then((categories)=>{
+//     console.log('categories',categories);
+//     res.render('admin/offer-to-category',{admin:true,categories})
+//   })
+  
+// })
+
+// router.get('/add-category-offer/:id',(req,res)=>{
+//   productHelpers.showOneCategory(req.params.id).then((singleCategory)=>{
+//     console.log('category single',singleCategory);
+//     res.render('admin/offer-to-category-update',{singleCategory,admin:true})
+    
+//   })
+// })
+
+// router.post('/add-category-offer/:id',(req,res)=>{
+//   console.log('params',req.params.id,'bo',req.body);
+//   proId=req.params.id
+//   productHelpers.updateCategoryOffer(proId,req.body).then(()=>{
+    
+//   })
+// })
+
+router.get('/coupon',(req,res)=>{
+  userHelpers.getAllCoupons().then((coupons)=>{
+    console.log('all coupons',coupons);
+    res.render('admin/coupon',{admin:true,coupons})
+  })
+  
+})
+
+router.get('/generate-code-form',(req,res)=>{
+  res.render('admin/coupon-form',{admin:true})
+})
+router.post('/generate-code',(req,res)=>{
+  console.log('hi generate');
+  let generateCode=voucher_codes.generate({
+    length:8,
+    count:5
+  })
+  console.log(generateCode[0]);
+  console.log('reqbody',req.body);
+  userHelpers.saveCoupen(generateCode[0],req.body).then(()=>{
+    res.redirect('/admin/coupon')
+  })
+})
+
 
 
 module.exports = router;

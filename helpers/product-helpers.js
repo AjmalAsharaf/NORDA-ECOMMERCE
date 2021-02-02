@@ -160,6 +160,28 @@ module.exports={
             })
         })
 
-    }
+    },
+    // updateCategoryOffer:(proId,data)=>{
+    //     console.log('pro',proId,'data',data);
+    //     let offer=parseInt(data.offer)
+    //     console.log('data',data.productName);
+        
+    //     return new Promise(async(resolve,reject)=>{
+            
+    //         let productPrice=await db.get().collection(collection.PRODUCT_COLLECTION).aggregate([{
+    //             $match:{productSubCat:'Jumpsuit',offer:{$exists:true}},
+                
+    //         },{
+    //             $project:{oldPrice:1}
+    //         }
+
+    //     ]).toArray()
+    //         console.log('data',productPrice);
+            
+           
+
+            
+    //     })
+    // }
        
 }
