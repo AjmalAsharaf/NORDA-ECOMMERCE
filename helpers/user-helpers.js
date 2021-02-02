@@ -448,21 +448,26 @@ module.exports = {
                 ship: 'Not Dispatched',
                 date:moment(new Date()).format('L')
             }
-            db.get().collection(collection.ORDER_COLLECTION).insertOne(orderObj).then((response) => {
+            db.get().collection(collection.ORDER_COLLECTION).insertOne(orderObj).then(async(response) => {
                 db.get().collection(collection.CART_COLLECTION).removeOne({ user: objId(order.user) })
-                db.get().collection(collection.ADDRESS_COLLECTION).insert({
-                    user: objId(order.user),
-                    firstName: order.fname,
-                    lastName: order.lname,
-                    houseName: order.houseName,
-                    streetAddress: order.streetAddress,
-                    town: order.town,
-                    state: order.state,
-                    zip: order.zip,
-                    phone: order.phone,
-
-
-                })
+                let addressCount= await db.get().collection(collection.ADDRESS_COLLECTION).find().count()
+                console.log(addressCount,'count here');
+                if(addressCount<2 && order.saveAddress){
+                    db.get().collection(collection.ADDRESS_COLLECTION).insert({
+                        user: objId(order.user),
+                        firstName: order.fname,
+                        lastName: order.lname,
+                        houseName: order.houseName,
+                        streetAddress: order.streetAddress,
+                        town: order.town,
+                        state: order.state,
+                        zip: order.zip,
+                        phone: order.phone,
+    
+    
+                    })
+                }
+               
                 resolve(response.ops[0]._id)
             })
 

@@ -235,16 +235,16 @@
                         <div class="col-lg-7">
                             <div>
                                 {{#each address}}
-                                <form id="oldAddress">
-                                    <input type="text"  id="ex-name" readonly value="{{this.firstName}}">
-                                    <input type="text"   id="ex-lname" readonly value="{{this.lastName}}">
-                                    <input type="text"  id="ex-house" readonly value="{{this.houseName}}">
-                                    <input type="text"  id="ex-street" readonly value="{{this.streetAddress}}">
-                                    <input type="text"  id="ex-town" readonly value="{{this.town}}">
-                                    <input type="text"  id="ex-state" readonly value="{{this.state}}">
-                                    <input type="text"  id="ex-zip" readonly value="{{this.zip}}">
-                                    <input type="text"  id="ex-mobile" readonly value="{{this.phone}}">
-                                    <input type="text"  id="ex-userid" value="{{this.user}}" hidden>
+                                <form id="oldAddress{{@index}}">
+                                    <input type="text"  id="ex-name{{@index}}" readonly value="{{this.firstName}}">
+                                    <input type="text"   id="ex-lname{{@index}}" readonly value="{{this.lastName}}">
+                                    <input type="text"  id="ex-house{{@index}}" readonly value="{{this.houseName}}">
+                                    <input type="text"  id="ex-street{{@index}}" readonly value="{{this.streetAddress}}">
+                                    <input type="text"  id="ex-town{{@index}}" readonly value="{{this.town}}">
+                                    <input type="text"  id="ex-state{{@index}}" readonly value="{{this.state}}">
+                                    <input type="text"  id="ex-zip{{@index}}" readonly value="{{this.zip}}">
+                                    <input type="text"  id="ex-mobile{{@index}}" readonly value="{{this.phone}}">
+                                    <input type="text"  id="ex-userid{{@index}}" value="{{this.user}}" hidden>
                                     <input type="submit" value="Deliver to this Address" class="btn btn-success">
                                 </form>
                                 {{/each}}
@@ -387,11 +387,14 @@
                                 
 
 
-                                <div class="additional-info-wrap">
-                                    <label>Order good notes</label>
-                                    <textarea placeholder="Notes about your order, e.g. special notes for delivery. "
-                                        name="message"></textarea>
-                                </div>
+                                <div class="col-lg-12 col-md-12">
+                                        <div class="billing-info mb-20">
+                                            <label>Save This address?</label>
+                                            <input type="checkbox" name="saveAddress" value="false" style="height: 20px; margin-left: -290px;" id="check-box-value">
+                                            
+                                        </div>
+                                    </div>
+                                
                             </div>
                         </div>
                         <div class="col-lg-5">
@@ -481,24 +484,54 @@
     
 
     <script>
-        $('#oldAddress').submit((e)=>{
+        $('#oldAddress0').submit((e)=>{
             e.preventDefault()
-            let fname=$('#ex-name').val()
+            let fname=$('#ex-name0').val()
             console.log('fname',fname)
             document.getElementById('firstName').value=fname
-            let lname=$('#ex-lname').val()
+            let lname=$('#ex-lname0').val()
             document.getElementById('lastName').value=lname
-            let house=$('#ex-house').val()
+            let house=$('#ex-house0').val()
             document.getElementById('house').value=house
-            let street=$('#ex-street').val()
+            let street=$('#ex-street0').val()
             document.getElementById('streetAdd').value=street
-            let town=$('#ex-town').val()
+            let town=$('#ex-town0').val()
             document.getElementById('townAdd').value=town
-            let state=$('#ex-state').val()
+            let state=$('#ex-state0').val()
             document.getElementById('stateAdd').value=state
-            let zip=$('#ex-zip').val()
+            let zip=$('#ex-zip0').val()
              document.getElementById('zipAdd').value=zip
-            let mobile=$('#ex-mobile').val()
+            let mobile=$('#ex-mobile0').val()
+             document.getElementById('phoneAdd').value=mobile
+           
+            if($('#check-box-value').prop('checked')==true)
+            {
+                console.log('address will be saved')
+            }else{
+                console.log('not gonna save')
+            }
+            
+
+
+        })
+        $('#oldAddress1').submit((e)=>{
+            e.preventDefault()
+            let fname=$('#ex-name1').val()
+            console.log('fname',fname)
+            document.getElementById('firstName').value=fname
+            let lname=$('#ex-lname1').val()
+            document.getElementById('lastName').value=lname
+            let house=$('#ex-house1').val()
+            document.getElementById('house').value=house
+            let street=$('#ex-street1').val()
+            document.getElementById('streetAdd').value=street
+            let town=$('#ex-town1').val()
+            document.getElementById('townAdd').value=town
+            let state=$('#ex-state1').val()
+            document.getElementById('stateAdd').value=state
+            let zip=$('#ex-zip1').val()
+             document.getElementById('zipAdd').value=zip
+            let mobile=$('#ex-mobile1').val()
              document.getElementById('phoneAdd').value=mobile
            
             
@@ -531,6 +564,10 @@
 
         $('#place-order').submit((e) => {
             e.preventDefault()
+            
+            if($('#check-box-value').prop('checked')==true){
+                document.getElementById('check-box-value').value=true
+            }
             $.ajax({
                 url: '/place-order',
                 method: 'post',

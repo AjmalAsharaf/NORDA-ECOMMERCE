@@ -435,6 +435,11 @@
 
 </body>
 <script>
+        $(document).ready(function () {
+            $('#table_id').DataTable();
+        });
+    </script>
+<script>
     $('#account-form').submit((e)=>{
         e.preventDefault()
         $('#email-taken').hide()

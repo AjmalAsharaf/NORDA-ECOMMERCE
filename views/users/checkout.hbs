@@ -291,15 +291,21 @@
                                     </div>
 
                                 </div>
-
+                                 <div class="billing-info mb-20">
+                                            <label>Save This address?</label>
+                                            <input type="checkbox" name="saveAddress" value="false" style="height: 20px; margin-left: -290px;" id="check-box-value">
+                                            
+                                        </div>
 
                                 <div class="additional-info-wrap">
                                     <label>Order notes</label>
                                     <textarea placeholder="Notes about your order, e.g. special notes for delivery. "
                                         name="message"></textarea>
+
                                 </div>
                             </div>
                         </div>
+                        
                         <div class="col-lg-5">
                             <div class="your-order-area">
                                 <h3>Your order</h3>
@@ -310,6 +316,7 @@
                                                 <li>Product <span>Total</span></li>
                                             </ul>
                                         </div>
+
                                         <div class="your-order-middle">
                                             <ul>
                                                 {{#each products}}
