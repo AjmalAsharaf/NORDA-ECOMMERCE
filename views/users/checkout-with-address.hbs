@@ -421,10 +421,15 @@
                                                 <li>Subtotal <span>Rs.{{total}} </span></li>
                                             </ul>
                                         </div>
+                                         <div class="your-order-info order-total" id="discount-div" style="display: none;">
+                                            <ul>
+                                                <li>Discount <span id="discount-coupon-price"></span><span>-</span></li>
+                                            </ul>
+                                        </div>
 
                                         <div class="your-order-info order-total">
                                             <ul>
-                                                <li>Total <span>Rs.{{total}}</span></li>
+                                                <li>Total <span id="total-price-final">{{total}}</span> <span>Rs. </span></li>
                                             </ul>
                                         </div>
                                     </div>
@@ -553,9 +558,17 @@
                         $('#invalid-code').show()
                     }else{
                         $('#coupon-container').hide()
-                        console.log('respn',response.coupon.offer)
+                        $('#discount-div').show()
+                        
                         document.getElementById('offerinput').value=response.coupon.offer
+                        document.getElementById('discount-coupon-price').innerHTML=response.coupon.offer
+                        
+                        let total=parseInt(document.getElementById('total-price-final').innerHTML)
+                        total=total-response.coupon.offer
+                        
 
+                        document.getElementById('total-price-final').innerHTML=total
+                        
                     }
                 }
             })

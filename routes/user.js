@@ -278,7 +278,7 @@ router.post('/otp-register', (req, res) => {
         method: 'post',
         url: 'https://d7networks.com/api/verifier/send',
         headers: {
-          'Authorization': 'Token 6006332f15b6afb6c2a4b9527f3e21fe63dd41fa',
+          'Authorization': 'Token b3b6ad053db9909cf29b8946712eeb1388acec39',
           ...data.getHeaders()
         },
         data: data
@@ -322,7 +322,7 @@ router.post('/verify-otp', (req, res) => {
     method: 'post',
     url: 'https://d7networks.com/api/verifier/verify',
     headers: {
-      'Authorization': 'Token 6006332f15b6afb6c2a4b9527f3e21fe63dd41fa',
+      'Authorization': 'Token b3b6ad053db9909cf29b8946712eeb1388acec39',
       ...data.getHeaders()
     },
     data: data
@@ -361,7 +361,7 @@ router.post('/resend-otp', (req, res) => {
     method: 'post',
     url: 'https://d7networks.com/api/verifier/resend',
     headers: {
-      'Authorization': 'Token 6006332f15b6afb6c2a4b9527f3e21fe63dd41fa',
+      'Authorization': 'Token b3b6ad053db9909cf29b8946712eeb1388acec39',
       ...data.getHeaders()
     },
     data: data
@@ -394,7 +394,7 @@ router.post('/otp-login', (req, res) => {
       method: 'post',
       url: 'https://d7networks.com/api/verifier/send',
       headers: {
-        'Authorization': 'Token 6006332f15b6afb6c2a4b9527f3e21fe63dd41fa',
+        'Authorization': 'Token b3b6ad053db9909cf29b8946712eeb1388acec39',
         ...data.getHeaders()
       },
       data: data
@@ -423,7 +423,7 @@ router.post('/otp-login-verify', (req, res) => {
     method: 'post',
     url: 'https://d7networks.com/api/verifier/verify',
     headers: {
-      'Authorization': 'Token 6006332f15b6afb6c2a4b9527f3e21fe63dd41fa',
+      'Authorization': 'Token b3b6ad053db9909cf29b8946712eeb1388acec39',
       ...data.getHeaders()
     },
     data: data
