@@ -708,13 +708,30 @@ module.exports = {
     couponsCheck:(code)=>{
         return new Promise(async(resolve,reject)=>{
             console.log('code',code);
+            let currentDate=moment(new Date).format('L')
             let coupon=await db.get().collection(collection.COUPON_COLLECTION).findOne({coupon:code.coupon})
             console.log('coupon',coupon)
             if(coupon){
-                resolve(coupon)
+                let dateFrom=Date.parse(coupon.from)
+                let dateTo=Date.parse(coupon.to)
+                let checkDate=Date.parse(currentDate)
+                
+                if(dateFrom >= checkDate && checkDate <= dateTo){
+                    resolve(coupon)
+                }else{
+                    reject()
+                }
+                
             }else{
                 reject()
             }
+        })
+    },
+    deleteCoupon:(proId)=>{
+        return new Promise((resolve,reject)=>{
+            db.get().collection(collection.COUPON_COLLECTION).removeOne({_id:objId(proId)})
+
+            resolve()
         })
     }
 

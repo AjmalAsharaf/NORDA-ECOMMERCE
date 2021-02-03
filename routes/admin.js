@@ -351,6 +351,14 @@ router.post('/generate-code',(req,res)=>{
   })
 })
 
+router.get('/delete-coupon/:id',(req,res)=>{
+  proId=req.params.id
+
+  userHelpers.deleteCoupon(proId).then(()=>{
+    res.redirect('/admin/coupon')
+  })
+  
+})
 
 
 module.exports = router;

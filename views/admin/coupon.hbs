@@ -118,7 +118,7 @@
                     <div class="col-md-12 m-auto">
                         <div class="bg-mattBlackLight my-2 p-3" id="mad-max">
                             <a href="/admin/generate-code-form" class="btn btn-primary">Create New</a>
-                            <table class="table mt-4">
+                            <table class="table mt-4" id="coupon-table">
                                 <thead>
                                     <tr>
                                         <th scope="col">No</th>
@@ -126,6 +126,7 @@
                                         <th scope="col">Date</th>
                                         
                                         <th scope="col">Offer</th>
+                                        <th scope="col">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -135,6 +136,7 @@
                                         <td>{{this.coupon}}</td>
                                         <td>From {{this.from}} To {{this.to}}</td>
                                         <td>{{this.offer}} OFF</td>
+                                        <td><a href="/admin/delete-coupon/{{this._id}}" class="btn btn-danger">Remove</a> </td>
                                     </tr>
                                     {{/each}}
                                 </tbody>
@@ -145,5 +147,10 @@
             </main>
         </div>
     </div>
+    <script>
+        $(document).ready(function () {
+            $('#coupon-table').DataTable();
+        });
+    </script>
 
 </body>
