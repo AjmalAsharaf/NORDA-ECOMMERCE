@@ -187,7 +187,9 @@ router.get('/category-management', (req, res) => {
 })
 
 router.get('/delete-category/:id', (req, res) => {
-  if (res.session.admin) {
+  
+  if (req.session.admin) {
+    
     proId = req.params.id
     productHelpers.deleteCategory(proId).then(() => {
       res.redirect('/admin/category-management')
