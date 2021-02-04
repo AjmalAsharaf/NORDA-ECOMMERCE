@@ -303,29 +303,29 @@ router.get('/delete-offer/:id',(req,res)=>{
   })
 })
 
-// router.get('/allCategory-offer',(req,res)=>{
-//   productHelpers.showCategory().then((categories)=>{
-//     console.log('categories',categories);
-//     res.render('admin/offer-to-category',{admin:true,categories})
-//   })
+router.get('/allCategory-offer',(req,res)=>{
+  productHelpers.showCategory().then((categories)=>{
+    console.log('categories',categories);
+    res.render('admin/offer-to-category',{admin:true,categories})
+  })
   
-// })
+})
 
-// router.get('/add-category-offer/:id',(req,res)=>{
-//   productHelpers.showOneCategory(req.params.id).then((singleCategory)=>{
-//     console.log('category single',singleCategory);
-//     res.render('admin/offer-to-category-update',{singleCategory,admin:true})
+router.get('/add-category-offer/:id',(req,res)=>{
+  productHelpers.showOneCategory(req.params.id).then((singleCategory)=>{
+    console.log('category single',singleCategory);
+    res.render('admin/offer-to-category-update',{singleCategory,admin:true})
     
-//   })
-// })
+  })
+})
 
-// router.post('/add-category-offer/:id',(req,res)=>{
-//   console.log('params',req.params.id,'bo',req.body);
-//   proId=req.params.id
-//   productHelpers.updateCategoryOffer(proId,req.body).then(()=>{
-    
-//   })
-// })
+router.post('/add-category-offer/:id',(req,res)=>{
+  console.log('params',req.params.id,'bo',req.body);
+  proId=req.params.id
+  productHelpers.updateCategoryOffer(proId,req.body).then(()=>{
+    res.redirect('/admin/allCategory-offer')
+  })
+})
 
 router.get('/coupon',(req,res)=>{
   userHelpers.getAllCoupons().then((coupons)=>{
