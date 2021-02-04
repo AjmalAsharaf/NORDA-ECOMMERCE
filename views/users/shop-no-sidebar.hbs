@@ -226,13 +226,18 @@
                                                     <a href="/product-view/{{this._id}}">
                                                         <img src="/product-images/{{this._id}}.jpg" alt="" >
                                                     </a>
-                                                    
+                                                    {{#if this.offer}}
+                                                    <span class="pro-badge left bg-red">-{{this.offer}}%</span>
+                                                    {{/if}}
                                                 </div>
                                                 <div class="product-content-wrap-2 text-center">
                                                     
                                                     <h3><a href="/product-view/{{this._id}}">{{this.productName}}</a></h3>
                                                     <div class="product-price-2">
                                                         <span>Rs.{{this.productPrice}}</span>
+                                                        {{#if this.offer}}
+                                                        <span class="old-price">Rs.{{this.oldPrice}}</span>
+                                                        {{/if}}
                                                     </div>
                                                 </div>
                                                 <div class="product-content-wrap-2 product-content-position text-center">
@@ -240,6 +245,9 @@
                                                     <h3><a href="product-details.html">{{this.productName}}</a></h3>
                                                     <div class="product-price-2">
                                                         <span>Rs.{{this.productPrice}}</span>
+                                                        {{#if this.offer}}
+                                                        <span class="old-price">Rs.{{this.oldPrice}}</span>
+                                                        {{/if}}
                                                     </div>
                                                     <div class="pro-add-to-cart">
                                                     <button title="Add to Cart" onclick="addToCart('{{this._id}}')">Add To Cart</button>

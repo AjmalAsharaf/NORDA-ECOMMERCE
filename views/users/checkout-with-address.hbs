@@ -233,7 +233,24 @@
                 <div class="checkout-wrap pt-30">
                     <div class="row">
                         <div class="col-lg-7">
+                            <div>
+                                {{#each address}}
+                                <form id="oldAddress{{@index}}">
+                                    <input type="text"  id="ex-name{{@index}}" readonly value="{{this.firstName}}">
+                                    <input type="text"   id="ex-lname{{@index}}" readonly value="{{this.lastName}}">
+                                    <input type="text"  id="ex-house{{@index}}" readonly value="{{this.houseName}}">
+                                    <input type="text"  id="ex-street{{@index}}" readonly value="{{this.streetAddress}}">
+                                    <input type="text"  id="ex-town{{@index}}" readonly value="{{this.town}}">
+                                    <input type="text"  id="ex-state{{@index}}" readonly value="{{this.state}}">
+                                    <input type="text"  id="ex-zip{{@index}}" readonly value="{{this.zip}}">
+                                    <input type="text"  id="ex-mobile{{@index}}" readonly value="{{this.phone}}">
+                                    <input type="text"  id="ex-userid{{@index}}" value="{{this.user}}" hidden>
+                                    <input type="submit" value="Deliver to this Address" class="btn btn-success">
+                                </form>
+                                {{/each}}
+                            </div>
                             <div class="billing-info-wrap mr-50">
+                                
                                 <h3>Billing Details</h3>
                                 <div class="row">
                                     <div class="col-lg-6 col-md-6">
@@ -241,13 +258,13 @@
                                             <div class="billing-info mb-20">
                                                 <label>First Name <abbr class="required"
                                                         title="required">*</abbr></label>
-                                                <input type="text" required name="fname" >
+                                                <input type="text" required name="fname" id="firstName">
                                             </div>
                                     </div>
                                     <div class="col-lg-6 col-md-6">
                                         <div class="billing-info mb-20">
                                             <label>Last Name <abbr class="required" title="required">*</abbr></label>
-                                            <input type="text" required name="lname">
+                                            <input type="text" required name="lname" id="lastName">
                                         </div>
                                     </div>
 
@@ -257,55 +274,129 @@
                                             <label>Street Address <abbr class="required"
                                                     title="required">*</abbr></label>
                                             <input class="billing-address" placeholder="House name" type="text" required
-                                                name="houseName">
+                                                name="houseName" id="house">
                                             <input placeholder="Street address" type="text" required
-                                                name="streetAddress">
+                                                name="streetAddress" id="streetAdd">
                                         </div>
                                     </div>
                                     <div class="col-lg-12">
                                         <div class="billing-info mb-20">
                                             <label>Town / City <abbr class="required" title="required">*</abbr></label>
-                                            <input type="text" required name="town">
+                                            <input type="text" required name="town" id="townAdd">
                                         </div>
                                     </div>
                                     <div class="col-lg-12 col-md-12">
                                         <div class="billing-info mb-20">
                                             <label>State<abbr class="required" title="required">*</abbr></label>
-                                            <input type="text" required name="state">
+                                            <input type="text" required name="state" id="stateAdd">
                                         </div>
                                     </div>
                                     <div class="col-lg-12 col-md-12">
                                         <div class="billing-info mb-20">
                                             <label>Postcode / ZIP <abbr class="required"
                                                     title="required">*</abbr></label>
-                                            <input type="text" required name="zip">
+                                            <input type="text" required name="zip" id="zipAdd">
                                             <input type="number"name="offerPrice" id="offerinput" hidden>
                                         </div>
                                     </div>
                                     <div class="col-lg-12 col-md-12">
                                         <div class="billing-info mb-20">
                                             <label>Phone <abbr class="required" title="required">*</abbr></label>
-                                            <input type="number" required name="phone">
+                                            <input type="number" required name="phone" id="phoneAdd">
                                             <input type="text" name="user" value="{{user._id}}" hidden>
                                         </div>
                                     </div>
 
                                 </div>
-                                 <div class="billing-info mb-20">
+                                {{!-- <div class="checkout-account mt-25">
+                                    <input class="checkout-toggle" type="checkbox">
+                                    <span>Ship to a different address?</span>
+                                </div>
+                                <div class="different-address open-toggle mt-30">
+                                    <div class="row">
+                                        <div class="col-lg-6 col-md-6">
+                                            <div class="billing-info mb-20">
+                                                <label>First Name</label>
+                                                <input type="text">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6 col-md-6">
+                                            <div class="billing-info mb-20">
+                                                <label>Last Name</label>
+                                                <input type="text">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-12">
+                                            <div class="billing-info mb-20">
+                                                <label>Company Name</label>
+                                                <input type="text">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-12">
+                                            <div class="billing-select mb-20">
+                                                <label>Country</label>
+                                                <select>
+                                                    <option>Select a country</option>
+                                                    <option>Azerbaijan</option>
+                                                    <option>Bahamas</option>
+                                                    <option>Bahrain</option>
+                                                    <option>Bangladesh</option>
+                                                    <option>Barbados</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-12">
+                                            <div class="billing-info mb-20">
+                                                <label>Street Address</label>
+                                                <input class="billing-address" placeholder="House number and street name" type="text">
+                                                <input placeholder="Apartment, suite, unit etc." type="text">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-12">
+                                            <div class="billing-info mb-20">
+                                                <label>Town / City</label>
+                                                <input type="text">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6 col-md-6">
+                                            <div class="billing-info mb-20">
+                                                <label>State / County</label>
+                                                <input type="text">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6 col-md-6">
+                                            <div class="billing-info mb-20">
+                                                <label>Postcode / ZIP</label>
+                                                <input type="text">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6 col-md-6">
+                                            <div class="billing-info mb-20">
+                                                <label>Phone</label>
+                                                <input type="text">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6 col-md-6">
+                                            <div class="billing-info mb-20">
+                                                <label>Email Address</label>
+                                                <input type="text">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div> --}}
+                                
+
+
+                                <div class="col-lg-12 col-md-12">
+                                        <div class="billing-info mb-20">
                                             <label>Save This address?</label>
                                             <input type="checkbox" name="saveAddress" value="false" style="height: 20px; margin-left: -290px;" id="check-box-value">
                                             
                                         </div>
-
-                                <div class="additional-info-wrap">
-                                    <label>Order notes</label>
-                                    <textarea placeholder="Notes about your order, e.g. special notes for delivery. "
-                                        name="message"></textarea>
-
-                                </div>
+                                    </div>
+                                
                             </div>
                         </div>
-                        
                         <div class="col-lg-5">
                             <div class="your-order-area">
                                 <h3>Your order</h3>
@@ -316,7 +407,6 @@
                                                 <li>Product <span>Total</span></li>
                                             </ul>
                                         </div>
-
                                         <div class="your-order-middle">
                                             <ul>
                                                 {{#each products}}
@@ -399,6 +489,63 @@
     
 
     <script>
+        $('#oldAddress0').submit((e)=>{
+            e.preventDefault()
+            let fname=$('#ex-name0').val()
+            console.log('fname',fname)
+            document.getElementById('firstName').value=fname
+            let lname=$('#ex-lname0').val()
+            document.getElementById('lastName').value=lname
+            let house=$('#ex-house0').val()
+            document.getElementById('house').value=house
+            let street=$('#ex-street0').val()
+            document.getElementById('streetAdd').value=street
+            let town=$('#ex-town0').val()
+            document.getElementById('townAdd').value=town
+            let state=$('#ex-state0').val()
+            document.getElementById('stateAdd').value=state
+            let zip=$('#ex-zip0').val()
+             document.getElementById('zipAdd').value=zip
+            let mobile=$('#ex-mobile0').val()
+             document.getElementById('phoneAdd').value=mobile
+           
+            if($('#check-box-value').prop('checked')==true)
+            {
+                console.log('address will be saved')
+            }else{
+                console.log('not gonna save')
+            }
+            
+
+
+        })
+        $('#oldAddress1').submit((e)=>{
+            e.preventDefault()
+            let fname=$('#ex-name1').val()
+            console.log('fname',fname)
+            document.getElementById('firstName').value=fname
+            let lname=$('#ex-lname1').val()
+            document.getElementById('lastName').value=lname
+            let house=$('#ex-house1').val()
+            document.getElementById('house').value=house
+            let street=$('#ex-street1').val()
+            document.getElementById('streetAdd').value=street
+            let town=$('#ex-town1').val()
+            document.getElementById('townAdd').value=town
+            let state=$('#ex-state1').val()
+            document.getElementById('stateAdd').value=state
+            let zip=$('#ex-zip1').val()
+             document.getElementById('zipAdd').value=zip
+            let mobile=$('#ex-mobile1').val()
+             document.getElementById('phoneAdd').value=mobile
+           
+            
+
+
+        })
+
+
+
         $('#coupon-check').submit((e)=>{
             e.preventDefault()
             $.ajax({
@@ -412,15 +559,16 @@
                     }else{
                         $('#coupon-container').hide()
                         $('#discount-div').show()
-                        console.log('respn',response.coupon.offer)
+                        
                         document.getElementById('offerinput').value=response.coupon.offer
-
                         document.getElementById('discount-coupon-price').innerHTML=response.coupon.offer
-                         let total=parseInt(document.getElementById('total-price-final').innerHTML)
+                        
+                        let total=parseInt(document.getElementById('total-price-final').innerHTML)
                         total=total-response.coupon.offer
                         
-                        document.getElementById('total-price-final').innerHTML=total
 
+                        document.getElementById('total-price-final').innerHTML=total
+                        
                     }
                 }
             })
@@ -428,10 +576,11 @@
 
 
         $('#place-order').submit((e) => {
-            
             e.preventDefault()
-            let address=$('#place-order').serialize()
-            console.log('addressfields',address)
+            
+            if($('#check-box-value').prop('checked')==true){
+                document.getElementById('check-box-value').value=true
+            }
             $.ajax({
                 url: '/place-order',
                 method: 'post',

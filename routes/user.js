@@ -6,6 +6,8 @@ var userHelpers = require('../helpers/user-helpers');
 const { response } = require('express');
 var axios = require('axios');
 var FormData = require('form-data');
+const { Db } = require('mongodb');
+const { getUserProfile, couponsCheck } = require('../helpers/user-helpers');
 
 
 
@@ -122,10 +124,12 @@ router.get('/user-home', (req, res) => {
         userHelpers.getCartProducts(req.session.user._id).then((cartProducts) => {
 
           userHelpers.getCartCount(req.session.user._id).then((cartCount) => {
+            
             res.render('users/shop-no-sidebar', { products, user, cartProducts, cartCount })
           })
 
         }).catch(() => {
+          
           res.render('users/shop-no-sidebar', { products, user })
         })
 
@@ -165,7 +169,7 @@ router.get('/view-cart', (req, res) => {
 
         if (products.length > 0) {
           let totalValue = await userHelpers.getTotalAmount(req.session.user._id)
-
+          
           res.render('users/cart', { user, products, totalValue })
         } else {
           res.render('users/cart', { user })
@@ -274,7 +278,7 @@ router.post('/otp-register', (req, res) => {
         method: 'post',
         url: 'https://d7networks.com/api/verifier/send',
         headers: {
-          'Authorization': 'Token 6006332f15b6afb6c2a4b9527f3e21fe63dd41fa',
+          'Authorization': 'Token b3b6ad053db9909cf29b8946712eeb1388acec39',
           ...data.getHeaders()
         },
         data: data
@@ -318,7 +322,7 @@ router.post('/verify-otp', (req, res) => {
     method: 'post',
     url: 'https://d7networks.com/api/verifier/verify',
     headers: {
-      'Authorization': 'Token 6006332f15b6afb6c2a4b9527f3e21fe63dd41fa',
+      'Authorization': 'Token b3b6ad053db9909cf29b8946712eeb1388acec39',
       ...data.getHeaders()
     },
     data: data
@@ -357,7 +361,7 @@ router.post('/resend-otp', (req, res) => {
     method: 'post',
     url: 'https://d7networks.com/api/verifier/resend',
     headers: {
-      'Authorization': 'Token 6006332f15b6afb6c2a4b9527f3e21fe63dd41fa',
+      'Authorization': 'Token b3b6ad053db9909cf29b8946712eeb1388acec39',
       ...data.getHeaders()
     },
     data: data
@@ -390,7 +394,7 @@ router.post('/otp-login', (req, res) => {
       method: 'post',
       url: 'https://d7networks.com/api/verifier/send',
       headers: {
-        'Authorization': 'Token 6006332f15b6afb6c2a4b9527f3e21fe63dd41fa',
+        'Authorization': 'Token b3b6ad053db9909cf29b8946712eeb1388acec39',
         ...data.getHeaders()
       },
       data: data
@@ -419,7 +423,7 @@ router.post('/otp-login-verify', (req, res) => {
     method: 'post',
     url: 'https://d7networks.com/api/verifier/verify',
     headers: {
-      'Authorization': 'Token 6006332f15b6afb6c2a4b9527f3e21fe63dd41fa',
+      'Authorization': 'Token b3b6ad053db9909cf29b8946712eeb1388acec39',
       ...data.getHeaders()
     },
     data: data
@@ -464,9 +468,9 @@ router.get('/product-view/:id', (req, res) => {
 router.get('/checkout', async (req, res) => {
   userHelpers.getCartProducts(req.session.user._id).then(async (products) => {
     userHelpers.getAddress(req.session.user._id).then(async (address) => {
-
+      console.log('address',address)
       let total = await userHelpers.getTotalAmount(req.session.user._id)
-      res.render('users/checkout', { total, user: req.session.user, products, address })
+      res.render('users/checkout-with-address', { total, user: req.session.user, products, address })
     }).catch(async () => {
       let total = await userHelpers.getTotalAmount(req.session.user._id)
       res.render('users/checkout', { total, user: req.session.user, products })
@@ -480,10 +484,28 @@ router.post('/place-order', async (req, res) => {
   console.log('place order', req.body);
   let products = await userHelpers.getCartProductList(req.body.user)
   let totalPrice = await userHelpers.getTotalAmount(req.body.user)
+  
+    let discound=parseInt(req.body.offerPrice)
+    if(discound){
+       totalPrice=totalPrice-discound
+    }else{
+      console.log('not a number');
+    }
+    
+
+ 
+  console.log('total price',totalPrice,'offer',discound);
+  
   userHelpers.placeOrder(req.body, products, totalPrice).then((orderId) => {
     if (req.body.payment_method == 'cod') {
       res.json({ codSuccess: true })
-    } else {
+    }else if(req.body.payment_method=='paypal'){
+      response.paypalTotal=totalPrice
+      response.paypal=true
+      res.json(response)
+    }
+    
+    else {
       userHelpers.generateRazorpay(orderId, totalPrice).then((response) => {
 
         res.json(response)
@@ -499,13 +521,15 @@ router.post('/place-order', async (req, res) => {
 router.get('/my-account', (req, res) => {
   let user = req.session.user
   userHelpers.getUserOrders(req.session.user._id).then((orders) => {
-    console.log('user orders', orders);
-    userHelpers.getAddress(req.session.user._id).then((address) => {
+   
+    userHelpers.getAddress(req.session.user._id).then(async(address) => {
 
-     
-      res.render('users/my-account', { orders, user, address })
-    }).catch(() => {
-      res.render('users/my-account', { orders, user })
+      let userProfile=await userHelpers.getUserProfile(req.session.user._id)
+      console.log('user profile',userProfile);
+      res.render('users/my-account', { orders, user, address,userProfile })
+    }).catch(async() => {
+      let userProfile=await userHelpers.getUserProfile(req.session.user._id)
+      res.render('users/my-account', { orders, user,userProfile })
     })
 
 
@@ -601,6 +625,36 @@ router.post('/edit-address',(req,res)=>{
 
 })
 
+router.get('/cancel-order/:id',(req,res)=>{
+  
+  userHelpers.cancelOrder(req.params.id).then(()=>{
+      res.redirect('/my-account')
+  })
+})
 
+router.post('/update-account',(req,res)=>{
+  
+  userHelpers.updateUserProfile(req.body).then((response)=>{
+    console.log('new data from update user',response)
+    req.session.user=response.user
+    res.json(response)
+  }).catch((response)=>{
+    console.log('router',response);
+    res.json(response)
+  })
+})
 
+router.post('/check-coupon',(req,res)=>{
+  console.log('coupon code',req.body);
+  userHelpers.couponsCheck(req.body).then((coupon)=>{
+    console.log('valid');
+   
+    res.json({coupon})
+  }).catch(()=>{
+    console.log('Not valid');
+    
+    res.json({status:false})
+  })
+
+})
 module.exports = router;

@@ -263,7 +263,7 @@
                                                         <tbody>
                                                             {{#each orders}}
                                                             <tr>
-                                                                <td>{{@index}}</td>
+                                                                <td>{{math @index "+" 1}}</td>
                                                                 <td>{{this.date}}</td>
                                                                 <td>{{this.status}}</td>
                                                                 <td>{{this.totalAmount}}</td>
@@ -277,8 +277,12 @@
 
 
                                                                  <td>{{this.ship}}</td>
-                                                                <td><a href="" class="check-btn sqr-btn ">View</a></td>
-                                                               
+                                                                 {{#if (neqw this.ship 'Order Cancelled')}}
+                                                                 
+                                                                <td><a href="/cancel-order/{{this._id}}" class="check-btn sqr-btn ">Cancel</a></td>
+                                                                {{else}}
+                                                                <td>Item is Cancelled</td>
+                                                                {{/if}}
                                                             </tr>
                                                             {{/each}}
                                                             
@@ -358,52 +362,57 @@
                                             <div class="myaccount-content">
                                                 <h3>Account Details</h3>
                                                 <div class="account-details-form">
-                                                    <form action="#">
+                                                    <form id="account-form">
                                                         <div class="row">
                                                             <div class="col-lg-6">
                                                                 <div class="single-input-item">
                                                                     <label for="first-name" class="required">First Name</label>
-                                                                    <input type="text" id="first-name" />
+                                                                    <input type="text" name="name" value="{{userProfile.name}}" id="myaccount-name" required/>
+                                                                    <input type="text" name="id" value="{{userProfile._id}}"  style="display: none;">
                                                                 </div>
                                                             </div>
-                                                            <div class="col-lg-6">
+                                                            {{!-- <div class="col-lg-6">
                                                                 <div class="single-input-item">
                                                                     <label for="last-name" class="required">Last Name</label>
                                                                     <input type="text" id="last-name" />
                                                                 </div>
-                                                            </div>
+                                                            </div> --}}
                                                         </div>
-                                                        <div class="single-input-item">
+                                                        {{!-- <div class="single-input-item">
                                                             <label for="display-name" class="required">Display Name</label>
                                                             <input type="text" id="display-name" />
-                                                        </div>
+                                                        </div> --}}
                                                         <div class="single-input-item">
                                                             <label for="email" class="required">Email Addres</label>
-                                                            <input type="email" id="email" />
+                                                            <input type="email" name="email" value="{{userProfile.email}}" id="myaccount-email" required/>
                                                         </div>
                                                         <fieldset>
                                                             <legend>Password change</legend>
                                                             <div class="single-input-item">
                                                                 <label for="current-pwd" class="required">Current Password</label>
-                                                                <input type="password" id="current-pwd" />
+                                                                <input type="password" name="password" id="current-pwd" required/>
                                                             </div>
                                                             <div class="row">
                                                                 <div class="col-lg-6">
                                                                     <div class="single-input-item">
                                                                         <label for="new-pwd" class="required">New Password</label>
-                                                                        <input type="password" id="new-pwd" />
+                                                                        <input type="password" name="newPassword" id="new-pwd" />
                                                                     </div>
                                                                 </div>
-                                                                <div class="col-lg-6">
+                                                                
+                                                                {{!-- <div class="col-lg-6">
                                                                     <div class="single-input-item">
                                                                         <label for="confirm-pwd" class="required">Confirm Password</label>
                                                                         <input type="password" id="confirm-pwd" />
                                                                     </div>
-                                                                </div>
+                                                                </div> --}}
                                                             </div>
                                                         </fieldset>
                                                         <div class="single-input-item">
-                                                            <button class="check-btn sqr-btn ">Save Changes</button>
+                                                            <h4 style="color: red; display: none;" id="email-taken">Email already taken</h4>
+                                                            <h4 style="color: red; display: none;" id="password-wrong">Password is wrong</h4>
+                                                            
+                                                            <button class="check-btn sqr-btn " type="submit">Save Changes</button>
                                                         </div>
                                                     </form>
                                                 </div>
@@ -425,3 +434,35 @@
    
 
 </body>
+<script>
+        $(document).ready(function () {
+            $('#table_id').DataTable();
+        });
+    </script>
+<script>
+    $('#account-form').submit((e)=>{
+        e.preventDefault()
+        $('#email-taken').hide()
+        $('#password-wrong').hide()
+        $.ajax({
+            url:'/update-account',
+            method:'post',
+            data:$('#account-form').serialize(),
+            success:(response)=>{
+                if(response.email==false){
+                    $('#email-taken').show()
+                }
+                else if(response.status){
+                    
+                    document.getElementById('myaccount-name').value=response.user.name
+                    document.getElementById('user-name-id').innerHTML=response.user.name 
+                    alert('User Data Updated')   
+                }else{
+                    $('#password-wrong').show()
+                }
+            }
+        })
+    })
+
+</script>
+

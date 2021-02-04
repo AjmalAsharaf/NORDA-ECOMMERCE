@@ -125,6 +125,63 @@ module.exports={
                 reject()
             }
         })
-    }
+    },
+    updateOffer:(proId,data)=>{
+        console.log('data ',data)
+        offer=parseInt(data.offer)
+        price=parseInt(data.productPrice)
+        offerPrice=price -  ((price*offer)/100)
+        console.log('offer',offerPrice);
+        return new Promise(async(resolve,reject)=>{
+            let product=await db.get().collection(collection.PRODUCT_COLLECTION).updateOne({_id:objId(proId)},{
+                $set:{
+                    offer:offer,
+                    productPrice:offerPrice,
+                    oldPrice:price
+                }
+            })
+            resolve()
+        })
+    },
+    removeOffer:(proId)=>{
+        return new Promise(async(resolve,reject)=>{
+            let oldPrice=await db.get().collection(collection.PRODUCT_COLLECTION).findOne({_id:objId(proId)})
+            console.log('oldprice',oldPrice.oldPrice);
+            db.get().collection(collection.PRODUCT_COLLECTION).updateOne({_id:objId(proId)},{
+                $set:{
+                    productPrice:oldPrice.oldPrice
+                },
+                $unset:{
+                    oldPrice:1,
+                    offer:1
+                }
+            }).then((response)=>{
+                resolve()
+            })
+        })
+
+    },
+    // updateCategoryOffer:(proId,data)=>{
+    //     console.log('pro',proId,'data',data);
+    //     let offer=parseInt(data.offer)
+    //     console.log('data',data.productName);
+        
+    //     return new Promise(async(resolve,reject)=>{
+            
+    //         let productPrice=await db.get().collection(collection.PRODUCT_COLLECTION).aggregate([{
+    //             $match:{productSubCat:'Jumpsuit',offer:{$exists:true}},
+                
+    //         },{
+    //             $project:{oldPrice:1}
+    //         }
+
+    //     ]).toArray()
+    //         console.log('data',productPrice);
+            
+           
+
+            
+    //     })
+    // }
        
 }

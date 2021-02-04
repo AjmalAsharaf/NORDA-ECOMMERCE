@@ -1,16 +1,4 @@
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>FrontendFunn -</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/css/bootstrap.min.css"
-        integrity="sha256-L/W5Wfqfa0sdBNIKN9cG6QA5F2qx4qICmU2VgLruv9Y=" crossorigin="anonymous" />
 
-    <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/material-design-icons/3.0.1/iconfont/material-icons.min.css"
-        integrity="sha256-x8PYmLKD83R9T/sYmJn1j3is/chhJdySyhet/JuHnfY=" crossorigin="anonymous" />
-    <link rel="stylesheet" href="/css/style1.css" />
-</head>
 
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-mattBlackLight fixed-top">
@@ -42,69 +30,84 @@
     </nav>
     <div class="wrapper d-flex">
         <div class="sideMenu bg-mattBlackLight">
-            <div class="sidebar">
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a href="/admin" class="nav-link px-2">
-                            <i class="material-icons icon">
-                                dashboard
-                            </i>
-                            <span class="text">Dashboard</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="/admin/user-management" class="nav-link px-2">
-                            <i class="material-icons icon">
-                                person
-                            </i>
-                            <span class="text">User Management</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="/admin/product-management" class="nav-link px-2">
-                            <i class="material-icons icon"> insert_chart </i><span class="text">Product Management</span></a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="/admin/category-management" class="nav-link px-2">
-                            <i class="material-icons icon"> insert_chart </i><span class="text">Category
-                                Management</span></a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#" class="nav-link px-2">
-                            <i class="material-icons icon">
-                                settings
-                            </i>
-                            <span class="text">Settings</span>
-                        </a>
-                    </li>
-                    
-                    
-                    {{!-- <li class="nav-item">
-                        <a href="#" class="nav-link px-2">
-                            <i class="material-icons icon">
-                                pages
-                            </i>
-                            <span class="text">Pages</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#" class="nav-link px-2">
-                            <i class="material-icons icon">
-                                computer
-                            </i>
-                            <span class="text">Demo</span>
-                        </a>
-                    </li> --}}
-                    <li class="nav-item">
-                        <a href="#" class="nav-link px-2 sideMenuToggler">
-                            <i class="material-icons icon expandView ">
-                                view_list
-                            </i>
-                            <span class="text">Resize</span>
-                        </a>
-                    </li>
-                </ul>
-            </div>
+             <div class="sidebar">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a href="/admin" class="nav-link px-2">
+              <i class="material-icons icon">
+                dashboard
+              </i>
+              <span class="text">Dashboard</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="/admin/user-management" class="nav-link px-2">
+              <i class="material-icons icon">
+                person
+              </i>
+              <span class="text">User Management</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="/admin/product-management" class="nav-link px-2">
+              <i class="material-icons icon"> insert_chart </i><span class="text">Product Management</span></a>
+          </li>
+          <li class="nav-item">
+            <a href="/admin/category-management" class="nav-link px-2">
+              <i class="material-icons icon"> book </i><span class="text">Category
+                Management</span></a>
+          </li>
+          <li class="nav-item">
+          <li class="nav-item">
+            <a href="/admin/get-all-orders" class="nav-link px-2">
+              <i class="material-icons icon">
+                pages
+              </i>
+              <span class="text">All Orders</span>
+            </a>
+          </li>
+          <a href="#" class="nav-link px-2">
+            <i class="material-icons icon">
+              settings
+            </i>
+            <span class="text">Settings</span>
+          </a>
+          </li>
+
+          <li class="nav-item">
+            <a href="/admin/report" class="nav-link px-2">
+              <i class="material-icons icon">
+                account_balance
+              </i>
+              <span class="text">Reports</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="/admin/coupon" class="nav-link px-2">
+              <i class="material-icons icon">
+                local_offer
+              </i>
+              <span class="text">Coupon</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="/admin/offer" class="nav-link px-2">
+              <i class="material-icons icon">
+                card_giftcard
+              </i>
+              <span class="text">Offer</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link px-2 sideMenuToggler">
+              <i class="material-icons icon expandView ">
+                view_list
+              </i>
+              <span class="text">Resize</span>
+            </a>
+          </li>
+        </ul>
+      </div>
         </div>
         <div class="content">
             <main>
@@ -120,7 +123,7 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="bg-mattBlackLight my-2 p-3">
-                                        <table class="table mt-4" id="productsTable">
+                                        <table class="table mt-4" id="userTable">
                                             <thead>
                                                 <tr>
                                                     <th scope="col" class="table-text">Name of the User</th>
@@ -169,11 +172,10 @@
             </main>
         </div>
     </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"
-        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.bundle.min.js"
-        integrity="sha256-OUFW7hFO0/r5aEGTQOz9F/aXQOt+TwqI1Z4fbVvww04=" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jQuery-slimScroll/1.3.8/jquery.slimscroll.min.js"
-        integrity="sha256-qE/6vdSYzQu9lgosKxhFplETvWvqAAlmAuR+yPh/0SI=" crossorigin="anonymous"></script>
-    <script src="/js/script1.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#userTable').DataTable();
+        });
+    </script>
+    
 </body>

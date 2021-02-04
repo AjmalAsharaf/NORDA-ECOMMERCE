@@ -1,0 +1,123 @@
+
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-mattBlackLight fixed-top">
+        <button class="navbar-toggler sideMenuToggler" type="button">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <a class="navbar-brand" href="/admin/">Admin Panel</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item dropdown">
+                    <div>
+
+                        <a href="/logout"> <span class="text">Logout</span></a>
+                    </div>
+
+
+
+
+
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <div class="wrapper d-flex">
+        <div class="sideMenu bg-mattBlackLight">
+            <div class="sidebar">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a href="/admin" class="nav-link px-2">
+                            <i class="material-icons icon">
+                                dashboard
+                            </i>
+                            <span class="text">Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/admin/user-management" class="nav-link px-2">
+                            <i class="material-icons icon">
+                                person
+                            </i>
+                            <span class="text">User Management</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/admin/product-management" class="nav-link px-2">
+                            <i class="material-icons icon"> insert_chart </i><span class="text">Product
+                                Management</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link px-2">
+                            <i class="material-icons icon">
+                                settings
+                            </i>
+                            <span class="text">Settings</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a href="#" class="nav-link px-2 sideMenuToggler">
+                            <i class="material-icons icon expandView ">
+                                view_list
+                            </i>
+                            <span class="text">Resize</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="content">
+            <main>
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-6 m-auto">
+                            <div class="bg-mattBlackLight my-2 p-3">
+                                <h2 style="color: aliceblue;" class="text-center">Update Offer Category</h2>
+                            </div>
+                        </div>
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-md-6 m-auto">
+                                    <div class="bg-mattBlackLight my-2 p-3">
+                                        <form action="/admin/add-category-offer/{{singleCategory._id}}" method="POST">
+                                            <div class="form-group">
+                                                <label for="exampleInputEmail1">Sub Category</label>
+                                                <input type="text" class="form-control" id="sub-category"
+                                                    aria-describedby="emailHelp" placeholder="Enter new category"
+                                                    required name="productName" value="{{singleCategory.productSubCat}}" readonly>
+                                                   
+
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="exampleInputEmail1">Offer for category</label>
+                                                <input type="number" class="form-control" id="sub-category"
+                                                    aria-describedby="emailHelp" placeholder="Enter new offer"
+                                                    required name="offer">
+                                                   
+
+                                            </div>
+                                            <div>
+                                                
+                                            <input type="submit" value="Update offer" class="btn btn-success">
+                                            </div>
+                                        </form>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+   

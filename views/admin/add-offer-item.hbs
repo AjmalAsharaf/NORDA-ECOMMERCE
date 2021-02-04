@@ -112,62 +112,57 @@
 
                 <div class="container-fluid">
                     <div class="row">
-                        <div class="col-md-12">
+                        <div class="col-md-6 m-auto">
                             <div class="bg-mattBlackLight my-2 p-3">
-                                <h2 style="color: aliceblue;" class="text-center">Product Management</h2>
+                                <h2 style="color: aliceblue;" class="text-center">Add offer</h2>
                             </div>
                         </div>
                         <div class="container-fluid">
                             <div class="row">
-                                <div class="col-md-12">
+                                <div class="col-md-6 m-auto">
                                     <div class="bg-mattBlackLight my-2 p-3">
-                                        <h2 class="text-center table-text">All Products</h2>
-                                        <div class="row">
-                                            <a href="/admin/add-product" class="btn btn-success ml-auto mr-2">Add
-                                                Product</a>
+                                        <form action="/admin/update-offer/{{singleProduct._id}}" method="POST">
+                                            <div class="form-group">
+                                                <label for="exampleInputEmail1">Name</label>
+                                                <input type="text" class="form-control" id="exampleInputEmail1"
+                                                    aria-describedby="emailHelp" value="{{singleProduct.productName}}"
+                                                    required name="productName" readonly>
 
-                                        </div>
-                                        <table class="table mt-4" id="table_id">
-                                            <thead>
-                                                <tr>
-                                                    <th scope="col" class="table-text">Name</th>
-                                                    <th scope="col" class="table-text">Category</th>
-                                                    <th scope="col" class="table-text">Sub-Category</th>
-                                                    <th scope="col" class="table-text">Price</th>
-                                                    <th scope="col" class="table-text">Qty</th>
-                                                    <th scope="col" class="table-text">Description</th>
-                                                    <th scope="col" class="table-text">Options</th>
-                                                    <th scope="col" class="table-text">Images</th>
+                                            </div>
 
+                                            <div class="form-group">
+                                                <label for="sel1">Category</label>
+                                                <input type="text" class="form-control" id="exampleInputEmail1"
+                                                    aria-describedby="emailHelp"
+                                                    value="{{singleProduct.productCategory}}" required
+                                                    name="productCategory" readonly>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="sel1">Sub Category</label>
+                                                <input type="text" class="form-control" id="exampleInputEmail1"
+                                                    aria-describedby="emailHelp" value="{{singleProduct.productSubCat}}"
+                                                    required name="productSubCat" readonly>
 
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {{#each products}}
-                                                <tr>
-
-                                                    <td class="table-text">{{this.productName}}</td>
-                                                    <td class="table-text">{{this.productCategory}}</td>
-                                                    <td class="table-text">{{this.productSubCat}}</td>
-                                                    <td class="table-text">{{this.productPrice}}</td>
-                                                    <td class="table-text">{{this.productQty}}</td>
-                                                    <td class="table-text">{{this.productDes}}</td>
-                                                    <td class="table-text"><a class="btn btn-primary"
-                                                            href="/admin/edit-product/{{this._id}}">Edit</a> <a
-                                                            class="btn btn-danger"
-                                                            href="/admin/delete-product/{{this._id}}"
-                                                            onclick="return confirm(`Are you want to delete {{this.productName}}`)">
-                                                            Delete</a></td>
-                                                    <td class="table-text"><img src="/product-images/{{this._id}}.jpg"
-                                                            alt="" style="width: 50px;height: 50px;"> </td>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="exampleInputPassword1">Price</label>
+                                                <input type="text" class="form-control" id="exampleInputEmail1"
+                                                    aria-describedby="emailHelp" value="{{singleProduct.productPrice}}"
+                                                    required name="productPrice" readonly>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="exampleInputPassword1">New offer</label>
+                                                <input type="number" class="form-control" id="exampleInputPassword1"
+                                                    placeholder="New offer" required name="offer" value="">
+                                            </div>
 
 
+                                            <div>
 
-                                                </tr>
 
-                                                {{/each}}
-                                            </tbody>
-                                        </table>
+                                                <input type="submit" class="btn btn-success" value="Update offer">
+                                            </div>
+                                        </form>
 
                                     </div>
                                 </div>
@@ -181,9 +176,5 @@
         </div>
     </div>
     <script>
-        $(document).ready(function () {
-            $('#table_id').DataTable();
-        });
-    </script>
 
-</body>
+    </script>
