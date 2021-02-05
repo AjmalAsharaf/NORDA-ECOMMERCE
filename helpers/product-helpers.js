@@ -22,8 +22,51 @@ module.exports = {
     },
     viewAllProducts: function () {
         return new Promise(async (resolve, reject) => {
+            
+           
+            let currentDate=moment(new Date).format('L')
+            currentDate=Date.parse(currentDate)
+            console.log('current date',currentDate);
+            let fromDate
+            let toDate
+            
+            let offerProducts=await db.get().collection(collection.PRODUCT_COLLECTION).aggregate([
+                {
+                    $match:{offer:{$exists:true}}
+                }
+            ]).toArray()
+            console.log('offer products',offerProducts)
+            offerProducts.forEach(element => {
+                fromDate=Date.parse(element.startDate)
+                toDate=Date.parse(element.endDate)
+                console.log('number date is',fromDate);
+                if(fromDate >= currentDate && currentDate <= toDate){
+                    console.log('Date is ok for',element.productName)
+                }else{
+                    db.get().collection(collection.PRODUCT_COLLECTION).updateOne({_id:objId(element._id)},{
+                        $set:{
+                            productPrice:element.oldPrice
+                        },
+                        $unset:{
+                            oldPrice:1,
+                            startDate:1,
+                            endDate:1,
+                            offer:1
+                        }
+                    })
+                    db.get().collection(collection.CATEGORY).updateOne({productSubCat:element.productSubCat},
+                        {
+                            $unset:{
+                                offer:1,
+                                startDate:1,
+                                endDate:1
+                            }
+                        })
+                    
+                }
+                
+            });
             let products = await db.get().collection(collection.PRODUCT_COLLECTION).find().toArray()
-
             resolve(products)
         })
     },
@@ -198,7 +241,9 @@ module.exports = {
                         },
                         $unset: {
                             oldPrice: 1,
-                            offer: 1
+                            offer: 1,
+                            startDate:1,
+                            endDate:1
                         }
                     })
                 }
@@ -214,7 +259,9 @@ module.exports = {
                     $set:{
                         productPrice:operations,
                         oldPrice:Allproducts[i].productPrice,
-                        offer:offerPer
+                        offer:offerPer,
+                        startDate:startDate,
+                        endDate:endDate
 
                     }
                 })
@@ -264,7 +311,9 @@ module.exports = {
                     },
                     $unset:{
                         offer:1,
-                        oldPrice:1
+                        oldPrice:1,
+                        endDate:1,
+                        startDate:1
                     }
                 })
             });
