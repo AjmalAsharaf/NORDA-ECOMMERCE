@@ -360,5 +360,12 @@ router.get('/delete-coupon/:id',(req,res)=>{
   
 })
 
+router.get('/delete-category-offer/:id',(req,res)=>{
+  console.log('id here',req.params.id)
+  productHelpers.removeCategoryOffer(req.params.id).then(()=>{
+    res.redirect('/admin/allCategory-offer')
+  })
+})
+
 
 module.exports = router;

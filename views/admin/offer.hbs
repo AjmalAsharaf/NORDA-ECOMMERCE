@@ -123,7 +123,7 @@
                     <div class="row">
                         <div class="col-md-12 m-auto">
                             <div class="bg-mattBlackLight my-2 p-3" id="mad-max">
-                                <a href="/admin/allCategory-offer" class="btn btn-success mb-5" >Add offer to a Category</a>
+                                <a href="/admin/allCategory-offer" class="btn btn-success mb-5" >All Category offer</a>
                                 <table class="table mt-" id="offer-table">
                                     <thead>
                                         <tr>
@@ -153,12 +153,14 @@
                                             <td class="table-text">NILL</td>
                                             {{/if}}
 
-                                            <td class="table-text"><a class="btn btn-primary"
-                                                    href="/admin/add-offer/{{this._id}}">Update Offer</a>
+                                            <td class="table-text">
                                                 {{#if this.offer}}
                                                 <a class="btn btn-danger" href="/admin/delete-offer/{{this._id}}"
                                                     onclick="return confirm(`Are you want to Remove offer {{this.productName}}`)">
                                                     Remove Offer</a>
+                                                    {{else}}
+                                                    <a class="btn btn-primary"
+                                                    href="/admin/add-offer/{{this._id}}">Update Offer</a>
                                                     {{/if}}
                                             </td>
                                             <td class="table-text"><img src="/product-images/{{this._id}}.jpg" alt=""

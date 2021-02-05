@@ -4,6 +4,7 @@ var collection = require('../config/collection')
 var objId = require('mongodb').ObjectID
 const { ObjectId } = require('mongodb')
 const { response } = require('express')
+const moment = require('moment')
 
 module.exports = {
     addProducts: function (product) {
@@ -165,8 +166,10 @@ module.exports = {
         return new Promise(async (resolve, reject) => {
             let operations
             let offerPer=parseInt(offer.offer)
+            let startDate=moment(offer.startDate).format('L')
+            let endDate=moment(offer.endDate).format('L')
             
-            
+            console.log('date for storing',startDate,endDate);
             console.log('all data ', proId, 'offer', offer)
             let allCategoryOffers = await db.get().collection(collection.PRODUCT_COLLECTION).aggregate([
                 {
@@ -186,10 +189,10 @@ module.exports = {
             if (allCategoryOffers.length > 0) {
 
                 for (i = 0; i < allCategoryOffers.length; i++) {
-                    console.log('data,',allCategoryOffers[0].productPrice);
-                    db.get().collection(collection.PRODUCT_COLLECTION).updateOne({ _id: objId(allCategoryOffers[0]._id) }, {
+                    console.log('data,',allCategoryOffers[i].productPrice);
+                    db.get().collection(collection.PRODUCT_COLLECTION).updateOne({ _id: objId(allCategoryOffers[i]._id) }, {
                         $set: {
-                            productPrice: allCategoryOffers[0].productPrice,
+                            productPrice: allCategoryOffers[i].productPrice,
 
 
                         },
@@ -216,11 +219,66 @@ module.exports = {
                     }
                 })
             }
-           
+            db.get().collection(collection.CATEGORY).updateOne({_id:objId(proId)},{
+                $set:{
+                    offer:offerPer,
+                    startDate:startDate,
+                    endDate:endDate
+                }
+            })
 
 
             resolve()
 
+        })
+    },
+
+    removeCategoryOffer:(name)=>{
+        console.log('name',name)
+        return new Promise(async(resolve,reject)=>{
+            let products=await db.get().collection(collection.PRODUCT_COLLECTION).aggregate([
+                {
+                    $match:{productSubCat:name,offer:{$exists:true}}
+                },
+                {
+                    $set: {
+                        productPrice: '$oldPrice'
+                    }
+                },
+                {
+                    $unset: ['offer', 'oldPrice']
+                }
+
+
+
+
+            ]).toArray()
+            console.log('produts here',products)
+            products.forEach(element => {
+                console.log('for each',element.productName);
+                db.get().collection(collection.PRODUCT_COLLECTION).updateOne({_id:ObjectId(element._id)},
+                {
+                    $set:{
+                        productPrice:element.productPrice,
+
+                    },
+                    $unset:{
+                        offer:1,
+                        oldPrice:1
+                    }
+                })
+            });
+            db.get().collection(collection.CATEGORY).updateOne({productSubCat:name},
+                {
+                    $unset:{
+                        offer:1,
+                        endDate:1,
+                        startDate:1
+                    }
+                }).then(()=>{
+                    resolve()
+                })
+            
         })
     }
 

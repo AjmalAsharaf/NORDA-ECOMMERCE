@@ -122,6 +122,7 @@
                                         <tr>
                                             <th scope="col" class="table-text">Category Name</th>
                                             <th scope="col" class="table-text">Offer</th>
+                                            <th scope="col" class="table-text">Offer Period</th>
                                             <th scope="col" class="table-text">Action</th>
                                             
 
@@ -136,18 +137,25 @@
                                             <td class="table-text">{{this.productSubCat}}</td>
                                             {{#if this.offer}}
                                             <td class="table-text">{{this.offer}}</td>
+                                            <td class="table-text">{{this.startDate}} To {{this.endDate}}</td>
                                             {{else}}
+                                            <td class="table-text">NILL</td>
                                             <td class="table-text">NILL</td>
                                             {{/if}}
                                             
                                             
-
-                                            <td class="table-text"><a class="btn btn-primary"
-                                                    href="/admin/add-category-offer/{{this._id}}">Update Offer</a>
-                                                
-                                                <a class="btn btn-danger" href="/admin/delete-category-offer/{{this._id}}"
+                                            
+                                            <td class="table-text">
+                                                {{#if this.offer}}
+                                                    <a class="btn btn-danger" href="/admin/delete-category-offer/{{this.productSubCat}}"
                                                     onclick="return confirm(`Are you want to Remove offer {{this.productSubCat}}`)">
                                                     Remove Offer</a>
+                                                    {{else}}
+
+                                                <a class="btn btn-primary"
+                                                    href="/admin/add-category-offer/{{this._id}}">Update Offer</a>
+                                                {{/if}}
+                                                
                                                    
                                             </td>
                                             
