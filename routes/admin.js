@@ -39,7 +39,7 @@ router.get('/user-management', function (req, res) {
 router.get('/product-management', function (req, res) {
   if (req.session.admin) {
     productHelpers.viewAllProducts().then((products) => {
-
+      console.log('products',products)
       res.render('admin/product-management', { admin: true, products })
     })
 
@@ -51,7 +51,7 @@ router.get('/product-management', function (req, res) {
 router.get('/add-product', (req, res) => {
   if (req.session.admin) {
     productHelpers.showCategory().then((category) => {
-
+      
       res.render('admin/add-product', { admin: true, category })
     })
 
@@ -64,17 +64,13 @@ router.post('/add-product', (req, res) => {
   if (req.session.admin) {
 
     productHelpers.addProducts(req.body).then((id) => {
-
+      console.log(id+0)
       let image = req.files.Image
-
-      image.mv('./assets/product-images/' + id + '.jpg', (err, done) => {
-        if (!err) {
-          res.redirect('/admin/product-management')
-        } else {
-          console.log('Image upload failed');
-        }
-      })
-
+      let image2=req.files.Image0
+      console.log('images',image, 'second image',image2);
+      image.mv('./assets/product-images/' + id + '.jpg')
+      image2.mv('./assets/product-images/' + id+'0' + '.jpg')
+      res.redirect('/admin/product-management')
     })
   } else {
     res.redirect('/')
@@ -122,6 +118,13 @@ router.post('/update-product/:id', (req, res) => {
 
 
       }
+      if(req.files.Image0){
+        image1=req.files.Image0
+        image1.mv('./assets/product-images/' + proId+'0' + '.jpg')
+      }
+
+
+
     })
 
   } else {
