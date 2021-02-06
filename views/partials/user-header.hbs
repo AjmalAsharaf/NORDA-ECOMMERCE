@@ -48,12 +48,14 @@
                                   
                                    
                                     <div class="same-style-2 header-cart">
-                                        <a class="cart-active" href="#">
+                                            <a href="/view-cart">
                                             <i class="icon-basket-loaded"></i>
                                             {{#if cartCount}}
                                             <span class="pro-count red" id="cart-counts">{{cartCount}}</span>
+                                            {{else}}
+                                            <span class="pro-count red" id="cart-counts">0</span>
                                             {{/if}}
-                                        </a>
+                                            </a>
                                     </div>
                                 </div>
                             </div>
