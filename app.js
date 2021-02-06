@@ -7,6 +7,9 @@ var db = require('./config/connection')
 const session = require('express-session')
 var fileUpload = require('express-fileupload')
 var hbs = require('express-handlebars')
+const dotenv=require('dotenv').config()
+
+
 
 const Handlebars = require('handlebars');
 const H = require('just-handlebars-helpers');

@@ -4,10 +4,10 @@ const state={
 }
 
 module.exports.connect=function(done){
-    const url='mongodb://localhost:27017'
+    
     const dbname='mygear'
     
-    mongoClient.connect(url,(err,data)=>{
+    mongoClient.connect(process.env.MONGODB_URI,(err,data)=>{
         if(err){
             done(err)
         }
