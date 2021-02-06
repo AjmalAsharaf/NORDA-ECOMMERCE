@@ -6,8 +6,22 @@ const orderHelpers = require('../helpers/order-helpers');
 const { response } = require('express');
 var voucher_codes = require('voucher-code-generator');
 /* GET users listing. */
+
+const verifyAdmin=(req,res,next)=>{
+  if(req.session.admin){
+    next()
+  }else{
+    res.redirect('/')
+  }
+}
+
+
+
 router.get('/', function (req, res, next) {
   if (req.session.admin) {
+    
+
+
     orderHelpers.getTotalOrderNum().then((orderNum) => {
       orderHelpers.graphStatus().then((response) => {
         res.render('admin/admin', { admin: true, orderNum, response })
@@ -229,27 +243,27 @@ router.post('/edit-category', (req, res) => {
   }
 
 })
-router.get('/get-all-orders', (req, res) => {
+router.get('/get-all-orders',verifyAdmin, (req, res) => {
   userHelpers.getAllOrders().then((allorders) => {
 
     res.render('admin/order-details', { admin: true, allorders })
   })
 })
 
-router.get('/cancel-order/:id', (req, res) => {
+router.get('/cancel-order/:id', verifyAdmin,(req, res) => {
   console.log('cancel', req.params.id);
   userHelpers.cancelOrder(req.params.id).then(() => {
     res.redirect('/admin/get-all-orders')
   })
 })
 
-router.get('/ship-order/:id', (req, res) => {
+router.get('/ship-order/:id', verifyAdmin,(req, res) => {
   userHelpers.shipOrder(req.params.id).then(() => {
     res.redirect('/admin/get-all-orders')
   })
 })
 
-router.get('/report', (req, res) => {
+router.get('/report', verifyAdmin,(req, res) => {
 
   res.render('admin/report', { admin: true })
 })
@@ -262,7 +276,7 @@ router.get('/report', (req, res) => {
 //       })
 // })
 
-router.get('/report-date', (req, res) => {
+router.get('/report-date',verifyAdmin, (req, res) => {
   console.log('params', req.query);
   orderHelpers.getReports(req.query).then((report) => {
     console.log('Response', report);
@@ -275,7 +289,7 @@ router.get('/report-date', (req, res) => {
   })
 })
 
-router.get('/offer', (req, res) => {
+router.get('/offer',verifyAdmin, (req, res) => {
   productHelpers.viewAllProducts().then((products) => {
 
 
@@ -284,14 +298,14 @@ router.get('/offer', (req, res) => {
   })
 })
 
-router.get('/add-offer/:id', (req, res) => {
+router.get('/add-offer/:id',verifyAdmin, (req, res) => {
   productHelpers.viewOnePorduct(req.params.id).then((singleProduct)=>{
     console.log('products',singleProduct);
     res.render('admin/add-offer-item',{admin:true,singleProduct})
   })
 })
 
-router.post('/update-offer/:id',(req,res)=>{
+router.post('/update-offer/:id',verifyAdmin,(req,res)=>{
   proId=req.params.id
   console.log('id',proId,'offer',req.body);
   productHelpers.updateOffer(proId,req.body).then(()=>{
@@ -299,14 +313,14 @@ router.post('/update-offer/:id',(req,res)=>{
   })
 })
 
-router.get('/delete-offer/:id',(req,res)=>{
+router.get('/delete-offer/:id',verifyAdmin,(req,res)=>{
   proId=req.params.id
   productHelpers.removeOffer(proId).then(()=>{
     res.redirect('/admin/offer')
   })
 })
 
-router.get('/allCategory-offer',(req,res)=>{
+router.get('/allCategory-offer',verifyAdmin,(req,res)=>{
   productHelpers.showCategory().then((categories)=>{
     console.log('categories',categories);
     res.render('admin/offer-to-category',{admin:true,categories})
@@ -314,7 +328,7 @@ router.get('/allCategory-offer',(req,res)=>{
   
 })
 
-router.get('/add-category-offer/:id',(req,res)=>{
+router.get('/add-category-offer/:id',verifyAdmin,(req,res)=>{
   productHelpers.showOneCategory(req.params.id).then((singleCategory)=>{
     console.log('category single',singleCategory);
     res.render('admin/offer-to-category-update',{singleCategory,admin:true})
@@ -322,7 +336,7 @@ router.get('/add-category-offer/:id',(req,res)=>{
   })
 })
 
-router.post('/add-category-offer/:id',(req,res)=>{
+router.post('/add-category-offer/:id',verifyAdmin,(req,res)=>{
   console.log('params',req.params.id,'bo',req.body);
   proId=req.params.id
   productHelpers.updateCategoryOffer(proId,req.body).then(()=>{
@@ -330,7 +344,7 @@ router.post('/add-category-offer/:id',(req,res)=>{
   })
 })
 
-router.get('/coupon',(req,res)=>{
+router.get('/coupon',verifyAdmin,(req,res)=>{
   userHelpers.getAllCoupons().then((coupons)=>{
     console.log('all coupons',coupons);
     res.render('admin/coupon',{admin:true,coupons})
@@ -338,7 +352,7 @@ router.get('/coupon',(req,res)=>{
   
 })
 
-router.get('/generate-code-form',(req,res)=>{
+router.get('/generate-code-form',verifyAdmin,(req,res)=>{
   res.render('admin/coupon-form',{admin:true})
 })
 router.post('/generate-code',(req,res)=>{
@@ -354,7 +368,7 @@ router.post('/generate-code',(req,res)=>{
   })
 })
 
-router.get('/delete-coupon/:id',(req,res)=>{
+router.get('/delete-coupon/:id',verifyAdmin,(req,res)=>{
   proId=req.params.id
 
   userHelpers.deleteCoupon(proId).then(()=>{
@@ -363,7 +377,7 @@ router.get('/delete-coupon/:id',(req,res)=>{
   
 })
 
-router.get('/delete-category-offer/:id',(req,res)=>{
+router.get('/delete-category-offer/:id',verifyAdmin,(req,res)=>{
   console.log('id here',req.params.id)
   productHelpers.removeCategoryOffer(req.params.id).then(()=>{
     res.redirect('/admin/allCategory-offer')

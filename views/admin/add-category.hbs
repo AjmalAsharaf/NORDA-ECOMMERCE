@@ -1,5 +1,5 @@
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-mattBlackLight fixed-top">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-mattBlackLight fixed-top">
     <button class="navbar-toggler sideMenuToggler" type="button">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -28,7 +28,7 @@
   </nav>
   <div class="wrapper d-flex">
     <div class="sideMenu bg-mattBlackLight">
-       <div class="sidebar">
+      <div class="sidebar">
         <ul class="navbar-nav">
           <li class="nav-item">
             <a href="/admin" class="nav-link px-2">
@@ -107,66 +107,65 @@
         </ul>
       </div>
     </div>
-        <div class="content">
-            <main>
-                <div class="container-fluid">
-                    <div class="row">
-                        <div class="col-md-6 m-auto">
-                            <div class="bg-mattBlackLight my-2 p-3">
-                                <h2 style="color: aliceblue;" class="text-center">Category management</h2>
-                            </div>
-                        </div>
-                        <div class="container-fluid">
-                            <div class="row">
-                                <div class="col-md-6 m-auto">
-                                    <div class="bg-mattBlackLight my-2 p-3">
-                                        <form id="add-category">
-                                            <div class="form-group">
-                                                <label for="exampleInputEmail1">Sub Category</label>
-                                                <input type="text" class="form-control" id="sub-category"
-                                                    aria-describedby="emailHelp" placeholder="Enter new category"
-                                                    required name="productName">
+    <div class="content">
+      <main>
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-md-6 m-auto">
+              <div class="bg-mattBlackLight my-2 p-3">
+                <h2 style="color: aliceblue;" class="text-center">Category management</h2>
+              </div>
+            </div>
+            <div class="container-fluid">
+              <div class="row">
+                <div class="col-md-6 m-auto">
+                  <div class="bg-mattBlackLight my-2 p-3">
+                    <form id="add-category">
+                      <div class="form-group">
+                        <label for="exampleInputEmail1">Sub Category</label>
+                        <input type="text" class="form-control" id="sub-category" aria-describedby="emailHelp"
+                          placeholder="Enter new category" required name="productName">
 
-                                            </div>
-                                            <div>
-                                                <h5 style="color: red; display: none;" id="exists">Category exists</h5>
-                                                <button type="submit" class="btn btn-primary">Add Category</button>
-                                            </div>
-                                        </form>
+                      </div>
+                      <div>
+                        <h5 style="color: red; display: none;" id="exists">Category exists</h5>
+                        <button type="submit" class="btn btn-primary">Add Category</button>
+                      </div>
+                    </form>
 
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-
-                    </div>
+                  </div>
                 </div>
-            </main>
+              </div>
+            </div>
+
+
+          </div>
         </div>
+      </main>
     </div>
+  </div>
 
 </body>
 
 <script>
-    $('#add-category').submit((e) => {
-        e.preventDefault()
+  $('#add-category').submit((e) => {
+    e.preventDefault()
 
-        let productSubCat = $('#sub-category').val()
-        $('#exists').hide()
-        $.ajax({
-            url: '/admin/add-category',
-            method: 'post',
-            data: {
-                productSubCat
-            },
-            success: (response) => {
-                if (response.status) {
-                    window.location.href = '/admin/category-management'
-                } else {
-                    $('#exists').show()
-                }
-            }
-        })
+    let productSubCat = $('#sub-category').val()
+    $('#exists').hide()
+    $.ajax({
+      url: '/admin/add-category',
+      method: 'post',
+      data: {
+        productSubCat
+      },
+      success: (response) => {
+        if (response.status) {
+          window.location.href = '/admin/category-management'
+        } else {
+          $('#exists').show()
+        }
+      }
     })
+  })
 </script>

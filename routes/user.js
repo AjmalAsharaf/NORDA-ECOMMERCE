@@ -14,6 +14,14 @@ const { getUserProfile, couponsCheck } = require('../helpers/user-helpers');
 
 var otpid;
 
+const verify=(req,res,next)=>{
+  if(req.session.user){
+    next()
+  }else{
+    res.redirect('/')
+  }
+}
+
 /* GET home page. */
 router.get('/', function (req, res, next) {
   if (req.session.user) {
@@ -220,7 +228,7 @@ router.get('/add-to-cart/:id', (req, res) => {
   }
 })
 
-router.post('/change-product-quantity', (req, res) => {
+router.post('/change-product-quantity',verify, (req, res) => {
 
 
   userHelpers.changeProductQuantity(req.body).then(async (response) => {
@@ -234,14 +242,14 @@ router.post('/change-product-quantity', (req, res) => {
   })
 })
 
-router.post('/delete-one-cart', (req, res) => {
+router.post('/delete-one-cart',verify, (req, res) => {
 
   userHelpers.deleteOneCartItem(req.body).then((response) => {
     res.json(response)
   })
 })
 
-router.post('/delete-cart', (req, res) => {
+router.post('/delete-cart', verify,(req, res) => {
 
   userHelpers.deleteCart(req.body).then((response) => {
     res.json(response)
@@ -455,7 +463,7 @@ router.post('/otp-login-verify', (req, res) => {
 
 })
 
-router.get('/product-view/:id', (req, res) => {
+router.get('/product-view/:id', verify,(req, res) => {
   let user = req.session.user
 
   productHelpers.viewOnePorduct(req.params.id).then((product) => {
@@ -465,7 +473,7 @@ router.get('/product-view/:id', (req, res) => {
 
 })
 
-router.get('/checkout', async (req, res) => {
+router.get('/checkout', verify, async (req, res) => {
   userHelpers.getCartProducts(req.session.user._id).then(async (products) => {
     userHelpers.getAddress(req.session.user._id).then(async (address) => {
       console.log('address',address)
@@ -480,7 +488,7 @@ router.get('/checkout', async (req, res) => {
 
 })
 
-router.post('/place-order', async (req, res) => {
+router.post('/place-order',verify, async (req, res) => {
   console.log('place order', req.body);
   let products = await userHelpers.getCartProductList(req.body.user)
   let totalPrice = await userHelpers.getTotalAmount(req.body.user)
@@ -518,7 +526,7 @@ router.post('/place-order', async (req, res) => {
 
 
 
-router.get('/my-account', (req, res) => {
+router.get('/my-account',verify, (req, res) => {
   let user = req.session.user
   userHelpers.getUserOrders(req.session.user._id).then((orders) => {
    
@@ -537,7 +545,7 @@ router.get('/my-account', (req, res) => {
 
 })
 
-router.post('/verify-payment', (req, res) => {
+router.post('/verify-payment',verify, (req, res) => {
 
   userHelpers.verifyPayment(req.body).then(() => {
 
@@ -551,7 +559,7 @@ router.post('/verify-payment', (req, res) => {
   })
 })
 
-router.get('/userhome-category/:id', (req, res) => {
+router.get('/userhome-category/:id', verify,(req, res) => {
   console.log('user home params', req.params.id);
   let user = req.session.user
 
@@ -596,12 +604,12 @@ router.get('/search', (req, res) => {
 
 })
 
-router.get('/add-address',(req,res)=>{
+router.get('/add-address',verify,(req,res)=>{
   let user=req.session.user
   res.render('users/add-address',{user})
 })
 
-router.post('/add-address',(req,res)=>{
+router.post('/add-address',verify,(req,res)=>{
   
   
   userHelpers.addAddress(req.body).then(()=>{
@@ -609,7 +617,7 @@ router.post('/add-address',(req,res)=>{
   })
 })
 
-router.get('/edit-address/:id',(req,res)=>{
+router.get('/edit-address/:id',verify,(req,res)=>{
   console.log('paramas',req.params.id);
   userHelpers.editOneaddress(req.params.id).then((address)=>{
     
@@ -617,7 +625,7 @@ router.get('/edit-address/:id',(req,res)=>{
   })
 })
 
-router.post('/edit-address',(req,res)=>{
+router.post('/edit-address',verify,(req,res)=>{
   console.log('put',req.body);
   userHelpers.updateAddress(req.body).then(()=>{
     res.redirect('/my-account')
@@ -625,14 +633,14 @@ router.post('/edit-address',(req,res)=>{
 
 })
 
-router.get('/cancel-order/:id',(req,res)=>{
+router.get('/cancel-order/:id',verify,(req,res)=>{
   
   userHelpers.cancelOrder(req.params.id).then(()=>{
       res.redirect('/my-account')
   })
 })
 
-router.post('/update-account',(req,res)=>{
+router.post('/update-account',verify,(req,res)=>{
   
   userHelpers.updateUserProfile(req.body).then((response)=>{
     console.log('new data from update user',response)
@@ -644,7 +652,7 @@ router.post('/update-account',(req,res)=>{
   })
 })
 
-router.post('/check-coupon',(req,res)=>{
+router.post('/check-coupon',verify,(req,res)=>{
   console.log('coupon code',req.body);
   userHelpers.couponsCheck(req.body).then((coupon)=>{
     console.log('valid');

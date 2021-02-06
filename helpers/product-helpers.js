@@ -181,7 +181,9 @@ module.exports = {
                 $set: {
                     offer: offer,
                     productPrice: offerPrice,
-                    oldPrice: price
+                    oldPrice: price,
+                    startDate:moment(data.startDate).format('L'),
+                    endDate:moment(data.endDate).format('L')
                 }
             })
             resolve()
@@ -197,7 +199,10 @@ module.exports = {
                 },
                 $unset: {
                     oldPrice: 1,
-                    offer: 1
+                    offer: 1,
+                    startDate:1 ,
+                    endDate:1
+
                 }
             }).then((response) => {
                 resolve()
